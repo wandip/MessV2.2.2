@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.SubPage01">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/datePicker2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/datePicker2"
+        android:layout_alignStart="@+id/datePicker2"
+        android:layout_marginStart="14dp"
+        android:id="@+id/messBtn"
+        android:visibility="gone" />
+
+    <TextView
+        android:text="Select a Day .."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/datePicker2"
+        android:id="@+id/showmessTV"
+        android:textSize="24sp"
+        android:layout_alignEnd="@+id/datePicker2"
+        android:layout_toEndOf="@+id/messBtn"
+        android:layout_alignStart="@+id/datePicker2"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:textStyle="normal|bold" />
+
+</RelativeLayout>
