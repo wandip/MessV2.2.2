@@ -36,10 +36,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IntroActivity"></activity>
-        <activity android:name=".RegisterActivity"
+        <activity android:name=".IntroActivity" />
+        <activity
+            android:name=".RegisterActivity"
             android:label=""
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".MessSelectionActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            />
     </application>
 
 </manifest>

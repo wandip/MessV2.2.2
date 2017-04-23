@@ -6,13 +6,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datePicker2"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
     <Button
         android:text="Button"
         android:layout_width="wrap_content"
@@ -24,17 +17,26 @@
         android:visibility="gone" />
 
     <TextView
-        android:text="Select a Day .."
+        android:text="Select A Day .."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/datePicker2"
         android:id="@+id/showmessTV"
         android:textSize="24sp"
         android:layout_alignEnd="@+id/datePicker2"
-        android:layout_toEndOf="@+id/messBtn"
+        android:layout_above="@id/datePicker2"
         android:layout_alignStart="@+id/datePicker2"
         android:layout_alignParentTop="true"
         android:gravity="center"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:layout_marginBottom="10dp" />
+
+    <DatePicker
+        android:id="@+id/datePicker2"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

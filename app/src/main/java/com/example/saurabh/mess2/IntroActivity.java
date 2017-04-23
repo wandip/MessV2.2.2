@@ -22,6 +22,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.R.attr.button;
 
+
+//STARTING SLIDE SCREENS (INTRO SCREENS)
+
+
 public class IntroActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
@@ -37,10 +41,10 @@ public class IntroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intromanager=new Intromanager(this);
-        if(!intromanager.Check())
+        if(!intromanager.Check()) //CHECK IF USER USES APP FOR FIRST TIE OR NOT
         {
             intromanager.setFirst(false);
-            Intent i = new Intent(IntroActivity.this,LoginActivity.class);
+            Intent i = new Intent(IntroActivity.this,MainActivity.class);
             startActivity(i);
             finish();
         }
@@ -65,7 +69,7 @@ public class IntroActivity extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  intromanager.setFirst(false);  UNCOMMENT THIS IN FINAL PROJECT
+              intromanager.setFirst(false);  //TO TELL THAT USER HAS USED APP ONCE
                 Intent i = new Intent(IntroActivity.this,LoginActivity.class);
                 startActivity(i);
                 finish();
@@ -83,7 +87,7 @@ public class IntroActivity extends AppCompatActivity {
                 }
                 else
                 {
-                   // intromanager.setFirst(false); UNCOMMENT THIS IN FINAL PROJECT
+                    intromanager.setFirst(false); //TO TELL THAT USER HAS USED APP ONCE
                     Intent i = new Intent(IntroActivity.this,LoginActivity.class);
                     startActivity(i);
                     finish();

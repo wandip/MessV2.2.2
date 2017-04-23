@@ -35,6 +35,6 @@
         android:textAlignment="center"
         android:layout_above="@+id/imageView"
         android:layout_centerHorizontal="true"
-        />
+        android:paddingBottom="20dp" />
 
 </RelativeLayout>

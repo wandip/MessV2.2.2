@@ -20,7 +20,11 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         Typeface mytypeface =Typeface.createFromAsset(getAssets(),"Raleway-SemiBold.ttf");
         TextView myTextView =(TextView)findViewById(R.id.textView4);
-//        myTextView.setTypeface(mytypeface);
+//        myTextView.setTypeface(mytypeface);  //useless
+
+
+
+        //USEFULL
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
