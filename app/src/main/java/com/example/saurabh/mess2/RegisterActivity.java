@@ -3,6 +3,9 @@ package com.example.saurabh.mess2;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private ProgressDialog mProgress;
     private DatabaseReference mDatabase;
+    private boolean connected=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,22 @@ public class RegisterActivity extends AppCompatActivity {
         mRegBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startRegister();
+
+                if(isConnected()) {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(20);
+                    startRegister();
+                }
+                else
+                {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
+
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(getBaseContext(),"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+
+                }
             }
         });
 
@@ -263,4 +282,17 @@ public class RegisterActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected=true;
+            return true;
+        }
+        else
+            connected = false;
+        return false;
+    }
+
 }

@@ -1,8 +1,134 @@
 package com.example.saurabh.mess2;
 
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by saurabh on 23/4/17.
  */
 
 public class Users {
+
+    private String age;
+    private String college;
+    private String contact;
+    private String email;
+    private String groupid;
+    private String name;
+    private String qrcode;
+    private String uid;
+    public final HashMap<String, Object> result = new HashMap<>();
+
+    public Users(String age, String college, String contact, String email, String groupid, String name, String qrcode,String uid) {
+        this.age = age;
+        this.college = college;
+        this.contact = contact;
+        this.email = email;
+        this.groupid = groupid;
+        this.name = name;
+        this.qrcode = qrcode;
+        this.uid=uid;
+
+        toMap();
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(String groupid) {
+        this.groupid = groupid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getQrcode() {
+        return qrcode;
+    }
+
+    public void setQrcode(String qrcode) {
+        this.qrcode = qrcode;
+    }
+
+    public void setuid(String uid) {
+        this.uid = uid;
+    }
+    public String getuid() {
+        return uid;
+    }
+
+
+    Users()
+    {
+
+    }
+    Users(String uid)
+    {
+        this.uid=uid;
+    }
+
+    @Exclude
+
+    public HashMap<String, Object> toMap()
+    {
+
+        result.put("uid", uid);
+        result.put("name", name);
+        result.put("groupid", groupid);
+        result.put("email", email);
+        result.put("contact", contact);
+        result.put("college", college);
+        result.put("qrcode",qrcode);
+        result.put("age",age);
+
+        return result;
+    }
+
+
+
 }

@@ -1,18 +1,13 @@
 package com.example.saurabh.mess2;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
-import android.os.Handler;
+import java.util.HashMap;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -30,13 +25,10 @@ import android.view.ViewGroup;
 
 
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.saurabh.mess2.BackendLogic.Group;
-import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,16 +40,21 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    int year_x,month_x,day_x;
-    static final int DIALOG_ID=0;
+
+    static int count=0;
+
     private static Button showmess;
-    private static TextView showmes;
+    private static TextView showmes,UserNameTxt;
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabaseUsers,mDatabaseGroups;
+    private DatabaseReference mDatabaseUsers,mDatabaseGroups,mDatabaseInCurUser;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private String mUserName;
+    public static Users UserDataObj;
+    private static String NameTemp;
     private int LOGOUT_VAL;
     private HashMap<String,Integer> map=new HashMap<>();
+    private static Button mAddGrpBtn;
+    private static TextView UserNameTxtView,UserEmailTxtView,UserContactTxtView,UserGroupIdTxtView,UserCollegeTxtView;
+    private static View rootView3;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -105,56 +102,68 @@ public class MainActivity extends AppCompatActivity {
                     loginIntent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent1);
                 }
-                /*if(firebaseAuth.getCurrentUser()==null&&LOGOUT_VAL==1)
-                {
-                    Toast.makeText(MainActivity.this,"Jhavla2",Toast.LENGTH_LONG).show();
-                    //        FirebaseAuth.getInstance().signOut();
 
-                    Intent loginIntent1 = new Intent(MainActivity.this,LoginActivity.class);
-                    loginIntent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(loginIntent1);
-                }
-*/
-                /*  else {
-                  mDatabaseUsers=FirebaseDatabase.getInstance().getReference().child("users");
 
-                     mDatabaseUsers.keepSynced(true);
-
-                    String user_id = mAuth.getCurrentUser().getUid();
-                    mDatabaseUsers.child(user_id).child("name").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            mUserName = dataSnapshot.getValue().toString();
-                            setTitle("Hi, " + mUserName);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }*/
             }
         };
 
 
 
+        mDatabaseUsers=FirebaseDatabase.getInstance().getReference().child("users"); //Database USER Node Ref
+        mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");//Database GROUP Node Ref
 
+        mDatabaseUsers.keepSynced(true);    //Offline Capabilities of Firebase
 
-        setTitle("Messed Up");
-        mDatabaseUsers=FirebaseDatabase.getInstance().getReference().child("users");
-        mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");
-
-        mDatabaseUsers.keepSynced(true);
-        initiatelogic();//Store Offline data only string values and not images
-                                            //WORK ON PICCASO TO STORE OFFLINE IMAGES USING FIREBASE
-                                            //SEARCH INTERNET
-
-       /* if(mAuth.getCurrentUser().getUid().equals("BDJYZEdkabXUMPQTaVfX5HfHh3M2"))
+        if(mAuth.getCurrentUser()!=null) //Get User Data and Store in UserDataObj Object
         {
-            initiatelogic();
+
+            getUserdata();
+
+
         }
-*/
+
+       /* mDatabaseInCurUser=mDatabaseUsers.child(UserDataObj.getuid());
+        mDatabaseInCurUser.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if(mAuth.getCurrentUser()!=null)
+                {
+                    getUserdata();
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if(mAuth.getCurrentUser()!=null)
+                {
+                    getUserdata();
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                if(mAuth.getCurrentUser()!=null)
+                {
+                    getUserdata();
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                if(mAuth.getCurrentUser()!=null)
+                {
+                    getUserdata();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });*/
+                                        //SEARCH INTERNET
 
 
 
@@ -167,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(1,false);     //PAGE NUMBER START 0,1,2 SET DEFAULT VIEW (QR CODE SCREEN =1)
+        mViewPager.setCurrentItem(0,false);     //PAGE NUMBER START 0,1,2 SET DEFAULT VIEW (QR CODE SCREEN =1)
                                                 //WHEN APP STARTS
 
 
@@ -177,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {    //TESTING FOR MESS SELECTION GUI NOT TO BE USED
                 Intent selectIntent=new Intent(MainActivity.this, MessSelectionActivity.class);
@@ -193,6 +203,99 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void getUserdata() {
+
+
+
+        final String uid=mAuth.getCurrentUser().getUid();
+
+        mDatabaseUsers.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserDataObj=dataSnapshot.getValue(Users.class);
+                     UserDataObj.setuid(uid);
+                    Log.v("E_VALUE",UserDataObj.getuid());
+
+                    SubPage03 Subpage3obj=new SubPage03();
+                    Subpage3obj.setDetails(UserDataObj.getAge(),UserDataObj.getCollege(),UserDataObj.getContact(),
+                            UserDataObj.getEmail(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode());
+                NameTemp=UserDataObj.getName();
+               /* UserNameTxtView=(TextView)findViewById(R.id.userName001);
+                //changeFragmentTextView(NameTemp);
+
+                UserNameTxtView.setText(UserDataObj.getName());
+                */
+
+                    Log.v("E_VALUE","Age : "+UserDataObj.getAge());
+                    Log.v("E_VALUE","College : "+UserDataObj.getCollege());
+                    Log.v("E_VALUE","Contact : "+UserDataObj.getContact());
+                    Log.v("E_VALUE","Email : "+UserDataObj.getEmail());
+                    Log.v("E_VALUE","GroupID : "+UserDataObj.getGroupid());
+                    Log.v("E_VALUE","NAME : "+UserDataObj.getName());
+                    Log.v("E_VALUE","QRCODE : "+UserDataObj.getQrcode());
+                    setTitle("Hi, "+UserDataObj.getName());
+                     setUserDetails2(UserDataObj.getAge(),UserDataObj.getCollege(),UserDataObj.getContact(),
+                             UserDataObj.getEmail(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode());
+
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        if(uid.equals("xZLuBRV5cCcjxuCb3eXyJNkcESB3")) //checks if admin
+        {
+            initiatelogic();
+        }
+
+
+
+
+
+    }
+
+    private void setUserDetails2(String age, String college, String contact, String email, String groupid, String name, String qrcode)
+    {
+        UserNameTxtView=(TextView)findViewById(R.id.userName001);
+        UserCollegeTxtView=(TextView)findViewById(R.id.userCollege);
+        UserEmailTxtView=(TextView)findViewById(R.id.userEmail);
+        UserGroupIdTxtView=(TextView)findViewById(R.id.userGroupID);
+        UserContactTxtView=(TextView)findViewById(R.id.userContact);
+
+
+        UserNameTxtView.setText(name);
+        UserCollegeTxtView.setText(college);
+        UserEmailTxtView.setText(email);
+        UserGroupIdTxtView.setText(groupid);
+        UserContactTxtView.setText(contact);
+
+    }
+
+    private void setUserDetails()
+    {
+        UserNameTxtView=(TextView)findViewById(R.id.userName001);
+        UserCollegeTxtView=(TextView)findViewById(R.id.userCollege);
+        UserEmailTxtView=(TextView)findViewById(R.id.userEmail);
+        UserGroupIdTxtView=(TextView)findViewById(R.id.userGroupID);
+        UserContactTxtView=(TextView)findViewById(R.id.userContact);
+
+
+        UserNameTxtView.setText(UserDataObj.getName());
+        UserCollegeTxtView.setText(UserDataObj.getCollege());
+        UserEmailTxtView.setText(UserDataObj.getEmail());
+        UserGroupIdTxtView.setText(UserDataObj.getGroupid());
+        UserContactTxtView.setText(UserDataObj.getContact());
+
+    }
+
 
     private void initiatelogic() {
 
@@ -215,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.v("E_VALUE","Addition : "+sum);
                 Group obj=new Group(map);
                 Log.v("E_VALUE","MAP SIZE : "+obj.getmapsize());
-                obj.assignset();
+                //obj.assignset();
 
             }
 
@@ -295,14 +398,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {   //SHOWING UI OF THE SUB PAGE 1 : CALENDER WALA
+                                 Bundle savedInstanceState) {
+                                                    //SHOWING UI OF THE SUB PAGE 1 : CALENDER WALA
                                                                 //DO ANY CODING IN THIS AREA REGARDING THAT PAGE
-            if(getArguments().getInt(ARG_SECTION_NUMBER)==1) {
+            if(getArguments().getInt(ARG_SECTION_NUMBER)==0) {
+
+
 
 
                 View rootView = inflater.inflate(R.layout.fragment_sub_page01,container,false);
 
-                showmess=(Button)rootView.findViewById(R.id.messBtn);
+              /*  showmess=(Button)rootView.findViewById(R.id.messBtn);
                 showmes=(TextView)rootView.findViewById(R.id.showmessTV);
 
                 DatePicker datePicker = (DatePicker)rootView.findViewById(R.id.datePicker2);
@@ -333,21 +439,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-             /*   showmess.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(getActivity().getApplicationContext(),"Clicked!",Toast.LENGTH_LONG).show();
-                        Intent settings_intent=new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                        startActivity(settings_intent);
-                    }
-                });
 */
-                //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-               // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
                 return rootView;
             }
-            else if(getArguments().getInt(ARG_SECTION_NUMBER)==2) {
-                                                    //CENTRE SCREEN VIEW CONTAINING QR CODE DO ANY CODING OF THAT
+            else if(getArguments().getInt(ARG_SECTION_NUMBER)==1) {
+                                                   //CENTRE SCREEN VIEW CONTAINING QR CODE DO ANY CODING OF THAT
                                                     // IN THIS AREA ( TODO: ADD QR CODE OFFLINE CAPABILITY )
                 //                                                  TODO: ADD PAYEMENT BUTTON IF NOT PAYED
                 //                                                  TODO: OVER DEFAULT QR CODE PLACE BUTTON
@@ -357,18 +453,41 @@ public class MainActivity extends AppCompatActivity {
                 // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
                 return rootView;
             }
-            else{
+            else
+            {
 
-
-                View rootView = inflater.inflate(R.layout.fragment_sub_page03,container,false);
 
                 //PROFILE SCREEN VIEW SAME AS ABOVE
+                SubPage03 subpage03Obj=new SubPage03();
+                Log.v("E_VALUE","In rootview3 "+NameTemp);
 
-               // TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-               // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-                return rootView;
+
+             //   if(count>0) {
+
+
+//                    UserNameTxtView.setText(NameTemp);
+              //  }
+//                TextView userNameTxtView2 = (TextView) rootView3.findViewById(R.id.userName);
+
+              //  UserNameTxtView.setText(NameTemp);
+
+                subpage03Obj.passContext(getActivity());
+                rootView3=subpage03Obj.onCreateView(inflater,container,savedInstanceState);
+                count++;
+                return rootView3;
             }
+
         }
+
+
+
+
+       /* @Override
+        public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            TextView userNameTxtView2 = (TextView) rootView3.findViewById(R.id.userName);
+            userNameTxtView2.setText(NameTemp);
+        }*/
     }
 
     /**
@@ -391,17 +510,17 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
+                /*case 0:
+                    return "MONTHLY";*/
                 case 0:
-                    return "MONTHLY";
-                case 1:
                     return "TODAY";
-                case 2:
+                case 1:
                     return "PROFILE";
             }
             return null;
@@ -413,10 +532,33 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth.addAuthStateListener(mAuthListener);
         super.onStart();
+        if(mAuth.getCurrentUser()!=null) //Get User Data and Store in UserDataObj Object
+        {
+
+            getUserdata();
+
+
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+
+
+    public void changeFragmentTextView(String s) {
+        android.app.Fragment frag = getFragmentManager().findFragmentById(R.layout.fragment_sub_page03);
+        ((TextView)rootView3.findViewById(R.id.userName001)).setText(s);
+    }
+
+
 }

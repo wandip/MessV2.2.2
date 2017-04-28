@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG ="LOGIN_ACTIVITY";
     public int VERIFIED_FLAG=0;
     private int count=0;
+    private boolean connected=false;
 
 
     @Override
@@ -95,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
         mForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(20);
                 Toast.makeText(LoginActivity.this,"Add Forgot Password method",Toast.LENGTH_LONG).show();
             }
         });
@@ -102,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         PassVisBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(20);
 
                 if(count%2==0)
                 {
@@ -125,9 +133,21 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isConnected()) {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(20);
 
+                    checkLogin();
+                }
+                else
+                {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
 
-                checkLogin();
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(getBaseContext(),"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                }
                 /*Intent loginIntent=new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(loginIntent);*/
             }
@@ -138,8 +158,21 @@ public class LoginActivity extends AppCompatActivity {
         SignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent regIntent=new Intent(LoginActivity.this,RegisterActivity.class);
-                startActivity(regIntent);
+                if(isConnected()) {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(20);
+                    Intent regIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(regIntent);
+                }
+                else
+                {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
+
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(getBaseContext(),"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -153,6 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(firebaseAuth.getCurrentUser()!=null)
                 {
                     mProgress.dismiss();
+                   // mProgress=null;
                     //startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }
                 else
@@ -182,9 +216,23 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mProgressG.setMessage("Fetching your Google Accounts..");
-                mProgressG.show();
-                signIn();
+
+                if(isConnected()) {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(20);
+                    mProgressG.setMessage("Fetching your Google Accounts..");
+                    mProgressG.show();
+                    signIn();
+                }
+                else
+                {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
+
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(getBaseContext(),"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -220,6 +268,19 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected=true;
+            return true;
+        }
+        else
+            connected = false;
+        return false;
     }
 
     @Override
@@ -338,6 +399,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             // email is not verified, so just prompt the message to the user and restart this activity.
             // NOTE: don't forget to log out the user.
+            Toast.makeText(LoginActivity.this, "Please Verify your Email!", Toast.LENGTH_SHORT).show();
             FirebaseAuth.getInstance().signOut();
             Intent reIntent = new Intent(LoginActivity.this,LoginActivity.class);
           //  mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
