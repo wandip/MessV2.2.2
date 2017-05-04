@@ -1,8 +1,12 @@
 package com.example.saurabh.mess2;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -25,6 +29,21 @@ public class FontApplication extends Application{
                 .build()
         );
         //....
+
+
+        Picasso.Builder builder=new Picasso.Builder(this);
+        builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
+        Picasso built =builder.build();
+        built.setIndicatorsEnabled(true);
+        built.setLoggingEnabled(true);
+        Picasso.setSingletonInstance(built);
+
+
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(base);
+    }
 }

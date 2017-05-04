@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
         android:textStyle="normal|bold"
+        android:textColor="#1c2428"
         android:textSize="30sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"

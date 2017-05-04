@@ -5,6 +5,11 @@
     <color name="colorAccent">#FF4081</color>
     <color name="BackgroundWhiteColor">#FFFFFF</color>
 
+    <color name="colorPrimary1">#f5f5f5</color>
+    <color name="colorPrimaryDark1">#14a304</color>
+    <color name="colorAccent1">#26b94a</color>
+    <color name="BackgroundWhiteColor1">#FFFFFF</color>
+
     <color name="screen1">#097ed2</color>
     <color name="screen2">#009688</color>
     <color name="screen3">#673AB7</color>

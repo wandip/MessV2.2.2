@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import java.util.HashMap;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,9 +26,12 @@ import android.view.ViewGroup;
 
 
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.saurabh.mess2.BackendLogic.AssignMessLogic;
 import com.example.saurabh.mess2.BackendLogic.Group;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,12 +39,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
 
+    public static String QRCODE;
+    public static  boolean PAYEMENT_DONE;
     static int count=0;
 
     private static Button showmess;
@@ -49,12 +63,15 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseUsers,mDatabaseGroups,mDatabaseInCurUser;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static Users UserDataObj;
+    public static Group obj;
     private static String NameTemp;
     private int LOGOUT_VAL;
     private HashMap<String,Integer> map=new HashMap<>();
     private static Button mAddGrpBtn;
+
     private static TextView UserNameTxtView,UserEmailTxtView,UserContactTxtView,UserGroupIdTxtView,UserCollegeTxtView;
-    private static View rootView3;
+    private static View rootView3,rootView2;
+    private static ImageView UserQRCodeImgView;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -189,8 +206,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {    //TESTING FOR MESS SELECTION GUI NOT TO BE USED
-                Intent selectIntent=new Intent(MainActivity.this, MessSelectionActivity.class);
-                startActivity(selectIntent);
+                /*Intent selectIntent=new Intent(MainActivity.this, MessSelectionActivity.class);
+                startActivity(selectIntent);*/
+                Log.v("E_VALUE","clicked fab");
+                setQRCodeImg();
+
                // startActivity(loginIntent);
 
                 /*Snackbar.make(getWindow().getDecorView().getRootView(), "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -204,13 +224,50 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void setQRCodeImg() {
+
+        if(UserDataObj.getQrcode().equals("default"))
+        {
+            //generate qr code
+            Log.v("E_VALUE","In setqrcodeimg");
+            generateQRCodeMethod();
+
+
+        }
+
+
+    }
+
+    private void generateQRCodeMethod() {
+
+        Log.v("E_VALUE","In generateqrcodemethod");
+
+
+        MultiFormatWriter multiFormatWriter=new MultiFormatWriter();
+        try{
+            BitMatrix bitMatrix=multiFormatWriter.encode(UserDataObj.getuid(), BarcodeFormat.QR_CODE,270,270);
+            BarcodeEncoder barcodeEncoder =new BarcodeEncoder();
+            Bitmap bitmap=barcodeEncoder.createBitmap(bitMatrix);
+           // SubPage02 msubPage02=new SubPage02(bitmap);
+
+
+        }
+        catch (WriterException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
     private void getUserdata() {
 
 
 
         final String uid=mAuth.getCurrentUser().getUid();
 
-        mDatabaseUsers.child(uid).addValueEventListener(new ValueEventListener() {
+        ValueEventListener userDetailsListener;
+
+        mDatabaseUsers.child(uid).addValueEventListener(userDetailsListener=new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                     UserDataObj=dataSnapshot.getValue(Users.class);
@@ -250,6 +307,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+      //  mDatabaseUsers.child(uid).removeEventListener(userDetailsListener);
+
 
         if(uid.equals("xZLuBRV5cCcjxuCb3eXyJNkcESB3")) //checks if admin
         {
@@ -262,14 +321,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setUserDetails2(String age, String college, String contact, String email, String groupid, String name, String qrcode)
+    private void setUserDetails2(String age, String college, String contact, String email, String groupid, String name, final String qrcode)
     {
         UserNameTxtView=(TextView)findViewById(R.id.userName001);
         UserCollegeTxtView=(TextView)findViewById(R.id.userCollege);
         UserEmailTxtView=(TextView)findViewById(R.id.userEmail);
         UserGroupIdTxtView=(TextView)findViewById(R.id.userGroupID);
         UserContactTxtView=(TextView)findViewById(R.id.userContact);
+         QRCODE=qrcode;
 
+        if(qrcode.equals("default"))
+        {
+
+            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+           UserQRCodeImgView.setImageResource(R.drawable.qrcode);
+           PAYEMENT_DONE=false;
+
+            //UserQRCodeImgView.setOnClickListener(new ExternalOnClickListener());
+        }
+        else {
+            PAYEMENT_DONE=true;
+            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+
+
+            Picasso.with(getBaseContext()).load(qrcode).networkPolicy(NetworkPolicy.OFFLINE).into(UserQRCodeImgView, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+
+                    Picasso.with(getBaseContext()).load(qrcode).into(UserQRCodeImgView);
+
+                }
+            });
+        }
 
         UserNameTxtView.setText(name);
         UserCollegeTxtView.setText(college);
@@ -306,19 +394,21 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
 
-                   int temp=dsp.child("size").getValue(Integer.class);
+                  // int temp=dsp.child("size").getValue(Integer.class);
+                    int temp= ((int) dsp.child("memberid").getChildrenCount());
                     String gidtemp=dsp.getKey();
+                    if(temp>0) {
+                        map.put(gidtemp, temp);
 
-                    map.put(gidtemp,temp);
-
-                    sum+=temp;
-                    Log.v("E_VALUE","SIZE : "+temp);
-
+                        sum += temp;
+                        Log.v("E_VALUE", "SIZE : " + temp);
+                    }
                 }
                 Log.v("E_VALUE","Addition : "+sum);
-                Group obj=new Group(map);
+                obj=new Group(map);
                 Log.v("E_VALUE","MAP SIZE : "+obj.getmapsize());
-                //obj.assignset();
+                obj.assignset();
+
 
             }
 
@@ -327,6 +417,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
 
     }
@@ -447,11 +538,14 @@ public class MainActivity extends AppCompatActivity {
                                                     // IN THIS AREA ( TODO: ADD QR CODE OFFLINE CAPABILITY )
                 //                                                  TODO: ADD PAYEMENT BUTTON IF NOT PAYED
                 //                                                  TODO: OVER DEFAULT QR CODE PLACE BUTTON
+                SubPage02 subpage02Obj=new SubPage02();
 
-                View rootView = inflater.inflate(R.layout.fragment_sub_page02,container,false);
                 //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
                 // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-                return rootView;
+                subpage02Obj.passContext(getActivity());
+
+                rootView2=subpage02Obj.onCreateView(inflater,container,savedInstanceState);
+                return rootView2;
             }
             else
             {
@@ -460,16 +554,6 @@ public class MainActivity extends AppCompatActivity {
                 //PROFILE SCREEN VIEW SAME AS ABOVE
                 SubPage03 subpage03Obj=new SubPage03();
                 Log.v("E_VALUE","In rootview3 "+NameTemp);
-
-
-             //   if(count>0) {
-
-
-//                    UserNameTxtView.setText(NameTemp);
-              //  }
-//                TextView userNameTxtView2 = (TextView) rootView3.findViewById(R.id.userName);
-
-              //  UserNameTxtView.setText(NameTemp);
 
                 subpage03Obj.passContext(getActivity());
                 rootView3=subpage03Obj.onCreateView(inflater,container,savedInstanceState);
@@ -532,14 +616,14 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth.addAuthStateListener(mAuthListener);
         super.onStart();
-        if(mAuth.getCurrentUser()!=null) //Get User Data and Store in UserDataObj Object
+        /*if(mAuth.getCurrentUser()!=null) //Get User Data and Store in UserDataObj Object
         {
 
             getUserdata();
 
 
         }
-
+*/
     }
 
     @Override

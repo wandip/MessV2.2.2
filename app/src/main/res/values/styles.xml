@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -14,6 +14,9 @@
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
     </style>
 
@@ -26,6 +29,17 @@
         <item name="android:layout_height">5dp</item>
         <item name="android:background">?android:attr/listDivider</item>
         <item name="android:color">#c91313</item>
+    </style>
+
+    <style name="NewTheme1" parent="Theme.AppCompat.NoActionBar" >
+        <item name="colorPrimary">@color/colorPrimary1</item>
+        <item name="colorPrimaryDark">@color/colorAccent1</item>
+        <item name="colorAccent">@color/colorAccent1</item>
+        <item name="android:textColorPrimary">@android:color/tertiary_text_dark</item>
+        <item name="android:colorBackground">@color/BackgroundWhiteColor1</item>
+        <item name="android:textColorSecondary">@android:color/tertiary_text_dark</item>
+        <item name="android:textColorSecondaryInverse">@android:color/tertiary_text_dark</item>
+        <item name="android:colorForeground">@android:color/holo_blue_dark</item>
     </style>
 
 </resources>

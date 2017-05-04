@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.saurabh.mess2.BackendLogic.Group;
+import com.example.saurabh.mess2.BackendLogic.GroupAssignLogic;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 public class AddFriendHandler extends AppCompatActivity{
 
     private Context context;
+    private String CUR_USER_ID,REQ_USER_ID;
+    private String CUR_USER_GRP_ID,REQ_USER_GRP_ID;
 
 
     public AddFriendHandler(Context context)
@@ -91,6 +94,7 @@ public class AddFriendHandler extends AppCompatActivity{
         mDatabaseInCurUser=mDatabaseUsers.child(mAuth.getCurrentUser().getUid());
 
         Log.v("E_VALUE","THE CURRENT USER ID IS: "+MainActivity.UserDataObj.getuid());
+        CUR_USER_ID=MainActivity.UserDataObj.getuid();
 
         searchRequestUID(REQUEST_USER_EMAIL);
 
@@ -100,8 +104,10 @@ public class AddFriendHandler extends AppCompatActivity{
     {
 
         Log.v("E_VALUE","THE REQUEST USER EMAIL ID IS "+request_user_email);
+        
 
-        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+
+       mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -120,7 +126,9 @@ public class AddFriendHandler extends AppCompatActivity{
                         uidtemp=dsp.getKey();
                         REQ_USER_ORIG_GRP=dsp.child("groupid").getValue(String.class);
                         Log.v("E_VALUE","EMAIL FOUND : "+emailtemp);
+
                         Log.v("E_VALUE","UID FOUND : "+uidtemp);
+                        REQ_USER_ID=uidtemp;
                         USER_FOUND_FLAG=1;
                         updateGroupId(uidtemp);
 
@@ -148,7 +156,7 @@ public class AddFriendHandler extends AppCompatActivity{
 
             }
         });
-
+        
 
 
     }
@@ -160,6 +168,7 @@ public class AddFriendHandler extends AppCompatActivity{
         Log.v("E_VALUE","REQ USER UID INUPDATEGROUP METHOD : "+uidtemp2);
 
         Log.v("E_VALUE","CURRENT USER GRPID INUPDATEGROUP METHOD : "+MainActivity.UserDataObj.getGroupid());
+        CUR_USER_GRP_ID=MainActivity.UserDataObj.getGroupid();
 
        /* mDatabaseInCurUser.child("groupid").addValueEventListener(new ValueEventListener() {
             @Override
@@ -176,7 +185,11 @@ public class AddFriendHandler extends AppCompatActivity{
         Log.v("E_VALUE","REQ USER GRPID ORIG METHOD : "+REQ_USER_ORIG_GRP);
 
 
-        searchReqUserGrpIfPresent(REQ_USER_ORIG_GRP);
+        GroupAssignLogic groupAssignLogic=new GroupAssignLogic(CUR_USER_ID,REQ_USER_ID,CUR_USER_GRP_ID,REQ_USER_ORIG_GRP);
+        groupAssignLogic.initiateAssign();
+
+
+      //  searchReqUserGrpIfPresent(REQ_USER_ORIG_GRP);
 
         mDatabaseInReqUser.child("groupid").setValue(MainActivity.UserDataObj.getGroupid());
 

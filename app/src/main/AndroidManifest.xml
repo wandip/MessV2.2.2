@@ -32,7 +32,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/NewTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,6 +50,11 @@
         <activity
             android:name=".GroupFormation.GroupRequestActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+
+
+
+
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
@@ -41,7 +42,6 @@ public class SubPage03 extends Fragment {
     private HashMap<String, Object> UserInfoMap= new HashMap<>();
     private DatabaseReference mCurrentUser;
     private boolean connected=false;
-
 
 
     // TODO: Rename and change types of parameters
@@ -192,18 +192,6 @@ public class SubPage03 extends Fragment {
         this.college=college;
         this.contact=contact;
         this.groupid=groupid;
-      //  UserNameTxtView=(TextView)rootView3.findViewById(R.id.userName);
-       /* UserNameTxtView.setText(name);
-        Log.v("E_VALUE","IN ONCREATE NAMe iS "+name);
-        //UserEmailTxtView=(TextView)rootView3.findViewById(R.id.userEmail);
-        UserEmailTxtView.setText(email);
-        //UserCollegeTxtView=(TextView)rootView3.findViewById(R.id.userCollege);
-        UserCollegeTxtView.setText(college);
-        //UserGroupIdTxtView=(TextView)rootView3.findViewById(R.id.userGroupID);
-        UserGroupIdTxtView.setText(groupid);
-        //UserContactTxtView=(TextView)rootView3.findViewById(R.id.userContact);
-        UserContactTxtView.setText(contact);
-*/
 
     }
 
