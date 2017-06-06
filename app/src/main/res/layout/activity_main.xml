@@ -8,6 +8,13 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.saurabh.mess2.MainActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/optimized_blurbackground2"
+        android:id="@+id/imageView4"
+        android:scaleType="centerCrop" />
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -44,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_agenda" />
+        app:srcCompat="@android:drawable/ic_menu_agenda"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

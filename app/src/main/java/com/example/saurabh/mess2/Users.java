@@ -24,6 +24,7 @@ public class Users {
     private String name;
     private String qrcode;
     private String uid;
+
     public final HashMap<String, Object> result = new HashMap<>();
 
     public Users(String age, String college, String contact, String email, String groupid, String name, String qrcode,String uid) {

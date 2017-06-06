@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.instamojo.android.Instamojo;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +39,7 @@ public class FontApplication extends Application{
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
 
-
+        Instamojo.initialize(this);
     }
 
     @Override

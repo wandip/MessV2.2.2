@@ -3,9 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blur_background_2"
     tools:context=".SubPage02">
 
     <!-- TODO: Update blank fragment layout -->
+
+    <ImageView
+        android:layout_height="wrap_content"
+        android:id="@+id/backgroundImageView"
+        android:layout_width="wrap_content"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/optimized_blurbackground2" />
 
     <com.example.saurabh.mess2.RalewayReg
         android:layout_width="match_parent"
@@ -45,6 +54,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/PayButton"
         android:layout_below="@+id/QRCodeImageView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

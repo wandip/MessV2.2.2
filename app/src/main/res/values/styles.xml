@@ -32,14 +32,21 @@
     </style>
 
     <style name="NewTheme1" parent="Theme.AppCompat.NoActionBar" >
-        <item name="colorPrimary">@color/colorPrimary1</item>
-        <item name="colorPrimaryDark">@color/colorAccent1</item>
-        <item name="colorAccent">@color/colorAccent1</item>
-        <item name="android:textColorPrimary">@android:color/tertiary_text_dark</item>
+        <item name="colorPrimary">@color/screen4</item>
+        <item name="colorPrimaryDark">@color/screen4</item>
+        <item name="colorAccent">@color/screen4</item>
+        <item name="android:textColorPrimary">@color/BackgroundWhiteColor</item>
         <item name="android:colorBackground">@color/BackgroundWhiteColor1</item>
-        <item name="android:textColorSecondary">@android:color/tertiary_text_dark</item>
-        <item name="android:textColorSecondaryInverse">@android:color/tertiary_text_dark</item>
-        <item name="android:colorForeground">@android:color/holo_blue_dark</item>
+        <item name="android:textColorSecondary">@color/BackgroundWhiteColor</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <item name="android:colorForeground">?attr/colorAccent</item>
+        <item name="android:windowBackground">@color/BackgroundWhiteColor</item>
+    </style>
+
+
+    <style name="CollapsedAppBarTopic" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
 </resources>

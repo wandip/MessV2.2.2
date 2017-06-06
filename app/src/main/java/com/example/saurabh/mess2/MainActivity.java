@@ -53,7 +53,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity {
 
 
-    public static String QRCODE;
+    public static String QRCODE,USERNAME;
     public static  boolean PAYEMENT_DONE;
     static int count=0;
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static TextView UserNameTxtView,UserEmailTxtView,UserContactTxtView,UserGroupIdTxtView,UserCollegeTxtView;
     private static View rootView3,rootView2;
-    private static ImageView UserQRCodeImgView;
+    private static ImageView UserQRCodeImgView,BackGroundImg;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -329,20 +329,32 @@ public class MainActivity extends AppCompatActivity {
         UserGroupIdTxtView=(TextView)findViewById(R.id.userGroupID);
         UserContactTxtView=(TextView)findViewById(R.id.userContact);
          QRCODE=qrcode;
+        USERNAME=name;
 
         if(qrcode.equals("default"))
         {
 
             UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+            BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
            UserQRCodeImgView.setImageResource(R.drawable.qrcode);
+          //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
            PAYEMENT_DONE=false;
 
             //UserQRCodeImgView.setOnClickListener(new ExternalOnClickListener());
         }
+        else if(qrcode.equals("paid"))
+        {
+            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+            UserQRCodeImgView.setImageResource(R.drawable.qrcode);
+            BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
+           // BackGroundImg.setImageResource(R.drawable.blur_background_3);
+            PAYEMENT_DONE=true;
+        }
         else {
             PAYEMENT_DONE=true;
             UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
-
+            BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
+           // BackGroundImg.setImageResource(R.drawable.optimized_blurbackground2);
 
             Picasso.with(getBaseContext()).load(qrcode).networkPolicy(NetworkPolicy.OFFLINE).into(UserQRCodeImgView, new Callback() {
                 @Override

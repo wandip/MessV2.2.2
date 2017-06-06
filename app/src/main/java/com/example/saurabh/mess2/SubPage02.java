@@ -2,12 +2,14 @@ package com.example.saurabh.mess2;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.storage.StorageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.util.Base64;
@@ -47,6 +49,7 @@ import static com.example.saurabh.mess2.MainActivity.PAYEMENT_DONE;
 import static com.example.saurabh.mess2.MainActivity.QRCODE;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
 import static com.example.saurabh.mess2.R.id.QRCodeImageView;
+import static com.example.saurabh.mess2.R.id.start;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,9 +59,10 @@ import static com.example.saurabh.mess2.R.id.QRCodeImageView;
  * Use the {@link SubPage02#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SubPage02 extends Fragment {
+public class SubPage02 extends Fragment  {
 
     private boolean QRCODE_GENERATED_FLAG;
+    private int RECEIVED_TOKEN;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -127,12 +131,18 @@ public class SubPage02 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+
         // Inflate the layout for this fragment
         rootView2=inflater.inflate(R.layout.fragment_sub_page02, container, false);
         paybtn=(Button)rootView2.findViewById(R.id.PayButton);
         image=(ImageView)rootView2.findViewById(QRCodeImageView);
         mGeneratingQRCode=new ProgressDialog(SubPage2Context);
         mAuth=FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser()==null)
+        {
+            return rootView2;
+        }
         mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
         mCheckQRCode=mCurrentUser.child("qrcode");
         mCheckQRCode.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -149,19 +159,31 @@ public class SubPage02 extends Fragment {
 
         Log.v("E_VALUE","PAYEMENT DONE value in oncreate  : "+PAYEMENT_DONE);
 
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-               DatabaseReference mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
-              DatabaseReference  mCheckQRCode=mCurrentUser.child("qrcode");
+                DatabaseReference mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+                DatabaseReference  mCheckQRCode=mCurrentUser.child("qrcode");
                 if(QRCODE.equals("default"))
+                {
+
+                    Intent PaymentIntent=new Intent(SubPage2Context,PaymentActivity.class);
+                    PaymentIntent.putExtra("UserID", mAuth.getCurrentUser().getUid());
+                    //startActivityForResult(PaymentIntent,0);
+                    SubPage2Context.startActivity(PaymentIntent);
+
+                }
+                else if(QRCODE.equals("paid"))
                 {
                     onPayClicked();
                 }
 
+
             }
         });
+
 
         if(QRCODE_GENERATED_FLAG)
         {
@@ -173,6 +195,8 @@ public class SubPage02 extends Fragment {
 
         return rootView2;
     }
+
+
 
     public void onPayClicked() {
         mGeneratingQRCode.setMessage("Generating your QR Code");
@@ -198,6 +222,7 @@ public class SubPage02 extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
@@ -221,7 +246,7 @@ public class SubPage02 extends Fragment {
             BitMatrix bitMatrix=multiFormatWriter.encode(UserDataObj.getuid(), BarcodeFormat.QR_CODE,270,270);
             BarcodeEncoder barcodeEncoder =new BarcodeEncoder();
             bitmap=barcodeEncoder.createBitmap(bitMatrix);
-            image=(ImageView)rootView2.findViewById(QRCodeImageView);
+           ImageView image=(ImageView)rootView2.findViewById(QRCodeImageView);
 
 
             image.setImageBitmap(bitmap);
@@ -323,4 +348,6 @@ public class SubPage02 extends Fragment {
         mAuth.addAuthStateListener(mAuthListener);
         super.onStart();
     }
+
+
 }
