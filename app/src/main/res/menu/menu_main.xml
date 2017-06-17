@@ -6,7 +6,14 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
+    <item android:title="About Us"
+        android:id="@+id/action_about_us" />
+    <item android:title="Share"
+        android:id="@+id/share" />
+    <item android:title="Rate Us!"
+        android:id="@+id/rateus" />
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"

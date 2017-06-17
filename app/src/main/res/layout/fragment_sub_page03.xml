@@ -3,36 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     tools:context=".SubPage03">
 
     <!-- TODO: Update blank fragment layout -->
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/optimized_blurbackground2"
-        android:id="@+id/imageView5"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:layout_below="@+id/ralewayReg"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/userName001"
-        android:textSize="16sp"
-        android:textAllCaps="true"
-        android:textStyle="normal|bold"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp" />
-
     <com.example.saurabh.mess2.RalewayReg
         android:layout_width="match_parent"
         android:layout_height="41dp"
-        android:text="This Page will Show OTHER OPTIONS"
         android:textAlignment="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -41,35 +20,7 @@
         android:textSize="14sp" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:id="@+id/userEmail"
-        android:textSize="16sp"
-        android:textAllCaps="true"
-        android:textStyle="normal|bold"
-        android:layout_below="@+id/userName001"
-        android:layout_alignStart="@+id/userName001"
-        android:paddingLeft="10dp" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:id="@+id/userCollege"
-        android:textSize="16sp"
-        android:textAllCaps="true"
-        android:textStyle="normal|bold"
-        android:layout_below="@+id/userEmail"
-        android:layout_alignStart="@+id/userEmail"
-        android:paddingLeft="10dp" />
-
-    <TextView
-        android:text="TextView"
+        android:text="Your Group Code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
@@ -78,23 +29,100 @@
         android:textSize="16sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
-        android:layout_below="@+id/userCollege"
-        android:layout_alignStart="@+id/userCollege"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ralewayReg"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/BackgroundWhiteColor1" />
 
     <TextView
-        android:text="TextView"
+        android:layout_width="match_parent"
+        android:paddingBottom="10dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:id="@+id/scannedlunchTxtView"
+        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:textStyle="normal|bold"
+        android:paddingLeft="10dp"
+        android:layout_alignBottom="@+id/ralewayReg"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/BackgroundWhiteColor1" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
         android:paddingBottom="10dp"
-        android:id="@+id/userContact"
+        android:id="@+id/scanneddinnerTxtView"
         android:textSize="16sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
-        android:layout_below="@+id/userGroupID"
-        android:layout_alignStart="@+id/userGroupID"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"
+        android:layout_above="@+id/scannedlunchTxtView"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/BackgroundWhiteColor1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/member1TxtView"
+        android:id="@+id/member2TxtView"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:layout_alignEnd="@+id/member1TxtView"
+        android:layout_alignStart="@+id/member1TxtView"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/member2TxtView"
+        android:layout_alignStart="@+id/member2TxtView"
+        android:id="@+id/member3TxtView"
+        android:textSize="18sp"
+        android:layout_marginTop="10dp"
+        android:textAlignment="center"
+        android:layout_alignEnd="@+id/member2TxtView"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="Your Friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView11"
+        android:layout_below="@+id/AddGroupBtn"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textStyle="normal|bold"
+        android:layout_alignEnd="@+id/AddGroupBtn"
+        android:layout_alignStart="@+id/AddGroupBtn"
+        android:layout_marginTop="25dp"
+        android:textAllCaps="true"
+        android:textColor="@color/BackgroundWhiteColor1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/member1TxtView"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_below="@+id/textView11"
+        android:layout_marginTop="23dp"
+        android:layout_alignEnd="@+id/textView11"
+        android:layout_alignStart="@+id/textView11"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:textStyle="normal|bold" />
+
 
     <Button
         android:text="Add Friends"
@@ -104,10 +132,51 @@
         android:id="@+id/AddGroupBtn"
         android:layout_marginLeft="50dp"
         android:hapticFeedbackEnabled="true"
-        android:elevation="10dp"
+        android:elevation="19dp"
         android:layout_marginRight="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/userGroupID"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="96dp" />
+        android:textSize="18sp" />
+
+    <Button
+        android:text="MonthlyUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SuperPowerfulButton2"
+        android:backgroundTint="@color/zxing_viewfinder_laser"
+        android:layout_below="@+id/member3TxtView"
+        android:layout_alignStart="@+id/member3TxtView"
+        android:layout_marginTop="56dp"
+        android:layout_alignEnd="@+id/member3TxtView" />
+
+    <Button
+        android:text="DailyUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SuperPowerfulButton"
+        android:backgroundTint="@color/zxing_viewfinder_laser"
+        android:layout_below="@+id/SuperPowerfulButton2"
+        android:layout_alignStart="@+id/SuperPowerfulButton2"
+        android:layout_alignEnd="@+id/SuperPowerfulButton2" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/textView11"
+        android:layout_marginTop="10dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/optimized_blurbackground2"
+        android:id="@+id/imageView5"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

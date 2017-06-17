@@ -1,17 +1,20 @@
 package com.example.saurabh.mess2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +41,11 @@ public class SubPage03 extends Fragment {
     private Context SubPage3Context;
     private View rootView3;
     private TextView UserNameTxtView,UserEmailTxtView,UserGroupIdTxtView,UserContactTxtView,UserCollegeTxtView;
-    private String name,email,groupid,contact,college;
+    private String name,email,groupid,contact,college,qrcode;
     private HashMap<String, Object> UserInfoMap= new HashMap<>();
     private DatabaseReference mCurrentUser;
     private boolean connected=false;
+    public  Button mPowerFulButton1;
 
 
     // TODO: Rename and change types of parameters
@@ -108,16 +112,92 @@ public class SubPage03 extends Fragment {
         // Inflate the layout for this fragment
         rootView3=inflater.inflate(R.layout.fragment_sub_page03, container, false);
         Button mAddGrpBtn = (Button) rootView3.findViewById(R.id.AddGroupBtn);
-        mAddGrpBtn.setOnClickListener(new View.OnClickListener() {
+
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+
+            if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals("4ALe90P970eTtifEAEfHlzwe03u1")) {
+
+
+                mPowerFulButton1 = (Button) rootView3.findViewById(R.id.SuperPowerfulButton);
+                Button mPowerFulButton2 = (Button) rootView3.findViewById(R.id.SuperPowerfulButton2);
+
+                mPowerFulButton1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showAdminPassDialogMethod();
+
+
+                    }
+                });
+
+                mPowerFulButton2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showAdminPassDialogMethod2();
+
+                    }
+                });
+
+
+            } else {
+                Button mPowerFulButton1 = (Button) rootView3.findViewById(R.id.SuperPowerfulButton);
+                mPowerFulButton1.setEnabled(false);
+                mPowerFulButton1.setVisibility(View.GONE);
+                mPowerFulButton1.setClickable(false);
+                Button mPowerFulButton2 = (Button) rootView3.findViewById(R.id.SuperPowerfulButton2);
+                mPowerFulButton2.setEnabled(false);
+                mPowerFulButton2.setVisibility(View.GONE);
+                mPowerFulButton2.setClickable(false);
+
+            }
+        }
+        else
+        {
+            Button mPowerFulButton1 = (Button) rootView3.findViewById(R.id.SuperPowerfulButton);
+            mPowerFulButton1.setEnabled(false);
+            mPowerFulButton1.setVisibility(View.GONE);
+            mPowerFulButton1.setClickable(false);
+        }
+
+
+           mAddGrpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
               //  if(isConnected()) {
 
+
+                if(isConnected())
+                {
                     Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(20);
                     final AddFriendHandler mAddFriendHandler = new AddFriendHandler(SubPage3Context);
 
-                    mAddFriendHandler.showDialogMethod();
+                    if(!UserDataObj.getQrcode().equals("default")&&!UserDataObj.getQrcode().equals("paid"))
+                    {
+
+                        mAddFriendHandler.showDialogMethod();
+                    }
+                    else
+                    {
+                        mAddFriendHandler.showNotPaidDialogue();
+                    }
+
+                }
+                else
+                {
+                    Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
+
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(SubPage3Context,"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+
              //   }
                 /*else
                 {
@@ -141,23 +221,57 @@ public class SubPage03 extends Fragment {
 
 */
 
+
+
+
         return rootView3;
 
 
     }
 
-    /*private boolean isConnected() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService();
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            //we are connected to a network
-            connected=true;
-            return true;
-        }
-        else
-            connected = false;
-        return false;
-    }*/
+    private void showAdminPassDialogMethod2() {
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SubPage3Context);
+
+
+        final EditText input = new EditText(SubPage3Context);
+
+        builder.setView(input);
+        builder.setTitle("ENTER CREDENTIALS") //
+                .setMessage("Enter Admin Root Password") //
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        String PasswordInput = input.getText().toString();
+                        if(PasswordInput.equals("BulltGyang"))
+                        {
+                            MainActivity MainObj=new MainActivity();
+                           MainObj.MonthChangeLogic();
+                            dialog.dismiss();
+
+                        }
+
+                    }
+                }) //
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        // TODO
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
+
+
+
+
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -183,8 +297,8 @@ public class SubPage03 extends Fragment {
         mListener = null;
     }
 
-    public void setDetails(String age, String college, String contact, String email,
-                           String groupid, String name, String qrcode)
+    public void setDetails(String college, String contact, String email, String endsub,
+                           String groupid, String name, String qrcode,String scanneddinner,String scannedlunch)
     {
 
         this.name=name;
@@ -192,6 +306,7 @@ public class SubPage03 extends Fragment {
         this.college=college;
         this.contact=contact;
         this.groupid=groupid;
+        this.qrcode=qrcode;
 
     }
 
@@ -214,8 +329,8 @@ public class SubPage03 extends Fragment {
     public void onStart() {
         super.onStart();
 
-        UserNameTxtView=(TextView)rootView3.findViewById(R.id.userName001);
-        UserNameTxtView.setText(name);
+       /* UserNameTxtView=(TextView)rootView3.findViewById(R.id.userName001);
+        UserNameTxtView.setText(name);*/
         Log.v("E_VALUE","IN ONSTART : "+name);
 
     }
@@ -223,16 +338,74 @@ public class SubPage03 extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        UserNameTxtView=(TextView)rootView3.findViewById(R.id.userName001);
-        UserNameTxtView.setText(UserDataObj.getName());
+        /*UserNameTxtView=(TextView)rootView3.findViewById(R.id.userName001);
+        UserNameTxtView.setText(UserDataObj.getName());*/
         Log.v("E_VALUE","IN RESUME : "+UserDataObj.getName());
 
 
     }
 
-    void updateNameTextView(String Text)
+   /* void updateNameTextView(String Text)
     {
         TextView t = (TextView)rootView3.findViewById(R.id.userName001);
         t.setText(Text);
+    }*/
+
+
+    public void showAdminPassDialogMethod() {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SubPage3Context);
+
+
+        final EditText input = new EditText(SubPage3Context);
+
+        builder.setView(input);
+        builder.setTitle("ENTER CREDENTIALS") //
+                .setMessage("Enter Admin Root Password") //
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        String PasswordInput = input.getText().toString();
+                        if(PasswordInput.equals("BulltGyang"))
+                        {
+                            MainActivity MainObj=new MainActivity();
+                            MainObj.initiatelogic();
+                            dialog.dismiss();
+
+                        }
+
+                    }
+                }) //
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        // TODO
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
+
     }
+
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) SubPage3Context.getSystemService(SubPage3Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected=true;
+            return true;
+        }
+        else
+            connected = false;
+        return false;
+
+
+    }
+
+
+
 }

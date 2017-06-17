@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_about_us"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:background="#262626"
+    android:scaleType="centerCrop"
+    tools:context="com.example.saurabh.mess2.AboutUsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="?attr/actionBarTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:id="@+id/toolbar2"
+        android:visibility="gone" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/aboutus2"
+        android:scaleType="centerCrop"
+        android:id="@+id/imageView11"
+        android:adjustViewBounds="true"
+        android:layout_below="@+id/toolbar2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="129dp"
+        android:id="@+id/textView"
+        android:textSize="20sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/app_icon_1"
+        android:layout_below="@+id/toolbar2"
+        android:id="@+id/imageView10"
+        android:layout_alignStart="@+id/textView"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:id="@+id/ll1">
+
+            <ImageView
+                android:layout_width="121dp"
+                android:layout_height="65dp"
+                app:srcCompat="@drawable/app_icon_1"
+                android:id="@+id/saurabhimg"
+                android:visibility="gone" />
+
+            <TextView
+                android:text="Saurabh Kshirsagar "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                android:layout_weight="1"
+                android:textColor="@color/accent_color"
+                android:textSize="25sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:id="@+id/ll2">
+
+            <ImageView
+                android:layout_width="122dp"
+                android:layout_height="65dp"
+                app:srcCompat="@drawable/app_icon_1"
+                android:id="@+id/dipakimg"
+                android:visibility="gone" />
+
+            <TextView
+                android:text="Dipak Wani"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView10"
+                android:layout_weight="1"
+                android:textColor="@color/accent_color"
+                android:textSize="24sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="0.33"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="119dp"
+                android:layout_height="72dp"
+                app:srcCompat="@drawable/app_icon_1"
+                android:id="@+id/yashimg"
+                android:visibility="gone" />
+
+            <TextView
+                android:text="Yash Karwa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView12"
+                android:layout_weight="1"
+                android:textSize="24sp"
+                android:textColor="@color/accent_color"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:autoLink="phone"
+        android:text="@string/contactusat"
+        android:id="@+id/ContactTextView"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="10dp"
+        android:layout_above="@+id/HelptextView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:autoLink="email"
+        android:text="@string/helptextdipak"
+        android:id="@+id/HelptextViewdip"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+        android:autoLink="email"
+        android:text="@string/helptextsaurabh"
+        android:id="@+id/HelptextViewsau"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+    <TextView
+        android:autoLink="email"
+        android:text="@string/helptextyash"
+        android:id="@+id/HelptextViewyash"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:autoLink="email"
+        android:text="@string/helptext2"
+        android:id="@+id/HelptextView"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="version :"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:paddingBottom="10dp"
+        android:id="@+id/versionTextView"
+        android:textSize="20sp"
+        android:layout_above="@+id/ContactTextView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:textStyle="normal|bold" />
+
+
+</RelativeLayout>

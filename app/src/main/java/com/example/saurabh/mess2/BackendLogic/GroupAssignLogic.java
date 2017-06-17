@@ -41,8 +41,9 @@ public class GroupAssignLogic extends AppCompatActivity
 
 
     public void initiateAssign() {
-         addInCurGrp();
+
           deleteReq();
+        addInCurGrp();
 
 
     }
@@ -55,8 +56,31 @@ public class GroupAssignLogic extends AppCompatActivity
     }
     void deleteReq()
     {
-        DatabaseReference mReqUser= mDatabaseInReqGrp.child("memberid").child(REQ_USER_ID);
-        mReqUser.setValue(null);
+
+        mDatabaseInReqGrp.child("memberid").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long membercount=dataSnapshot.getChildrenCount();
+                if(membercount==1)
+                {
+                    DatabaseReference mReqUser= mDatabaseInReqGrp.child("memberid").child(REQ_USER_ID);
+                    mReqUser.setValue(null);
+
+                    mDatabaseInReqGrp.child("todaysmess").setValue(null);
+                }
+                else
+                {
+                    DatabaseReference mReqUser= mDatabaseInReqGrp.child("memberid").child(REQ_USER_ID);
+                    mReqUser.setValue(null);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
     }

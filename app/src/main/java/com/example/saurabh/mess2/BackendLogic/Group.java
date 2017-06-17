@@ -136,6 +136,10 @@ public class Group {
         {
             SET_TYPE=5;
         }
+        else if(isKPartitionPossible(sizearr,N,9))
+        {
+            SET_TYPE=9;
+        }
         else if(isKPartitionPossible(sizearr,N,6))
         {
             SET_TYPE=6;

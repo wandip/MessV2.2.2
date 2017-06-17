@@ -2,16 +2,21 @@ package com.example.saurabh.mess2;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.os.storage.StorageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -39,6 +45,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.encoder.QRCode;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.kobakei.ratethisapp.RateThisApp;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -77,9 +84,11 @@ public class SubPage02 extends Fragment  {
     //creating a storage reference. Replace the below URL with your Firebase storage URL.
     StorageReference storageRef = storage.getReferenceFromUrl("gs://messed-up.appspot.com");
     private ProgressDialog mGeneratingQRCode;
+    private DatabaseReference mGroupDatabase,mInGroupUserGrp;
     private Bitmap bitmap;
     private String qrcode;
     private Button paybtn;
+    private boolean connected;
 
 
     // TODO: Rename and change types of parameters
@@ -143,6 +152,46 @@ public class SubPage02 extends Fragment  {
         {
             return rootView2;
         }
+
+        // Monitor launch times and interval from installation
+        RateThisApp.onCreate(SubPage2Context);
+        // If the condition is satisfied, "Rate this app" dialog will be shown
+        RateThisApp.showRateDialogIfNeeded(SubPage2Context);
+
+        // Custom condition: 3 days and 10 launches
+        final RateThisApp.Config config = new RateThisApp.Config(3,10);
+
+        config.setTitle(R.string.my_own_title);
+        config.setMessage(R.string.my_own_message);
+        config.setYesButtonText(R.string.my_own_rate);
+        config.setNoButtonText(R.string.my_own_thanks);
+        config.setCancelButtonText(R.string.my_own_cancel);
+
+       // config.setUrl("http://www.example.com"); //change if want to override
+
+        RateThisApp.init(config);
+
+        RateThisApp.setCallback(new RateThisApp.Callback() {
+            @Override
+            public void onYesClicked() {
+                Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(20);
+            }
+
+            @Override
+            public void onNoClicked() {
+                Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(20);            }
+
+            @Override
+            public void onCancelClicked() {
+                Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(20);            }
+        });
+
+
+
+
         mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
         mCheckQRCode=mCurrentUser.child("qrcode");
         mCheckQRCode.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -166,7 +215,28 @@ public class SubPage02 extends Fragment  {
 
                 DatabaseReference mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
                 DatabaseReference  mCheckQRCode=mCurrentUser.child("qrcode");
-                if(QRCODE.equals("default"))
+
+                if(QRCODE.equals("paid"))
+                {
+                    if(isConnected())
+                    {
+                        Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+
+                        onPayClicked();
+                    }
+                    else
+                    {
+                        Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
+                        long[] pattern = {0, 75,100,75};
+
+                        // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                        v.vibrate(pattern, -1);
+                        Toast.makeText(SubPage2Context,"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else
                 {
 
                     Intent PaymentIntent=new Intent(SubPage2Context,PaymentActivity.class);
@@ -174,10 +244,6 @@ public class SubPage02 extends Fragment  {
                     //startActivityForResult(PaymentIntent,0);
                     SubPage2Context.startActivity(PaymentIntent);
 
-                }
-                else if(QRCODE.equals("paid"))
-                {
-                    onPayClicked();
                 }
 
 
@@ -199,6 +265,22 @@ public class SubPage02 extends Fragment  {
 
 
     public void onPayClicked() {
+
+        mGroupDatabase=FirebaseDatabase.getInstance().getReference().child("group");
+       mInGroupUserGrp= mGroupDatabase.push();
+        mInGroupUserGrp.child("memberid").child(UserDataObj.getuid()).setValue("100");
+        mInGroupUserGrp.child("todaysmess").setValue(".............");
+
+        DatabaseReference mInCurUser=FirebaseDatabase.getInstance().getReference().child("users").child(UserDataObj.getuid());
+
+
+
+        mInCurUser.child("groupid").setValue(mInGroupUserGrp.getKey());
+
+      //  Long endsubvalue=Long.parseLong("56");
+        mInCurUser.child("endsub").setValue("56");
+
+
         mGeneratingQRCode.setMessage("Generating your QR Code");
         mGeneratingQRCode.show();
         Log.v("E_VALUE","In setqrcodeimg");
@@ -347,6 +429,21 @@ public class SubPage02 extends Fragment  {
 
         mAuth.addAuthStateListener(mAuthListener);
         super.onStart();
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) SubPage2Context.getSystemService(SubPage2Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected=true;
+            return true;
+        }
+        else
+            connected = false;
+        return false;
+
+
     }
 
 

@@ -2,12 +2,15 @@ package com.example.saurabh.mess2;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -47,6 +50,8 @@ import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.example.saurabh.mess2.RegisterActivity.SIGN_IN_CHECK;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Button loginBtn;
@@ -55,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailidedtxt,passwordedtxt;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference mDatabaseUsers,temp;
+    private DatabaseReference mDatabaseUsers,temp,mDatabase;
     private ProgressDialog mProgress,mProgressG;
     private SignInButton mGoogleBtn;
     private TextView mForgotPass;
@@ -104,9 +109,29 @@ public class LoginActivity extends AppCompatActivity {
         mForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(20);
-                Toast.makeText(LoginActivity.this,"Add Forgot Password method",Toast.LENGTH_LONG).show();
+
+
+                if(isConnected()) {
+
+
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    v.vibrate(20);
+
+                    generateDialogueBoxPassRes();
+
+                    //sendPasswordResetMail();
+
+
+                }
+                else
+                {
+                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
+
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(getBaseContext(),"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -166,8 +191,34 @@ public class LoginActivity extends AppCompatActivity {
                 if(isConnected()) {
                     Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(20);
-                    Intent regIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                    startActivity(regIntent);
+
+
+                    if(SIGN_IN_CHECK>0)
+                    {
+                          final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+
+                            builder.setTitle("SORRY!") //
+                                    .setMessage("Please Re-Install the App to Register Another User") //
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+
+                                        }
+                                    }); //
+
+                            builder.setCancelable(false);
+                            builder.show();
+
+
+
+                    }
+                    else
+                    {
+                        Intent regIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                        startActivity(regIntent);
+                    }
+
+
                 }
                 else
                 {
@@ -275,6 +326,68 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void generateDialogueBoxPassRes() {
+        final String email = emailidedtxt.getText().toString();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Forgot Password?");
+        builder.setMessage("Send Password Reset Email to "+email);
+
+        builder.setPositiveButton("SEND", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user pressed "yes", then he is allowed to exit from application
+                sendPasswordResetMail();
+            }
+        });
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user select "No", just cancel this dialog and continue with app
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+
+
+
+    }
+
+    private void sendPasswordResetMail() {
+
+
+        boolean valid = true;
+
+        final String email = emailidedtxt.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            emailidedtxt.setError("Required");
+            valid = false;
+        } else {
+            emailidedtxt.setError(null);
+        }
+        if(!email.contains("@") || !email.contains(".co"))
+        {
+            emailidedtxt.setError("Enter Valid Email ID");
+            valid=false;
+        }
+
+        if(valid)
+        {
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this,"Password Reset Email Sent to "+email,Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        }
+
+    }
+
     private boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
@@ -313,8 +426,15 @@ public class LoginActivity extends AppCompatActivity {
                 mProgress.setMessage("Signing You in...");
                 mProgress.show();
 
+
+
+
+
                 // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = result.getSignInAccount();
+                final GoogleSignInAccount account = result.getSignInAccount();
+
+
+
                 firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed, update UI appropriately
@@ -323,27 +443,86 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete(@NonNull final Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-                        Intent GSignIntent=new Intent(LoginActivity.this,MainActivity.class);
-                        GSignIntent.putExtra("gf",1);
-                        GSignIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(GSignIntent);
-                        Toast.makeText(LoginActivity.this,"Google Signed In",Toast.LENGTH_SHORT).show();
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                            boolean USER_FOUND_FLAG=false;
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+
+                                    String emailtemp=dsp.child("email").getValue(String.class);
+
+
+                                    String req_user_email_trim= account.getEmail().trim();
+
+
+
+                                    if(req_user_email_trim.equals(emailtemp)) //FINDS THE USER ID corresponding to EMAIL Given
+                                    {
+                                        USER_FOUND_FLAG=true;
+
+                                    }
+
+                                }
+                                if(!USER_FOUND_FLAG)
+                                {
+                                    mDatabase=FirebaseDatabase.getInstance().getReference();
+                                    DatabaseReference current_user_db= mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()); //goes inside the current user ref
+
+                                    current_user_db.child("name").setValue(account.getDisplayName().trim());
+                                    current_user_db.child("qrcode").setValue("default");
+                                    current_user_db.child("email").setValue(account.getEmail().trim());     // UNCCOMENT THIS TO ADD USER TO DATABASE
+                                    current_user_db.child("contact").setValue("nocontact");
+                                    current_user_db.child("college").setValue("nocollege");
+                                    current_user_db.child("scannedlunch").setValue("-1");
+                                    current_user_db.child("scanneddinner").setValue("-1");
+
+                                    current_user_db.child("endsub").setValue("-56");
+                                    current_user_db.child("groupid").setValue("not paid");
+
+
+
+
+                                }
+
+                                Intent GSignIntent=new Intent(LoginActivity.this,MainActivity.class);
+                                GSignIntent.putExtra("gf",1);
+                                GSignIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(GSignIntent);
+                                Toast.makeText(LoginActivity.this,"Google Signed In",Toast.LENGTH_SHORT).show();
+                                // If sign in fails, display a message to the user. If sign in succeeds
+                                // the auth state listener will be notified and logic to handle the
+                                // signed in user can be handled in the listener.
+                                if (!task.isSuccessful()) {
+                                    Log.w(TAG, "signInWithCredential", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
+
+
                         // ...
                     }
                 });
@@ -398,13 +577,13 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(mainIntent1);
 
 
-            Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
         }
         else
         {
             // email is not verified, so just prompt the message to the user and restart this activity.
             // NOTE: don't forget to log out the user.
-            Toast.makeText(LoginActivity.this, "Please Verify your Email!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Please Verify your Email!", Toast.LENGTH_LONG).show();
             FirebaseAuth.getInstance().signOut();
             Intent reIntent = new Intent(LoginActivity.this,LoginActivity.class);
           //  mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -467,5 +646,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }

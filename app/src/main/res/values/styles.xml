@@ -34,7 +34,7 @@
     <style name="NewTheme1" parent="Theme.AppCompat.NoActionBar" >
         <item name="colorPrimary">@color/screen4</item>
         <item name="colorPrimaryDark">@color/screen4</item>
-        <item name="colorAccent">@color/screen4</item>
+        <item name="colorAccent">@android:color/background_light</item>
         <item name="android:textColorPrimary">@color/BackgroundWhiteColor</item>
         <item name="android:colorBackground">@color/BackgroundWhiteColor1</item>
         <item name="android:textColorSecondary">@color/BackgroundWhiteColor</item>

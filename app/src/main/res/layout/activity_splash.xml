@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
@@ -8,7 +9,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#383838"
     tools:context="com.example.saurabh.mess2.SplashActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/final_logo"
+        android:layout_above="@+id/textView4"
+        android:layout_marginBottom="39dp"
+        android:id="@+id/imageView9"
+        android:layout_alignEnd="@+id/textView4"
+        android:layout_alignStart="@+id/textView4"
+        android:visibility="visible"
+        android:cropToPadding="false"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:text="Messing Up..."
@@ -16,9 +31,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
         android:textStyle="normal|bold"
-        android:textColor="#1c2428"
+        android:textColor="#fdc62e"
         android:textSize="30sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif" />
+        android:fontFamily="sans-serif"
+        android:layout_marginBottom="148dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

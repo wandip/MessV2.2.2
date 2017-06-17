@@ -42,7 +42,7 @@
     <TextView
         android:text="Not Now. Maybe Later?"
         android:textSize="15dp"
-        android:id="@+id/textView"
+        android:id="@+id/HelptextView"
         android:textColor="@color/BackgroundWhiteColor"
         android:layout_height="wrap_content"
         android:textStyle="normal|bold"

@@ -13,6 +13,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static com.example.saurabh.mess2.MainActivity.UserDataObj;
+
+
 import com.example.saurabh.mess2.BackendLogic.Group;
 import com.example.saurabh.mess2.BackendLogic.GroupAssignLogic;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +71,9 @@ public class AddFriendHandler extends AppCompatActivity{
                             Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                             v.vibrate(20);
                             REQUEST_USER_EMAIL = input.getText().toString();
+
+
+
                             AddFriendOnClick(REQUEST_USER_EMAIL);
                             dialog.dismiss();
                     }
@@ -84,19 +90,49 @@ public class AddFriendHandler extends AppCompatActivity{
 
     }
 
-    public void AddFriendOnClick(String REQUEST_USER_EMAIL)  //Initialises Database Refrences and gets The Current User ID
+    public void AddFriendOnClick(final String REQUEST_USER_EMAIL)  //Initialises Database Refrences and gets The Current User ID
     {
+        final int[] number_of_cur_grp_mem = new int[1];
         USER_FOUND_FLAG=0;
 
         mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");
 
-        mDatabaseUsers=FirebaseDatabase.getInstance().getReference().child("users");
-        mDatabaseInCurUser=mDatabaseUsers.child(mAuth.getCurrentUser().getUid());
 
-        Log.v("E_VALUE","THE CURRENT USER ID IS: "+MainActivity.UserDataObj.getuid());
-        CUR_USER_ID=MainActivity.UserDataObj.getuid();
+        mDatabaseGroups.child(UserDataObj.getGroupid()).child("memberid").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                number_of_cur_grp_mem[0] =((int) dataSnapshot.getChildrenCount());
+                if(number_of_cur_grp_mem[0]>=4)
+                {
+                    Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = {0, 75,100,75};
+                    Log.v("E_VALUE","NUMBER OF CUR USER GRP MEM 2:"+number_of_cur_grp_mem[0]);
+                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                    v.vibrate(pattern, -1);
+                    Toast.makeText(context,"Sorry! Your Group Size cannot exceed 4!",Toast.LENGTH_LONG).show();
 
-        searchRequestUID(REQUEST_USER_EMAIL);
+                }
+                else {
+
+                    mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("users");
+                    mDatabaseInCurUser = mDatabaseUsers.child(mAuth.getCurrentUser().getUid());
+
+                    Log.v("E_VALUE", "THE CURRENT USER ID IS: " + MainActivity.UserDataObj.getuid());
+                    CUR_USER_ID = MainActivity.UserDataObj.getuid();
+
+                    searchRequestUID(REQUEST_USER_EMAIL);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        Log.v("E_VALUE","NUMBER OF CUR USER GRP MEM 1:"+number_of_cur_grp_mem[0]);
+
+
 
     }
 
@@ -116,21 +152,44 @@ public class AddFriendHandler extends AppCompatActivity{
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
 
                     String emailtemp=dsp.child("email").getValue(String.class);
+                    String paidstatus=dsp.child("qrcode").getValue(String.class);
+                    String req_username=dsp.child("name").getValue(String.class);
 
                     String req_user_email_trim= request_user_email.trim();
 
+                    if(req_user_email_trim.equals(UserDataObj.getEmail()))
+                    {
+                        Toast.makeText(context,"Caught You ;P Don't Test Us we are full Proof !",Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
 
                     if(req_user_email_trim.equals(emailtemp)) //FINDS THE USER ID corresponding to EMAIL Given
                     {
-                        uidtemp=dsp.getKey();
-                        REQ_USER_ORIG_GRP=dsp.child("groupid").getValue(String.class);
-                        Log.v("E_VALUE","EMAIL FOUND : "+emailtemp);
+                        if(paidstatus.equals("default")||paidstatus.equals("paid"))
+                        {
+                            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                            long[] pattern = {0, 75,100,75};
 
-                        Log.v("E_VALUE","UID FOUND : "+uidtemp);
-                        REQ_USER_ID=uidtemp;
-                        USER_FOUND_FLAG=1;
-                        updateGroupId(uidtemp);
+                            // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                            v.vibrate(pattern, -1);
+                            Toast.makeText(context,"Your Friend "+req_username+" has not Confirmed Payment!",Toast.LENGTH_LONG).show();
+                            USER_FOUND_FLAG=1;
+                        }
+                        else
+                        {
+                            uidtemp=dsp.getKey();
+                            REQ_USER_ORIG_GRP=dsp.child("groupid").getValue(String.class);
+                            Log.v("E_VALUE","EMAIL FOUND : "+emailtemp);
+
+                            Log.v("E_VALUE","UID FOUND : "+uidtemp);
+                            REQ_USER_ID=uidtemp;
+                            USER_FOUND_FLAG=1;
+                            updateGroupId(uidtemp);
+
+                        }
+
+
 
 
                     }
@@ -279,5 +338,35 @@ public class AddFriendHandler extends AppCompatActivity{
         else
             connected = false;
         return false;
+    }
+
+    public void showNotPaidDialogue() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+
+
+        builder.setTitle("ADD FRIEND") //
+                .setMessage("Please Pay First, wait for Confirmation if already Paid!") //
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+
+
+                        dialog.dismiss();
+                    }
+                }); //
+               /* .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        // TODO
+                        dialog.dismiss();
+                    }
+                })*/
+        builder.show();
+
+
     }
 }

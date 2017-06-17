@@ -28,9 +28,10 @@
         android:layout_marginTop="30dp">
 
         <TextView
-            android:text="Need Help? Contact Us"
+            android:autoLink="email"
+            android:text="@string/helptext"
             android:textSize="15dp"
-            android:id="@+id/textView"
+            android:id="@+id/HelptextView"
             android:textColor="@color/BackgroundWhiteColor"
             android:layout_height="wrap_content"
             android:textStyle="normal|bold"

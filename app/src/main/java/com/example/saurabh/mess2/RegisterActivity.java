@@ -2,15 +2,19 @@ package com.example.saurabh.mess2;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -44,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private DatabaseReference mDatabase;
     private boolean connected=false;
+    public static int SIGN_IN_CHECK;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity {
         mPasswordField=(EditText)findViewById(R.id.PassEditTex);
         mCPasswordField=(EditText)findViewById(R.id.CPassEditTex);
         mCollegeField=(EditText)findViewById(R.id.CollegeEditText);
+       // mCollegeField.setText("PICT");
         mContactField=(EditText)findViewById(R.id.NumEditText);
         mAuth=FirebaseAuth.getInstance();
         mDatabase= FirebaseDatabase.getInstance().getReference().child("users"); //root directory of Firebase and new child
@@ -71,7 +78,38 @@ public class RegisterActivity extends AppCompatActivity {
                 if(isConnected()) {
                     Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(20);
-                    startRegister();
+
+                    if(validateForm()) {
+
+                        final String name=mNameField.getText().toString().trim();
+                        final String email=mEmailField.getText().toString().trim();
+                        final String college=mCollegeField.getText().toString().trim();
+                        final String contact=mContactField.getText().toString().trim();
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+
+                        builder.setTitle("CONFIRM!") //
+                                .setMessage("Name : "+name+"\n"+"College : "+college+"\n"+"Contact : "+contact+"\n"+"E-Mail : "+email+"\n"
+                                ) //
+                                .setPositiveButton("CONFIRM DETAILS", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        startRegister();
+
+                                    }
+                                }) //
+                                .setNegativeButton("EDIT DETAILS", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+
+                                    }
+                                });
+                        builder.setCancelable(false);
+                        builder.show();
+
+
+
+                    }
                 }
                 else
                 {
@@ -145,6 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void startRegister() {
 
+
        final String name=mNameField.getText().toString().trim();
         final String email=mEmailField.getText().toString().trim();
         String password =mPasswordField.getText().toString().trim();
@@ -162,16 +201,42 @@ public class RegisterActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful())
                     {
-                      /*  String user_id=mAuth.getCurrentUser().getUid(); //gives current users unique id
-                       DatabaseReference current_user_db= mDatabase.child(user_id); //goes inside the current user ref
+
+                        String user_id=mAuth.getCurrentUser().getUid(); //gives current users unique id
+
+
+                        DatabaseReference current_user_db;
+
+                        current_user_db= mDatabase.child(user_id); //goes inside the current user ref
 
                         current_user_db.child("name").setValue(name);
                         current_user_db.child("qrcode").setValue("default");
-                        current_user_db.child("email").setValue(email);      UNCCOMENT THIS TO ADD USER TO DATABSE
+                        current_user_db.child("email").setValue(email);     // UNCCOMENT THIS TO ADD USER TO DATABASE
                         current_user_db.child("contact").setValue(contact);
-                        current_user_db.child("college").setValue(college);*/
+                        Log.v("E_VALUE","babbaba : "+SIGN_IN_CHECK);
+
+                        current_user_db.child("college").setValue(college);
+                        current_user_db.child("scannedlunch").setValue("-1");
+                        current_user_db.child("scanneddinner").setValue("-1");
+
+                      //  Long endsubvalue=Long.parseLong("-56");
+
+
+
+                        current_user_db.child("endsub").setValue("-56");
+                        current_user_db.child("groupid").setValue("not paid");
+
+
+                        Log.v("E_VALUE","College : "+college);
+                        Log.v("E_VALUE","Contact : "+contact);
+                        Log.v("E_VALUE","Email : "+email);
+                       // Log.v("E_VALUE","GroupID : "+UserDataObj.getGroupid());
+                        Log.v("E_VALUE","NAME : "+name);
+                        Log.v("E_VALUE","USER ID : "+user_id);
+
 
                         mProgress.dismiss();
+                        SIGN_IN_CHECK++;
                         sendVerificationEmail();
 
 
@@ -183,6 +248,13 @@ public class RegisterActivity extends AppCompatActivity {
                     else
                     {
                         mProgress.dismiss();
+                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            Toast.makeText(getBaseContext(),
+                                    "User with this email already exist.", Toast.LENGTH_LONG).show();
+                        }else
+                        {
+                            Toast.makeText(getBaseContext(),"Something went wrong",Toast.LENGTH_LONG).show();
+                        }
                     }
 
                 }
@@ -202,7 +274,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             mEmailField.setError(null);
         }
-        if(!email.contains("@") || !email.contains(".com"))
+        if(!email.contains("@") || !email.contains(".co"))
         {
             mEmailField.setError("Enter Valid Email ID");
             valid=false;

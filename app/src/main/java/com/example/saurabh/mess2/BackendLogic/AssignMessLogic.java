@@ -79,6 +79,7 @@ public class AssignMessLogic extends AppCompatActivity {
             messname = ((i + date - 2) % 4);
 //
            DatabaseReference mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+
             mInMessGroupList.setValue(null);
 
             int j=Group.dip.get(i-1).size()-1;
@@ -91,47 +92,187 @@ public class AssignMessLogic extends AppCompatActivity {
             }
 
         }
+
+      /*  for (int i = 1; i < 5; i++) {
+            //       System.out.print("mess for set " + i + " is ");
+            messname = ((i + date - 2) % 4);
+//
+            DatabaseReference mInMessMessName= mDatabaseMessRef.child(m1.get(messname).mid).child("messname");
+            final String[] TodaysMessTemp = new String[1];
+            mInMessMessName.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    TodaysMessTemp[0] =dataSnapshot.getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 4: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+
+
+                DatabaseReference mInGroup=FirebaseDatabase.getInstance().getReference().child("group").child((String) Group.dip.get(i - 1).get(j));
+                mInGroup.child("todaysmess").setValue(TodaysMessTemp[0]);
+
+
+
+                j--;
+
+            }
+
+        }*/
+/*
+        DatabaseReference mInMessName= mDatabaseMessRef.child(m1.get(messname).mid).child("messname");
+*/
     }
+
+    /*
+     mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseMessRef = mDatabase.child("mess");
+
+
+        for (int i = 1; i < 5; i++) {
+     //       System.out.print("mess for set " + i + " is ");
+            messname = ((i + date - 2) % 4);
+//
+           DatabaseReference mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+
+            mInMessGroupList.setValue(null);
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 4: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+                DatabaseReference mTemp = mInMessGroupList.child((String) Group.dip.get(i - 1).get(j));
+                mTemp.setValue("0");
+                j--;
+
+            }
+
+        }
+     */
 
     private void logic5(int date) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseMessRef = mDatabase.child("mess");
+
         for (int i = 1; i < 6; i++) {
 
-            System.out.print("mess for set " + i + "is ");
+            //System.out.print("mess for set " + i + "is ");
             messname = ((i + date - 2) % 5);
 
+            DatabaseReference mInMessGroupList;
             if (messname <= 3)
-                System.out.println(m1.get(messname).name);/////normal mapping
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
             else
-                System.out.println(m1.get(1).name);///5th mess is second one B
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+
+            mInMessGroupList.setValue(null);
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 5: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+                DatabaseReference mTemp = mInMessGroupList.child((String) Group.dip.get(i - 1).get(j));
+                mTemp.setValue("0");
+                j--;
+
+            }
         }
     }
 
-    private static void logic6(int date) {
+    private void logic6(int date) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseMessRef = mDatabase.child("mess");
+
         for (int i = 1; i < 7; i++) {
 
-            System.out.print("mess for set " + i + "is ");/////ABCabD
+            //System.out.print("mess for set " + i + "is ");/////ABCabD
             messname = ((i + date - 2) % 6);
+            DatabaseReference mInMessGroupList;
 
             if (messname < 3)
-                System.out.println(m1.get(messname).name);
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
             else if (messname < 5)
-                System.out.println(m1.get(messname - 3).name);
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname-3).mid).child("grouplist");
             else
-                System.out.println(m1.get(3).name);
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+
+            mInMessGroupList.setValue(null);
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 6: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+                DatabaseReference mTemp = mInMessGroupList.child((String) Group.dip.get(i - 1).get(j));
+                mTemp.setValue("0");
+                j--;
+
+            }
         }
 
     }
 
-    private static void logic7(int date) {
+    private void logic7(int date) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseMessRef = mDatabase.child("mess");
+
         for (int i = 1; i < 8; i++) {
 
-            System.out.print("mess for set " + i + "is ");
+            //System.out.print("mess for set " + i + "is ");
             messname = (((i + date - 2) % 7) % 4);
 
-            System.out.println(m1.get(messname).name);
+            DatabaseReference mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+
+            mInMessGroupList.setValue(null);
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 4: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+                DatabaseReference mTemp = mInMessGroupList.child((String) Group.dip.get(i - 1).get(j));
+                mTemp.setValue("0");
+                j--;
+
+            }
         }
     }
 
+    private void logic9(int date) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabaseMessRef = mDatabase.child("mess");
+
+        for (int i = 1; i < 10; i++) {
+
+            //System.out.print("mess for set " + i + "is ");
+            messname = ((i + date - 2) % 9);
+
+            DatabaseReference mInMessGroupList;
+
+            if (messname <= 3)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+            else if (messname <= 5)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname-4).mid).child("grouplist");
+            else if (messname==6)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+            else if (messname==7)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+            else 
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+
+            mInMessGroupList.setValue(null);
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 4: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+                DatabaseReference mTemp = mInMessGroupList.child((String) Group.dip.get(i - 1).get(j));
+                mTemp.setValue("0");
+                j--;
+
+            }
+        }
+    }
     public void switchlogic() {
 
 
@@ -154,6 +295,8 @@ public class AssignMessLogic extends AppCompatActivity {
             case 7:
                 logic7(d);
                 break;
+            case 9:
+                logic9(d);
         }
     }
 }
