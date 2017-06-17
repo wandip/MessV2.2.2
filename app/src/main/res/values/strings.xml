@@ -92,4 +92,9 @@
     <string name="my_own_thanks">No, Thanks</string>
     <string name="my_own_cancel">Maybe Later</string>
 
+    <string name="meetingsetup">Call or Drop us a Message anytime to set up meeting time! <br><a href="" target="_top">+917387636474</a></br></string>
+
+    <string name="unlimitedthalipay">UNLIMITED THALI</string>
+    <string name="instamojodetails">PCI-DSS compliant payment environment. 128-bit encryption. RBI regulations compliant.</string>
+
 </resources>

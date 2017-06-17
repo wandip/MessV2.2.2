@@ -27,7 +27,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class PaymentActivity extends AppCompatActivity {
 
     String UserID;
-    private TextView PaymentAmtTxtView,NameTxtView,EmailTxtView,ContactTxtView,NeedHelpTxtView;
+    private TextView PaymentAmtTxtView,CostTxtView,NameTxtView,EmailTxtView,ContactTxtView,NeedHelpTxtView;
     private DatabaseReference mCurrentUser,mCheckQRCode;
     private String TotalAmtLim,TotalAmtUnLim;
     private int RECEIVED_TOKEN=0;
@@ -36,7 +36,7 @@ public class PaymentActivity extends AppCompatActivity {
     private String BothTimesGatewayUrl;/*="https://www.instamojo.com/@messedup9/lbefc4952fa694c228b6a7d19b480cf8d/";*/
     private PaymentGatewayActivity paymentGatewayActivity;
     private String paymenturllim,paymenturlunlim; //actual payment link
-    private String onlyLunchGatewayUrl;
+    private String CashString,onlyLunchGatewayUrl;
     private String onlyDinnerGatewayUrl;
     private DatabaseReference mAdminDatabase,mPaymentLinklim,mPaymentLinkunlim;
 
@@ -47,22 +47,22 @@ public class PaymentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.acitivity_new_payment);
 
         //PaymentAmtTxtView=(TextView)findViewById(R.id.CostTxtView);
-        NameTxtView=(TextView)findViewById(R.id.NameTextView);
+        /*NameTxtView=(TextView)findViewById(R.id.NameTextView);
         ContactTxtView=(TextView)findViewById(R.id.ContactEditText);
         EmailTxtView=(TextView)findViewById(R.id.EmailTextView);
-        NeedHelpTxtView=(TextView)findViewById(R.id.HelptextView);
-
-        NameTxtView.setText(UserDataObj.getName());
+        NeedHelpTxtView=(TextView)findViewById(R.id.HelptextView);*/
+        CostTxtView=(TextView)findViewById(R.id.CostTxtView1);
+        /*NameTxtView.setText(UserDataObj.getName());
         ContactTxtView.setText(UserDataObj.getContact());
-        EmailTxtView.setText(UserDataObj.getEmail());
+        EmailTxtView.setText(UserDataObj.getEmail());*/
 
 
-        PaymentBtn=(Button)findViewById(R.id.paymentBtn);
+       // PaymentBtn=(Button)findViewById(R.id.paymentBtn);
 
-        BothBtnLim=(Button)findViewById(R.id.BothButtonLim);
+        //BothBtnLim=(Button)findViewById(R.id.BothButtonLim);
         BothBtnUnLim=(Button)findViewById(R.id.BothButtonUnLim);
 
        // onlyLunchBtn=(Button)findViewById(R.id.onlyLunchButton);
@@ -83,7 +83,20 @@ public class PaymentActivity extends AppCompatActivity {
 
         DatabaseReference mAmmountLim=mAdminDatabase.child("costlimited");
         DatabaseReference mAmmountUnLim=mAdminDatabase.child("costunlimited");
+        DatabaseReference mCashPaymentString=mAdminDatabase.child("cashpayment");
 
+        mCashPaymentString.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                CashString=dataSnapshot.getValue().toString();
+                CostTxtView.setText(CashString);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mPaymentLinklim.addValueEventListener(new ValueEventListener() {
             @Override
@@ -107,7 +120,7 @@ public class PaymentActivity extends AppCompatActivity {
 
             }
         });
-        mAmmountLim.addValueEventListener(new ValueEventListener() {
+     /*   mAmmountLim.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TotalAmtLim=dataSnapshot.getValue().toString();
@@ -119,13 +132,16 @@ public class PaymentActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        });*/
         mAmmountUnLim.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 TotalAmtUnLim=dataSnapshot.getValue().toString();
                 /*PaymentAmtTxtView.setText("Unlimited Thali   ₹  "+TotalAmtUnLim);*/
-                BothBtnUnLim.setText("Unlimited Thali ₹  "+TotalAmtUnLim);
+
+
+
+                BothBtnUnLim.setText("Continue to Pay ₹  "+TotalAmtUnLim);
 
 
             }
@@ -145,7 +161,7 @@ public class PaymentActivity extends AppCompatActivity {
 
 
 
-        BothBtnLim.setOnClickListener(new View.OnClickListener() {
+       /* BothBtnLim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -169,7 +185,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
 
-        });
+        });*/
         BothBtnUnLim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

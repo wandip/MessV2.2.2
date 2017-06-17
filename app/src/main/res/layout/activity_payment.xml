@@ -47,7 +47,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="15dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -160,7 +161,7 @@
                     android:background="@drawable/signup_button"
                     android:elevation="0dp"
                     android:padding="15dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:textSize="17sp"
                     android:layout_below="@+id/linearLayout4"
                     android:layout_alignParentStart="true"
@@ -168,23 +169,6 @@
                     tools:text="Limited thali"
                     android:text="Limited thali"
                     android:layout_weight="0.94"
-                    android:layout_marginTop="30dp" />
-
-                <Button
-                    android:textColor="@color/BackgroundWhiteColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/BothButtonUnLim"
-                    android:background="@drawable/signup_button"
-                    android:elevation="0dp"
-                    android:padding="15dp"
-                    android:visibility="visible"
-                    android:textSize="17sp"
-                    android:layout_below="@+id/linearLayout4"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    tools:text="Unlimited thali"
-                    android:layout_weight="1"
                     android:layout_marginTop="30dp" />
 
                 <TextView
@@ -201,6 +185,22 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginTop="15dp"
                     android:text="Pay with cash  ₹̶3̶0̶7̶5̶  ->  ₹3025" />
+
+                <Button
+                    android:textColor="@color/BackgroundWhiteColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/BothButtonUnLim"
+                    android:background="@drawable/signup_button"
+                    android:elevation="0dp"
+                    android:padding="15dp"
+                    android:visibility="visible"
+                    android:textSize="17sp"
+                    android:layout_below="@+id/linearLayout4"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    tools:text="Unlimited thali"
+                    android:layout_marginTop="30dp" />
 
             </LinearLayout>
         </LinearLayout>

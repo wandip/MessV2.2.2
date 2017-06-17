@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@drawable/credit_card_2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+
+        android:textSize="15dp"
+        android:autoLink="email"
+        android:text="@string/helptext"
+        android:id="@+id/HelptextView"
+        android:textColor="@color/BackgroundWhiteColor"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/instamojo_secure_inverted"
+        android:scaleType="fitCenter"
+        android:id="@+id/imageView12"
+        android:layout_above="@+id/HelptextView"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/BothButtonUnLim" />
+
+    <TextView
+        android:text="Just One Step away!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView16"
+        android:textStyle="normal|bold"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:textAlignment="center" />
+
+    <TextView
+        android:text="OR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView19"
+        android:textStyle="normal|bold|italic"
+        android:textAllCaps="true"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:layout_marginLeft="5dp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/textView19"
+        android:layout_marginLeft="15dp" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/textView19"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:text="@string/meetingsetup"
+        android:autoLink="phone"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_width="wrap_content"
+        android:textColorLink="#dc001a"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView17"
+        android:layout_above="@+id/textView19"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/BackgroundWhiteColor"
+        android:textStyle="normal|bold"
+        android:textSize="25dp"
+        android:id="@+id/CostTxtView1"
+        android:textAlignment="center"
+        android:visibility="visible"
+        android:text="Pay with cash  ₹̶3̶0̶7̶5̶  ->  ₹3025"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_above="@+id/textView17"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:textAllCaps="true" />
+
+    <TextView
+        android:text="Pay securely with just One Tap with our Payment Gateway"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView19"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView20"
+        android:layout_marginTop="40dp"
+        android:textSize="20sp"
+        android:textStyle="normal|bold"
+        android:textAlignment="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/BackgroundWhiteColor1" />
+
+    <Button
+        android:textColor="@color/BackgroundWhiteColor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/BothButtonUnLim"
+        android:background="@drawable/signup_button"
+        android:elevation="0dp"
+        android:padding="15dp"
+        android:visibility="visible"
+        android:textSize="17sp"
+        tools:text="continue to pay: "
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_below="@+id/textView20"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
+
+
+</RelativeLayout>

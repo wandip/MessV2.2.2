@@ -26,42 +26,40 @@
         android:paddingBottom="10dp"
         android:textAlignment="viewStart"
         android:id="@+id/userGroupID"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
         android:paddingLeft="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/ralewayReg"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="15dp"
         android:textColor="@color/BackgroundWhiteColor1" />
 
     <TextView
         android:layout_width="match_parent"
-        android:paddingBottom="10dp"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
         android:id="@+id/scannedlunchTxtView"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
-        android:paddingLeft="10dp"
         android:layout_alignBottom="@+id/ralewayReg"
         android:layout_alignParentStart="true"
-        android:textColor="@color/BackgroundWhiteColor1" />
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
-        android:paddingBottom="10dp"
         android:id="@+id/scanneddinnerTxtView"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
-        android:paddingLeft="10dp"
         android:layout_above="@+id/scannedlunchTxtView"
         android:layout_alignParentStart="true"
-        android:textColor="@color/BackgroundWhiteColor1" />
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +67,6 @@
         android:layout_below="@+id/member1TxtView"
         android:id="@+id/member2TxtView"
         android:textSize="18sp"
-        android:layout_marginTop="10dp"
         android:textAlignment="center"
         android:layout_alignEnd="@+id/member1TxtView"
         android:layout_alignStart="@+id/member1TxtView"
@@ -85,28 +82,11 @@
         android:layout_alignStart="@+id/member2TxtView"
         android:id="@+id/member3TxtView"
         android:textSize="18sp"
-        android:layout_marginTop="10dp"
         android:textAlignment="center"
         android:layout_alignEnd="@+id/member2TxtView"
         android:textAllCaps="false"
-        android:layout_marginBottom="10dp"
         android:textColor="@color/BackgroundWhiteColor1"
         android:textStyle="normal|bold" />
-
-    <TextView
-        android:text="Your Friends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView11"
-        android:layout_below="@+id/AddGroupBtn"
-        android:textSize="20sp"
-        android:textAlignment="center"
-        android:textStyle="normal|bold"
-        android:layout_alignEnd="@+id/AddGroupBtn"
-        android:layout_alignStart="@+id/AddGroupBtn"
-        android:layout_marginTop="25dp"
-        android:textAllCaps="true"
-        android:textColor="@color/BackgroundWhiteColor1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -115,13 +95,58 @@
         android:textSize="18sp"
         android:textAlignment="center"
         android:layout_below="@+id/textView11"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="12dp"
         android:layout_alignEnd="@+id/textView11"
         android:layout_alignStart="@+id/textView11"
         android:textAllCaps="false"
-        android:layout_marginBottom="10dp"
         android:textColor="@color/BackgroundWhiteColor1"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:layout_marginBottom="10dp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_toStartOf="@+id/textView11"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/textView11"
+        android:layout_marginRight="5dp"
+        android:id="@+id/topleftView" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#FFFFFF"
+        android:layout_toEndOf="@+id/textView11"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/textView11"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerHorizontal="false"
+        android:id="@+id/toprightView"
+        android:layout_below="@+id/textView11" />
+
+    <View
+        android:background="#FFFFFF"
+        android:layout_marginLeft=" 20dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/leftView"
+        android:layout_height="fill_parent"
+        android:visibility="visible"
+        android:layout_width="1dp"
+        android:layout_below="@+id/textView11"
+        android:layout_alignBottom="@+id/bottomView"
+        android:layout_above="@+id/textView11" />
+    <View
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="#FFFFFF"
+        android:layout_below="@+id/textView11"
+        android:layout_marginRight="25dp"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/bottomView"
+        android:layout_above="@+id/textView11"
+        android:id="@+id/rightView"
+        android:layout_toEndOf="@+id/bottomView" />
 
 
     <Button
@@ -145,9 +170,9 @@
         android:id="@+id/SuperPowerfulButton2"
         android:backgroundTint="@color/zxing_viewfinder_laser"
         android:layout_below="@+id/member3TxtView"
-        android:layout_alignStart="@+id/member3TxtView"
+        android:layout_alignStart="@+id/AddGroupBtn"
         android:layout_marginTop="56dp"
-        android:layout_alignEnd="@+id/member3TxtView" />
+        android:layout_alignEnd="@+id/AddGroupBtn" />
 
     <Button
         android:text="DailyUpdate"
@@ -163,11 +188,15 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:background="#FFFFFF"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
         android:layout_marginBottom="10dp"
-        android:layout_below="@+id/textView11"
-        android:layout_marginTop="10dp" />
+        android:visibility="visible"
+        android:layout_below="@+id/member3TxtView"
+        android:layout_marginTop="20dp"
+        android:layout_alignEnd="@+id/toprightView"
+        android:layout_alignStart="@+id/topleftView"
+        android:id="@+id/bottomView" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -178,5 +207,19 @@
         android:visibility="invisible"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Your Friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView11"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        android:textStyle="normal|bold"
+        android:layout_marginTop="15dp"
+        android:textAllCaps="true"
+        android:textColor="@color/BackgroundWhiteColor1"
+        android:layout_below="@+id/AddGroupBtn"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

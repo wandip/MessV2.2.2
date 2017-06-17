@@ -143,6 +143,7 @@
         android:id="@+id/ContactTextView"
         android:textColor="@color/BackgroundWhiteColor1"
         android:layout_height="wrap_content"
+        android:textColorLink="@color/screen4"
         android:textStyle="normal|bold"
         android:layout_width="wrap_content"
         android:textAlignment="center"
@@ -200,6 +201,7 @@
         android:id="@+id/HelptextView"
         android:textColor="@color/BackgroundWhiteColor1"
         android:layout_height="wrap_content"
+        android:textColorLink="@color/screen4"
         android:textStyle="normal|bold"
         android:layout_width="wrap_content"
         android:textAlignment="center"
@@ -210,7 +212,7 @@
 
     <TextView
         android:text="version :"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/button_background_enabled_end"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textAlignment="center"

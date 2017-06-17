@@ -482,8 +482,6 @@ public class MainActivity extends AppCompatActivity{
                     Log.v("E_VALUE","NAME : "+UserDataObj.getName());
                     Log.v("E_VALUE","QRCODE : "+UserDataObj.getQrcode());
                     setTitle("Hi, "+UserDataObj.getName());
-                     setUserDetails2(UserDataObj.getCollege(),UserDataObj.getContact(),
-                             UserDataObj.getEmail(),UserDataObj.getEndsub(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode(),UserDataObj.getScanneddinner(),UserDataObj.getScannedlunch());
 
                 if(UserDataObj.getContact().equals("nocontact"))
                 {
@@ -521,6 +519,9 @@ public class MainActivity extends AppCompatActivity{
 
 
                 }
+                setUserDetails2(UserDataObj.getCollege(),UserDataObj.getContact(),
+                        UserDataObj.getEmail(),UserDataObj.getEndsub(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode(),UserDataObj.getScanneddinner(),UserDataObj.getScannedlunch());
+
 
 
 
