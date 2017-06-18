@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -37,6 +40,7 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +54,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -64,12 +69,17 @@ import com.squareup.picasso.Picasso;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static android.text.InputType.TYPE_CLASS_PHONE;
+
 public class MainActivity extends AppCompatActivity{
 
 
-    public static String QRCODE,USERNAME;
+    public static String QRCODE,USERNAME,PAID_NEXT,PAID_TIME,BATCH;
     public static  boolean PAYEMENT_DONE,connected;
     static int count=0;
+    public static String CURRENT;
+
+    public static String BUFFER;
 
     private static Button showmess;
     private static TextView showmes,UserNameTxt;
@@ -79,6 +89,8 @@ public class MainActivity extends AppCompatActivity{
     public static Users UserDataObj;
     public static Group obj;
     private static String NameTemp;
+    private static boolean DIALOG_MESSAGE_SHOWN;
+    private static String DIALOG_MESSAGE;
 
 
     String resumeflag;
@@ -120,7 +132,18 @@ public class MainActivity extends AppCompatActivity{
         final int intValue2 = mainIntent2.getIntExtra("gf", 0);
 
 
-            if(!isConnected())
+
+
+
+
+        /*Object timestamp=timeMap.get(".sv");
+        Log.v("E_VALUE","*****++++TIMESTAMP++++****"+ timestamp);
+*/
+
+
+
+
+        if(!isConnected())
             {
                  Toast.makeText(MainActivity.this,"Please Connect to the Internet to Update your Today's Mess",Toast.LENGTH_LONG).show();
                 Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
@@ -131,6 +154,7 @@ public class MainActivity extends AppCompatActivity{
             }
 
             checkUpdate();
+            checkMessage();
 
 
 
@@ -390,6 +414,113 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private void checkMessage()
+    {
+/*
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor PreferanceEditor = preferences.edit();*/
+
+        final SharedPreferences preferences = this.getSharedPreferences("com.example.saurabh.mess2", Context.MODE_PRIVATE);
+        SharedPreferences.Editor PreferanceEditor = preferences.edit();
+
+        final String MessageKey="com.example.saurabh.mess2.message";
+
+
+
+        Log.v("E_VALUE","=================1111"+preferences.getString(MessageKey,"mmm"));
+
+
+            final String[] msg = new String[1];
+            final String[] msgtitle = new String[1];
+            msgtitle[0]="MESSAGE";
+
+            DatabaseReference mAdminDatabaseMessage = FirebaseDatabase.getInstance().getReference().child("admin").child("message");
+            DatabaseReference mAdminDatabaseMessageTitle = FirebaseDatabase.getInstance().getReference().child("admin").child("message");
+        DatabaseReference mAdminDatabase = FirebaseDatabase.getInstance().getReference().child("adminmessage").child("messagetext");
+          mAdminDatabase.addValueEventListener(new ValueEventListener() {
+
+              @Override
+              public void onDataChange(DataSnapshot dataSnapshot) {
+
+                  String name = preferences.getString(MessageKey,"nomessage");
+
+
+                  if(!name.equals("nomessage")) {
+
+
+                      msg[0] = dataSnapshot.getValue().toString();
+                      // msgtitle[0] = dataSnapshot.child("messagetitle").getValue().toString();
+
+                      if (!msg[0].equals(name) && !msg[0].equals("nomessage"))
+                      {
+                          showMessageDialog(msg[0], msgtitle[0]);
+                      }
+                  }
+
+
+              }
+
+              @Override
+              public void onCancelled(DatabaseError databaseError) {
+
+              }
+          });
+
+    }
+
+    private void showMessageDialog(final String mssg, String mssgtitle)
+    {
+
+        final SharedPreferences preferences = this.getSharedPreferences("com.example.saurabh.mess2", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor PreferanceEditor = preferences.edit();
+
+        final String MessageKey="com.example.saurabh.mess2.message";
+
+        PreferanceEditor.putString(MessageKey, mssg);
+        PreferanceEditor.apply();
+
+
+
+
+        DIALOG_MESSAGE=mssg;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(mssgtitle) //
+                .setMessage(mssg) //
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        PreferanceEditor.putString(MessageKey, mssg);
+                        PreferanceEditor.apply();
+
+                        dialog.dismiss();
+                        Log.v("E_VALUE", "AFTER CLICKING ........."+String.valueOf(DIALOG_MESSAGE_SHOWN));
+
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        DIALOG_MESSAGE_SHOWN=true;
+                        PreferanceEditor.putString(MessageKey, mssg);
+                        PreferanceEditor.apply();
+
+                        dialog.dismiss();
+                    }
+                });
+        this.setFinishOnTouchOutside(false);
+        builder.setCancelable(false);
+        builder.show();
+
+
+
+    }
+
+
+
+
+
     private void showUpdateDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -464,6 +595,11 @@ public class MainActivity extends AppCompatActivity{
                      UserDataObj.setuid(uid);
                     Log.v("E_VALUE",UserDataObj.getuid());
 
+
+                PAID_NEXT=dataSnapshot.child("paidnext").getValue().toString();
+                PAID_TIME=dataSnapshot.child("paidtime").getValue().toString();
+                BATCH=dataSnapshot.child("batch").getValue().toString();
+
                     SubPage03 Subpage3obj=new SubPage03();
                     Subpage3obj.setDetails(UserDataObj.getCollege(),UserDataObj.getContact(),
                             UserDataObj.getEmail(),UserDataObj.getEndsub(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode(),UserDataObj.getScanneddinner(),UserDataObj.getScannedlunch());
@@ -473,6 +609,9 @@ public class MainActivity extends AppCompatActivity{
 
                 UserNameTxtView.setText(UserDataObj.getName());
                 */
+
+
+
 
 
                     Log.v("E_VALUE","College : "+UserDataObj.getCollege());
@@ -491,7 +630,15 @@ public class MainActivity extends AppCompatActivity{
 
 
                     final EditText input = new EditText(getBaseContext());
-                    builder.setView(input);
+                    input.setInputType(TYPE_CLASS_PHONE);
+                    input.setSingleLine();
+                    FrameLayout container = new FrameLayout(getBaseContext());
+                    FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.leftMargin = 50;
+                    params.rightMargin=50;
+                    input.setLayoutParams(params);
+                    container.addView(input);
+                    builder.setView(container);
                     builder.setTitle("CONTACT DETAILS") //
                             .setMessage("Enter your Mobile Number") //
                             .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {

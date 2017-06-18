@@ -52,5 +52,15 @@
         android:layout_centerHorizontal="true"
         android:visibility="gone" />
 
+    <Button
+        android:text="Upcoming Month.."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/signup_button"
+        android:layout_below="@+id/QRCodeImageView"
+        android:id="@+id/PayNextBtn"
+        android:layout_alignStart="@+id/TodaysMessTxtView"
+        android:layout_alignEnd="@+id/TodaysMessTxtView" />
+
 
 </RelativeLayout>

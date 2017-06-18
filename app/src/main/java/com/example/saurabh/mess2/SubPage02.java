@@ -31,10 +31,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -51,12 +53,25 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import static com.example.saurabh.mess2.MainActivity.BATCH;
+import static com.example.saurabh.mess2.MainActivity.BUFFER;
+import static com.example.saurabh.mess2.MainActivity.CURRENT;
+import static com.example.saurabh.mess2.MainActivity.PAID_NEXT;
+import static com.example.saurabh.mess2.MainActivity.PAID_TIME;
 import static com.example.saurabh.mess2.MainActivity.PAYEMENT_DONE;
 import static com.example.saurabh.mess2.MainActivity.QRCODE;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
 import static com.example.saurabh.mess2.R.id.QRCodeImageView;
 import static com.example.saurabh.mess2.R.id.start;
+/*
+import static com.example.saurabh.mess2.UpdateStrings.BUFFER;
+*/
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,7 +102,9 @@ public class SubPage02 extends Fragment  {
     private DatabaseReference mGroupDatabase,mInGroupUserGrp;
     private Bitmap bitmap;
     private String qrcode;
-    private Button paybtn;
+    private Button UpcomingMonthBtn;
+    public static Map<String,String> timeMap;
+
     private boolean connected;
 
 
@@ -144,7 +161,7 @@ public class SubPage02 extends Fragment  {
 
         // Inflate the layout for this fragment
         rootView2=inflater.inflate(R.layout.fragment_sub_page02, container, false);
-        paybtn=(Button)rootView2.findViewById(R.id.PayButton);
+        UpcomingMonthBtn=(Button)rootView2.findViewById(R.id.PayNextBtn);
         image=(ImageView)rootView2.findViewById(QRCodeImageView);
         mGeneratingQRCode=new ProgressDialog(SubPage2Context);
         mAuth=FirebaseAuth.getInstance();
@@ -216,14 +233,17 @@ public class SubPage02 extends Fragment  {
                 DatabaseReference mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
                 DatabaseReference  mCheckQRCode=mCurrentUser.child("qrcode");
 
-                if(QRCODE.equals("paid"))
+                if(QRCODE.equals("paid")&&PAID_TIME.equals("not paid"))
                 {
                     if(isConnected())
                     {
                         Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(20);
 
-                        onPayClicked();
+
+                        setbatch();
+
+
                     }
                     else
                     {
@@ -236,9 +256,8 @@ public class SubPage02 extends Fragment  {
                     }
 
                 }
-                else
+                else if(PAID_TIME.equals("not paid"))
                 {
-
                     Intent PaymentIntent=new Intent(SubPage2Context,PaymentActivity.class);
                     PaymentIntent.putExtra("UserID", mAuth.getCurrentUser().getUid());
                     //startActivityForResult(PaymentIntent,0);
@@ -258,34 +277,249 @@ public class SubPage02 extends Fragment  {
         }
 
 
+        UpcomingMonthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent NextMonthIntent=new Intent(SubPage2Context,NextMonthActivity.class);
+               // NextMonthIntent.putExtra("UserID", mAuth.getCurrentUser().getUid());
+                //startActivityForResult(PaymentIntent,0);
+                SubPage2Context.startActivity(NextMonthIntent);
+
+            }
+        });
+
+
 
         return rootView2;
     }
 
+    private void setbatch() {
+
+        timeMap=ServerValue.TIMESTAMP;
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+
+            FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("paidtime").setValue(timeMap);
+        }
+
+
+        FirebaseDatabase.getInstance().getReference().child("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("paidtime").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                SimpleDateFormat dateFormat=new SimpleDateFormat("dd MM yyyy");
+
+                Date paidDate=new Date(((Long) dataSnapshot.getValue()));
+
+                checkDate(paidDate);
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+       // onPayClicked();
+
+    }
+
+    private void checkDate(final Date paidDate) {
+
+        final String[] batch2start = {null};
+        final String[] batch1start = {null};
+
+        FirebaseDatabase.getInstance().getReference().child("admin").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+
+                if(s==null)
+                {
+                  batch1start[0] = dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 1 START "+ batch1start[0]);
+
+                }
+                else if(s.equals("batch1start"))
+                {
+                    batch2start[0] =dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 2 START "+ batch2start[0]);
+
+                }
+
+
+                if(batch1start[0]!=null&&batch2start[0]!=(null)) {
+                    updateBatch(batch1start[0], batch2start[0], paidDate);
+                    batch1start[0]=null;
+                    batch2start[0]=null;
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+
+                if(s==null)
+                {
+                    batch1start[0]= dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 1 START "+batch1start[0]);
+
+
+                }
+                else if(s.equals("batch1start"))
+                {
+                    batch2start[0]=dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 2 START "+batch2start[0]);
+
+                }
+
+
+                if(batch1start[0]!=null&&batch2start[0]!=(null))
+                {
+                    updateBatch(batch1start[0], batch2start[0], paidDate);
+                    batch1start[0]=null;
+                    batch2start[0]=null;
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void updateBatch(String batch1start, String batch2start, Date paidDate) {
+
+
+        SimpleDateFormat myFormat=new SimpleDateFormat("dd MM yyyy");
+
+        try {
+            Date b1=myFormat.parse(batch1start);
+            Date b2=myFormat.parse(batch2start);
+
+            long diff1=b1.getTime()-paidDate.getTime();
+            long diff2=b2.getTime()-paidDate.getTime();
+
+
+
+            if(diff1<diff2)
+            {
+                BATCH="batch1";
+
+
+                Log.v("E_VALUE","SUB PAGE BATCH"+BATCH);
+
+
+                FirebaseDatabase.getInstance().getReference().child("users")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("batch").setValue("batch1");
+                onPayClicked();
+            }
+            else
+            {
+                BATCH="batch2";
+
+                FirebaseDatabase.getInstance().getReference().child("users")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("batch").setValue("batch2");
+                onPayClicked();
+            }
+
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 
     public void onPayClicked() {
 
-        mGroupDatabase=FirebaseDatabase.getInstance().getReference().child("group");
-       mInGroupUserGrp= mGroupDatabase.push();
-        mInGroupUserGrp.child("memberid").child(UserDataObj.getuid()).setValue("100");
-        mInGroupUserGrp.child("todaysmess").setValue(".............");
 
-        DatabaseReference mInCurUser=FirebaseDatabase.getInstance().getReference().child("users").child(UserDataObj.getuid());
+        DatabaseReference mBatchDatabase = FirebaseDatabase.getInstance().getReference().child(BATCH);
+
+        mBatchDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                CURRENT = dataSnapshot.child("current").getValue().toString();
+                BUFFER = dataSnapshot.child("buffer").getValue().toString();
+                updateGrpQRCode();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
+    }
+
+    private void updateGrpQRCode() {
 
 
-
-        mInCurUser.child("groupid").setValue(mInGroupUserGrp.getKey());
-
-      //  Long endsubvalue=Long.parseLong("56");
-        mInCurUser.child("endsub").setValue("56");
+        Log.v("E_VALUE","BUFFER 1 STRING VALUE==="+BUFFER);
 
 
-        mGeneratingQRCode.setMessage("Generating your QR Code");
-        mGeneratingQRCode.show();
-        Log.v("E_VALUE","In setqrcodeimg");
-        generateQRCodeMethod();
+        if(BUFFER!=null) {
 
+
+            Log.v("E_VALUE","BUFFER STRING VALUE==="+BUFFER);
+
+            mGroupDatabase = FirebaseDatabase.getInstance().getReference().child(BUFFER);
+            mInGroupUserGrp = mGroupDatabase.push();
+            mInGroupUserGrp.child("memberid").child(UserDataObj.getuid()).setValue("100");
+            mInGroupUserGrp.child("todaysmess").setValue(".............");
+
+            DatabaseReference mInCurUser = FirebaseDatabase.getInstance().getReference().child("users").child(UserDataObj.getuid());
+
+
+            mInCurUser.child("buffgroupid").setValue(mInGroupUserGrp.getKey());
+
+            //  Long endsubvalue=Long.parseLong("56");
+            mInCurUser.child("endsub").setValue("56");
+
+
+            mGeneratingQRCode.setMessage("Generating your QR Code");
+            mGeneratingQRCode.show();
+            Log.v("E_VALUE", "In setqrcodeimg");
+            generateQRCodeMethod();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

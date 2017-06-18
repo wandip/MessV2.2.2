@@ -10,9 +10,13 @@ import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import static android.text.InputType.TYPE_CLASS_PHONE;
+import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
 
 
@@ -50,7 +54,7 @@ public class AddFriendHandler extends AppCompatActivity{
     private DatabaseReference mDatabase,mDatabaseGroups,mDatabaseUsers,mDatabaseInCurUser,mDatabaseInReqUser,mDatabaseInCurUserGrp;
     FirebaseAuth mAuth=FirebaseAuth.getInstance();
     String REQUEST_USER_EMAIL,REQ_USER_ORIG_GRP;
-    String uidtemp;
+    String uidtemp,GROUP_SIZE;
     private int USER_FOUND_FLAG;
     private boolean connected=false;
 
@@ -62,7 +66,15 @@ public class AddFriendHandler extends AppCompatActivity{
 
 
         final EditText input = new EditText(context);
-        builder.setView(input);
+        input.setInputType(TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        input.setSingleLine();
+        FrameLayout container = new FrameLayout(context);
+        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = 50;
+        params.rightMargin=50;
+        input.setLayoutParams(params);
+        container.addView(input);
+        builder.setView(container);
         builder.setTitle("ADD FRIEND") //
                 .setMessage("Enter Email ID of your Friend") //
                 .setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
@@ -73,8 +85,23 @@ public class AddFriendHandler extends AppCompatActivity{
                             REQUEST_USER_EMAIL = input.getText().toString();
 
 
+                        FirebaseDatabase.getInstance().getReference().child("admin").child("groupmaxsize")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        GROUP_SIZE= (String) dataSnapshot.getValue();
+                                        AddFriendOnClick(REQUEST_USER_EMAIL);
+                                    }
 
-                            AddFriendOnClick(REQUEST_USER_EMAIL);
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+
+
                             dialog.dismiss();
                     }
                 }) //
@@ -102,14 +129,14 @@ public class AddFriendHandler extends AppCompatActivity{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 number_of_cur_grp_mem[0] =((int) dataSnapshot.getChildrenCount());
-                if(number_of_cur_grp_mem[0]>=4)
+                if(number_of_cur_grp_mem[0]>=Integer.parseInt(GROUP_SIZE))
                 {
                     Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                     long[] pattern = {0, 75,100,75};
                     Log.v("E_VALUE","NUMBER OF CUR USER GRP MEM 2:"+number_of_cur_grp_mem[0]);
                     // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
                     v.vibrate(pattern, -1);
-                    Toast.makeText(context,"Sorry! Your Group Size cannot exceed 4!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"Sorry! Your Group Size cannot exceed "+ GROUP_SIZE+"!",Toast.LENGTH_LONG).show();
 
                 }
                 else {

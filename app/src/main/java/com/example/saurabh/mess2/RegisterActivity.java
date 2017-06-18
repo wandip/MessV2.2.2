@@ -213,19 +213,17 @@ public class RegisterActivity extends AppCompatActivity {
                         current_user_db.child("qrcode").setValue("default");
                         current_user_db.child("email").setValue(email);     // UNCCOMENT THIS TO ADD USER TO DATABASE
                         current_user_db.child("contact").setValue(contact);
-                        Log.v("E_VALUE","babbaba : "+SIGN_IN_CHECK);
-
                         current_user_db.child("college").setValue(college);
                         current_user_db.child("scannedlunch").setValue("-1");
                         current_user_db.child("scanneddinner").setValue("-1");
-
-                      //  Long endsubvalue=Long.parseLong("-56");
-
-
-
+                        current_user_db.child("batch").setValue("not paid");
+                        current_user_db.child("paidnext").setValue("not paid");
+                        current_user_db.child("paidtime").setValue("not paid");
+                        current_user_db.child("buffgroupid").setValue("not paid");
                         current_user_db.child("endsub").setValue("-56");
                         current_user_db.child("groupid").setValue("not paid");
 
+                        Log.v("E_VALUE","babbaba : "+SIGN_IN_CHECK);
 
                         Log.v("E_VALUE","College : "+college);
                         Log.v("E_VALUE","Contact : "+contact);

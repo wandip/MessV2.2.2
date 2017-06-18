@@ -66,8 +66,10 @@
         <activity
             android:name=".AboutUsActivity"
             android:theme="@style/NewTheme1" />
-        <activity android:name=".UnderConstructionActivity"
-            android:theme="@style/NewTheme1"/>
+        <activity
+            android:name=".UnderConstructionActivity"
+            android:theme="@style/NewTheme1" />
+        <activity android:name=".NextMonthActivity"></activity>
     </application>
 
 </manifest>

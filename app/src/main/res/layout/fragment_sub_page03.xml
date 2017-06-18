@@ -68,12 +68,12 @@
         android:id="@+id/member2TxtView"
         android:textSize="18sp"
         android:textAlignment="center"
-        android:layout_alignEnd="@+id/member1TxtView"
-        android:layout_alignStart="@+id/member1TxtView"
         android:textAllCaps="false"
         android:layout_marginBottom="10dp"
         android:textColor="@color/BackgroundWhiteColor1"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:layout_alignStart="@+id/AddGroupBtn"
+        android:layout_alignEnd="@+id/AddGroupBtn" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,12 +96,12 @@
         android:textAlignment="center"
         android:layout_below="@+id/textView11"
         android:layout_marginTop="12dp"
-        android:layout_alignEnd="@+id/textView11"
-        android:layout_alignStart="@+id/textView11"
         android:textAllCaps="false"
         android:textColor="@color/BackgroundWhiteColor1"
         android:textStyle="normal|bold"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp"
+        android:layout_alignStart="@+id/member2TxtView"
+        android:layout_alignEnd="@+id/member2TxtView" />
 
     <View
         android:layout_width="fill_parent"
@@ -127,7 +127,7 @@
 
     <View
         android:background="#FFFFFF"
-        android:layout_marginLeft=" 20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="5dp"
         android:id="@+id/leftView"
         android:layout_height="fill_parent"
@@ -161,7 +161,9 @@
         android:layout_marginRight="50dp"
         android:layout_below="@+id/userGroupID"
         android:layout_centerHorizontal="true"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible"
+        android:clickable="false" />
 
     <Button
         android:text="MonthlyUpdate"
