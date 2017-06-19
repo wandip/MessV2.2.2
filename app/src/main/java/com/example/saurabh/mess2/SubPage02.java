@@ -241,7 +241,7 @@ public class SubPage02 extends Fragment  {
                         v.vibrate(20);
 
 
-                        setbatch();
+                        setbatch("Main");
 
 
                     }
@@ -294,7 +294,7 @@ public class SubPage02 extends Fragment  {
         return rootView2;
     }
 
-    private void setbatch() {
+    public void setbatch(final String from) {
 
         timeMap=ServerValue.TIMESTAMP;
 
@@ -315,7 +315,7 @@ public class SubPage02 extends Fragment  {
 
                 Date paidDate=new Date(((Long) dataSnapshot.getValue()));
 
-                checkDate(paidDate);
+                checkDate(paidDate,from);
 
 
 
@@ -332,7 +332,7 @@ public class SubPage02 extends Fragment  {
 
     }
 
-    private void checkDate(final Date paidDate) {
+    private void checkDate(final Date paidDate, final String from) {
 
         final String[] batch2start = {null};
         final String[] batch1start = {null};
@@ -358,7 +358,7 @@ public class SubPage02 extends Fragment  {
 
 
                 if(batch1start[0]!=null&&batch2start[0]!=(null)) {
-                    updateBatch(batch1start[0], batch2start[0], paidDate);
+                    updateBatch(batch1start[0], batch2start[0], paidDate,from);
                     batch1start[0]=null;
                     batch2start[0]=null;
                 }
@@ -388,7 +388,7 @@ public class SubPage02 extends Fragment  {
 
                 if(batch1start[0]!=null&&batch2start[0]!=(null))
                 {
-                    updateBatch(batch1start[0], batch2start[0], paidDate);
+                    updateBatch(batch1start[0], batch2start[0], paidDate,from);
                     batch1start[0]=null;
                     batch2start[0]=null;
 
@@ -418,7 +418,7 @@ public class SubPage02 extends Fragment  {
 
     }
 
-    private void updateBatch(String batch1start, String batch2start, Date paidDate) {
+    private void updateBatch(String batch1start, String batch2start, Date paidDate,String from) {
 
 
         SimpleDateFormat myFormat=new SimpleDateFormat("dd MM yyyy");
@@ -443,7 +443,7 @@ public class SubPage02 extends Fragment  {
                 FirebaseDatabase.getInstance().getReference().child("users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("batch").setValue("batch1");
-                onPayClicked();
+                onPayClicked(from);
             }
             else
             {
@@ -452,7 +452,7 @@ public class SubPage02 extends Fragment  {
                 FirebaseDatabase.getInstance().getReference().child("users")
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("batch").setValue("batch2");
-                onPayClicked();
+                onPayClicked(from);
             }
 
 
@@ -465,7 +465,7 @@ public class SubPage02 extends Fragment  {
     }
 
 
-    public void onPayClicked() {
+    public void onPayClicked(final String from) {
 
 
         DatabaseReference mBatchDatabase = FirebaseDatabase.getInstance().getReference().child(BATCH);
@@ -477,7 +477,7 @@ public class SubPage02 extends Fragment  {
 
                 CURRENT = dataSnapshot.child("current").getValue().toString();
                 BUFFER = dataSnapshot.child("buffer").getValue().toString();
-                updateGrpQRCode();
+                updateGrpQRCode(from);
 
             }
 
@@ -490,7 +490,7 @@ public class SubPage02 extends Fragment  {
 
     }
 
-    private void updateGrpQRCode() {
+    private void updateGrpQRCode(String from) {
 
 
         Log.v("E_VALUE","BUFFER 1 STRING VALUE==="+BUFFER);
@@ -514,11 +514,14 @@ public class SubPage02 extends Fragment  {
             //  Long endsubvalue=Long.parseLong("56");
             mInCurUser.child("endsub").setValue("56");
 
+            if(from.equals("Main")) {
+                mGeneratingQRCode.setMessage("Generating your QR Code");
+                mGeneratingQRCode.show();
+                Log.v("E_VALUE", "In setqrcodeimg");
 
-            mGeneratingQRCode.setMessage("Generating your QR Code");
-            mGeneratingQRCode.show();
-            Log.v("E_VALUE", "In setqrcodeimg");
-            generateQRCodeMethod();
+
+                generateQRCodeMethod();
+            }
         }
     }
 
@@ -623,22 +626,6 @@ public class SubPage02 extends Fragment  {
         image.setImageBitmap(decodedbyte);
     }
 
-    public void setOnlick() {
-
-        ImageView image=(ImageView)rootView2.findViewById(QRCodeImageView);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v("E_VALUE","PAYEMENT DONE value in oncreate  : "+PAYEMENT_DONE);
-
-                onPayClicked();
-
-            }
-
-
-        });
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this

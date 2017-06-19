@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity{
     public static  boolean PAYEMENT_DONE,connected;
     static int count=0;
     public static String CURRENT;
+    public static String BUFFER_GRPID;
 
     public static String BUFFER;
 
@@ -342,7 +343,12 @@ public class MainActivity extends AppCompatActivity{
         config.setNoButtonText(R.string.my_own_thanks);
         config.setCancelButtonText(R.string.my_own_cancel);
         RateThisApp.init(config);
+
 */
+
+
+
+
 
     }
 
@@ -598,6 +604,7 @@ public class MainActivity extends AppCompatActivity{
 
                 PAID_NEXT=dataSnapshot.child("paidnext").getValue().toString();
                 PAID_TIME=dataSnapshot.child("paidtime").getValue().toString();
+                BUFFER_GRPID=dataSnapshot.child("buffgroupid").getValue().toString();
                 BATCH=dataSnapshot.child("batch").getValue().toString();
 
                     SubPage03 Subpage3obj=new SubPage03();
@@ -864,6 +871,33 @@ catch(Exception e)
 
     private void setMemberTxtView() {
 
+        final String[] current = new String[1];
+
+
+        Log.v("E_VALUE","CALL HOTAY 111 "+BATCH);
+
+
+        if(!BATCH.equals("not paid")) {
+            FirebaseDatabase.getInstance().getReference().child(BATCH).child("current")
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            current[0] = dataSnapshot.getValue().toString();
+                            Log.v("E_VALUE", "CALL HOTAY " + current[0]);
+                            setMemberTxtView2(current[0]);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+        }
+    }
+
+
+    private void setMemberTxtView2(String current) {
+
 
 
 
@@ -893,7 +927,7 @@ catch (Exception e)
 
 }
 
-        DatabaseReference mInCurGrpMemberId=FirebaseDatabase.getInstance().getReference().child("group").child(UserDataObj.getGroupid())
+        DatabaseReference mInCurGrpMemberId=FirebaseDatabase.getInstance().getReference().child(current).child(UserDataObj.getGroupid())
                 .child("memberid");
 
 
@@ -941,6 +975,8 @@ catch (Exception e)
         });
 
     }
+
+
 
     private void setTodaysMessTxtView() {
 
@@ -1051,10 +1087,91 @@ catch (Exception e)
 
     }
 
+    public void initiatelogic2() {
+
+        DatabaseReference mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");
+
+        mDatabaseGroups.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int sum=0;
+
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+
+                    // int temp=dsp.child("size").getValue(Integer.class);
+                    int temp= ((int) dsp.child("memberid").getChildrenCount());
+                    String gidtemp=dsp.getKey();
+                    if(temp>0) {
+                        map.put(gidtemp, temp);
+
+                        sum += temp;
+                        Log.v("E_VALUE", "SIZE : " + temp);
+                    }
+                }
+                Log.v("E_VALUE","Addition : "+sum);
+                obj=new Group(map);
+                Log.v("E_VALUE","MAP SIZE : "+obj.getmapsize());
+                obj.assignset();
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
+
     public void MonthChangeLogic()
     {
-        DatabaseReference mGroupRef=FirebaseDatabase.getInstance().getReference().child("group");
-        mGroupRef.setValue(null);
+        final String[] buffer = new String[1];
+
+        DatabaseReference mGroupRef;
+        FirebaseDatabase.getInstance().getReference().child("batch1").child("buffer")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        buffer[0] =dataSnapshot.getValue().toString();
+
+                        if(buffer[0].equals("group1"))
+                        {
+                            FirebaseDatabase.getInstance().getReference().child("batch1")
+                                    .child("buffer").setValue("group2");
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("batch1").child("current").setValue("group1");
+
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("group2").setValue(null);
+
+                        }
+                        else
+                        {
+                            FirebaseDatabase.getInstance().getReference().child("batch1")
+                                    .child("buffer").setValue("group1");
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("batch1").child("current").setValue("group2");
+
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("group1").setValue(null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+
+
+
+
         DatabaseReference mMonthChange=FirebaseDatabase.getInstance().getReference().child("users");
 
         mMonthChange.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -1062,9 +1179,29 @@ catch (Exception e)
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot dsp : dataSnapshot.getChildren())
                 {
+                    if(dsp.child("batch").getValue().toString().equals("batch1")) {
 
-                    dsp.child("groupid").getRef().setValue("not paid");
-                    dsp.child("qrcode").getRef().setValue("default");
+                        if (dsp.child("paidnext").getValue().toString().equals("not paid"))
+                        {
+                            dsp.child("buffgroupid").getRef().setValue("not paid");
+                            dsp.child("batch").getRef().setValue("not paid");
+                            dsp.child("paidtime").getRef().setValue("not paid");
+                            dsp.child("qrcode").getRef().setValue("default");
+                            dsp.child("scanneddinner").getRef().setValue("-1");
+                            dsp.child("scannedlunch").getRef().setValue("-1");
+                            dsp.child("endsub").getRef().setValue("-56");
+
+
+                        } else {
+                            String temp = dsp.child("buffgroupid").getValue().toString();
+
+                            dsp.child("groupid").getRef().setValue(temp);
+                            dsp.child("buffgroupid").getRef().setValue("not paid");
+                            dsp.child("paidnext").getRef().setValue("not paid");
+
+                        }
+                    }
+
 
                 }
             }
@@ -1076,6 +1213,86 @@ catch (Exception e)
         });
 
     }
+    public void MonthChangeLogic2() {
+
+        final String[] buffer = new String[1];
+
+        DatabaseReference mGroupRef;
+        FirebaseDatabase.getInstance().getReference().child("batch2").child("buffer")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        buffer[0] = dataSnapshot.getValue().toString();
+                        if (buffer[0].equals("group3")) {
+                            FirebaseDatabase.getInstance().getReference().child("batch2")
+                                    .child("buffer").setValue("group4");
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("batch2").child("current").setValue("group3");
+
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("group4").setValue(null);
+
+                        } else {
+                            FirebaseDatabase.getInstance().getReference().child("batch2")
+                                    .child("buffer").setValue("group3");
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("batch2").child("current").setValue("group4");
+
+                            FirebaseDatabase.getInstance().getReference()
+                                    .child("group3").setValue(null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+        DatabaseReference mMonthChange=FirebaseDatabase.getInstance().getReference().child("users");
+
+        mMonthChange.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dsp : dataSnapshot.getChildren())
+                {
+                    if(dsp.child("batch").getValue().toString().equals("batch2")) {
+
+                        if (dsp.child("paidnext").getValue().toString().equals("not paid"))
+                        {
+                            dsp.child("buffgroupid").getRef().setValue("not paid");
+                            dsp.child("batch").getRef().setValue("not paid");
+                            dsp.child("paidtime").getRef().setValue("not paid");
+                            dsp.child("qrcode").getRef().setValue("default");
+                            dsp.child("scanneddinner").getRef().setValue("-1");
+                            dsp.child("scannedlunch").getRef().setValue("-1");
+                            dsp.child("endsub").getRef().setValue("-56");
+
+
+                        } else {
+                            String temp = dsp.child("buffgroupid").getValue().toString();
+
+                            dsp.child("groupid").getRef().setValue(temp);
+                            dsp.child("buffgroupid").getRef().setValue("not paid");
+                            dsp.child("paidnext").getRef().setValue("not paid");
+
+                        }
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
 
 
 

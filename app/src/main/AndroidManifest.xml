@@ -69,7 +69,9 @@
         <activity
             android:name=".UnderConstructionActivity"
             android:theme="@style/NewTheme1" />
-        <activity android:name=".NextMonthActivity"></activity>
+        <activity android:name=".NextMonthActivity"
+            android:theme="@style/Theme.AppCompat" />
+
     </application>
 
 </manifest>

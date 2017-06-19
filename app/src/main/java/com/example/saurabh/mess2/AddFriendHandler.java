@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import static android.text.InputType.TYPE_CLASS_PHONE;
 import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+import static com.example.saurabh.mess2.MainActivity.BATCH;
+import static com.example.saurabh.mess2.MainActivity.BUFFER;
+import static com.example.saurabh.mess2.MainActivity.BUFFER_GRPID;
+import static com.example.saurabh.mess2.MainActivity.CURRENT;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
 
 
@@ -83,6 +87,26 @@ public class AddFriendHandler extends AppCompatActivity{
                             Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                             v.vibrate(20);
                             REQUEST_USER_EMAIL = input.getText().toString();
+                        DatabaseReference mBatchDatabase = FirebaseDatabase.getInstance().getReference().child(BATCH);
+
+                        mBatchDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                CURRENT = dataSnapshot.child("current").getValue().toString();
+                                BUFFER = dataSnapshot.child("buffer").getValue().toString();
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+
+                        });
+
+
 
 
                         FirebaseDatabase.getInstance().getReference().child("admin").child("groupmaxsize")
@@ -90,7 +114,7 @@ public class AddFriendHandler extends AppCompatActivity{
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         GROUP_SIZE= (String) dataSnapshot.getValue();
-                                        AddFriendOnClick(REQUEST_USER_EMAIL);
+                                        continue1(BUFFER_GRPID,REQUEST_USER_EMAIL);
                                     }
 
                                     @Override
@@ -119,13 +143,72 @@ public class AddFriendHandler extends AppCompatActivity{
 
     public void AddFriendOnClick(final String REQUEST_USER_EMAIL)  //Initialises Database Refrences and gets The Current User ID
     {
+
+        USER_FOUND_FLAG = 0;
+
+
+        final String[] BufferGroupId = new String[1];
+      //  if (isConnected()) {
+            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(20);
+
+
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("buffgroupid").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    BufferGroupId[0] = dataSnapshot.getValue().toString();
+                    continue0(BufferGroupId[0], REQUEST_USER_EMAIL);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+      //  }
+    }
+
+    private void continue0(final String s, final String request_user_email) {
+
+
+            DatabaseReference mBatchDatabase = FirebaseDatabase.getInstance().getReference().child(BATCH);
+
+            mBatchDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    CURRENT = dataSnapshot.child("current").getValue().toString();
+                    BUFFER = dataSnapshot.child("buffer").getValue().toString();
+                   continue1(s,request_user_email);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            });
+
+
+
+
+
+
+    }
+
+    public void continue1(String BufferGroupId,final String REQUEST_USER_EMAIL)
+    {
         final int[] number_of_cur_grp_mem = new int[1];
-        USER_FOUND_FLAG=0;
 
-        mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");
+        mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child(BUFFER);
 
+        Log.v("E_VALUE","BUFFERGRPID"+BufferGroupId);
 
-        mDatabaseGroups.child(UserDataObj.getGroupid()).child("memberid").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseGroups.child(BufferGroupId).child("memberid").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 number_of_cur_grp_mem[0] =((int) dataSnapshot.getChildrenCount());
@@ -179,8 +262,11 @@ public class AddFriendHandler extends AppCompatActivity{
                 for (DataSnapshot dsp : dataSnapshot.getChildren()) {
 
                     String emailtemp=dsp.child("email").getValue(String.class);
-                    String paidstatus=dsp.child("qrcode").getValue(String.class);
+                    String req_buff_grpid=dsp.child("buffgroupid").getValue(String.class);
+                    String req_paid_next=dsp.child("paidnext").getValue(String.class);
                     String req_username=dsp.child("name").getValue(String.class);
+                    String req_user_batch=dsp.child("batch").getValue(String.class);
+
 
                     String req_user_email_trim= request_user_email.trim();
 
@@ -193,28 +279,29 @@ public class AddFriendHandler extends AppCompatActivity{
 
                     if(req_user_email_trim.equals(emailtemp)) //FINDS THE USER ID corresponding to EMAIL Given
                     {
-                        if(paidstatus.equals("default")||paidstatus.equals("paid"))
-                        {
-                            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                            long[] pattern = {0, 75,100,75};
 
-                            // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
-                            v.vibrate(pattern, -1);
-                            Toast.makeText(context,"Your Friend "+req_username+" has not Confirmed Payment!",Toast.LENGTH_LONG).show();
-                            USER_FOUND_FLAG=1;
-                        }
-                        else
+                        if(!req_buff_grpid.equals("not paid")&&!req_paid_next.equals("not paid")&&BATCH.equals(req_user_batch))
                         {
                             uidtemp=dsp.getKey();
-                            REQ_USER_ORIG_GRP=dsp.child("groupid").getValue(String.class);
+                            REQ_USER_ORIG_GRP=dsp.child("buffgroupid").getValue(String.class);
                             Log.v("E_VALUE","EMAIL FOUND : "+emailtemp);
 
                             Log.v("E_VALUE","UID FOUND : "+uidtemp);
                             REQ_USER_ID=uidtemp;
                             USER_FOUND_FLAG=1;
                             updateGroupId(uidtemp);
-
                         }
+                        else
+                        {
+                            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                            long[] pattern = {0, 75,100,75};
+
+                            // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                            v.vibrate(pattern, -1);
+                            Toast.makeText(context,"Your Friend "+req_username+" has not Confirmed Payment! OR is not in your Batch ",Toast.LENGTH_LONG).show();
+                            USER_FOUND_FLAG=1;
+                        }
+
 
 
 
@@ -251,33 +338,54 @@ public class AddFriendHandler extends AppCompatActivity{
 
 
         mDatabaseInReqUser=mDatabaseUsers.child(uidtemp2);
-        Log.v("E_VALUE","REQ USER UID INUPDATEGROUP METHOD : "+uidtemp2);
 
-        Log.v("E_VALUE","CURRENT USER GRPID INUPDATEGROUP METHOD : "+MainActivity.UserDataObj.getGroupid());
-        CUR_USER_GRP_ID=MainActivity.UserDataObj.getGroupid();
+        final String[] BufferGroupId = new String[1];
 
-       /* mDatabaseInCurUser.child("groupid").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                REQ_USER_ORIG_GRP = dataSnapshot.getValue(String.class);
-            }
+            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(20);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+            /*FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("buffgroupid").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    BufferGroupId[0] = dataSnapshot.getValue().toString();
+                    continue0(BufferGroupId[0], REQUEST_USER_EMAIL);
+                    mDatabaseInReqUser.child("buffgroupid").setValue(BufferGroupId[0]);
+
+
+
+                    Log.v("E_VALUE","REQ USER GRPID ORIG METHOD : "+REQ_USER_ORIG_GRP);
+
+
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 */
-        Log.v("E_VALUE","REQ USER GRPID ORIG METHOD : "+REQ_USER_ORIG_GRP);
+
+        mDatabaseInReqUser.child("buffgroupid").setValue(BUFFER_GRPID);
+
+        CUR_USER_GRP_ID=BUFFER_GRPID;
 
 
         GroupAssignLogic groupAssignLogic=new GroupAssignLogic(CUR_USER_ID,REQ_USER_ID,CUR_USER_GRP_ID,REQ_USER_ORIG_GRP);
-        groupAssignLogic.initiateAssign();
+
+
+
+
+
+        //  groupAssignLogic.initiateAssign();
 
 
       //  searchReqUserGrpIfPresent(REQ_USER_ORIG_GRP);
 
-        mDatabaseInReqUser.child("groupid").setValue(MainActivity.UserDataObj.getGroupid());
+       // mDatabaseInReqUser.child("buffgroupid").setValue(BufferGroupId[0]);
 
 
 
@@ -286,74 +394,7 @@ public class AddFriendHandler extends AppCompatActivity{
 
     }
 
-    private void searchReqUserGrpIfPresent(final String req_user_orig_grp) {
 
-        mDatabaseGroups.child(req_user_orig_grp).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-
-                    String searchgrpmemid = dsp.child("memberid").getValue(String.class);
-
-                    if(req_user_orig_grp.equals(searchgrpmemid))
-                    {
-                        String searchgrpid=dsp.getKey();
-                        int searchgrpsize=dsp.child("size").getValue(Integer.class);
-                        if(searchgrpsize==1)
-                        {
-                            Log.v("E_VALUE","GRP SIZE IS 1, GRP ID FOUND IS: "+searchgrpid);
-                            //grpsizecase1(searchgrpid);
-                        }
-
-                    }
-                 //   String searchgrpid = dsp.child("email").getValue(String.class);
-
-
-
-                }
-
-                }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-       // mDatabaseGroups.child(req_user_orig_grp).child("memberid").child(uidtemp).remove();
-
-    }
-
-    private void grpsizecase1(String searchgrpid) {
-
-      mDatabaseGroups.addListenerForSingleValueEvent(new ValueEventListener() {
-          @Override
-          public void onDataChange(DataSnapshot dataSnapshot) {
-
-          }
-
-          @Override
-          public void onCancelled(DatabaseError databaseError) {
-
-          }
-      });
-
-        mDatabaseInCurUserGrp.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dataSnapshot.child("size").getValue();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
     private boolean isConnected() {
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
@@ -383,15 +424,8 @@ public class AddFriendHandler extends AppCompatActivity{
 
                         dialog.dismiss();
                     }
-                }); //
-               /* .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                        v.vibrate(20);
-                        // TODO
-                        dialog.dismiss();
-                    }
-                })*/
+                });
+
         builder.show();
 
 

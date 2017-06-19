@@ -7,7 +7,7 @@ import android.view.View;
  * Created by saurabh on 3/5/17.
  */
 
-public class ExternalOnClickListener implements View.OnClickListener {
+public class ExternalOnClickListener  {
 
     private Context mContext;
 
@@ -15,7 +15,7 @@ public class ExternalOnClickListener implements View.OnClickListener {
         // keep references for your onClick logic
     }
 
-    @Override public void onClick(View v) {
+    /*@Override public void onClick(View v) {
         // TODO: add code here
 
         mContext = v.getContext();
@@ -32,6 +32,6 @@ public class ExternalOnClickListener implements View.OnClickListener {
             }
 
             default:
-                break; }}
+                break; }}*/
 
 }

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
@@ -247,11 +248,25 @@ public class SubPage03 extends Fragment {
                         Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(20);
                         String PasswordInput = input.getText().toString();
-                        if(PasswordInput.equals("BulltGyang"))
+                        if(PasswordInput.equals("BulltGyangBatchOne"))
                         {
+                            FirebaseDatabase.getInstance().getReference().child("admin").child("resumeflag").setValue("notworking");
                             MainActivity MainObj=new MainActivity();
                            MainObj.MonthChangeLogic();
+
+                            Toast.makeText(SubPage3Context,"Logic Run!",Toast.LENGTH_SHORT).show();
+
                             dialog.dismiss();
+
+                        }
+                        else if(PasswordInput.equals("BulltGyangBatchTwo"))
+                        {
+                            FirebaseDatabase.getInstance().getReference().child("admin").child("resumeflag").setValue("notworking");
+                            MainActivity MainObj=new MainActivity();
+                            MainObj.MonthChangeLogic2();
+                            dialog.dismiss();
+                            Toast.makeText(SubPage3Context,"Logic Run!",Toast.LENGTH_SHORT).show();
+
 
                         }
 
