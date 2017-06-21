@@ -5,34 +5,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SplashActivity extends Activity {
     private static int SPLASH_TIME_OUT=2000;
-    private ImageView splashImageIcon;
+    private ImageView splashImageIcon,FirebaseImg,SecureImg;
     protected Animation fadeIn;
 
     @Override
@@ -44,14 +40,17 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
 
         splashImageIcon=(ImageView)findViewById(R.id.imageView9);
-        splashImageIcon.setImageResource(R.drawable.final_logo);
+        splashImageIcon.setImageResource(R.drawable.logo_splash);
 
         splashImageIcon.setVisibility(View.VISIBLE);
 
 
         //fadeIn= AnimationUtils.loadAnimation(this,R.anim.fade_in);
 
-
+        FirebaseImg=(ImageView)findViewById(R.id.firebase);
+        Picasso.with(getBaseContext()).load(R.drawable.firebase_full_icon).into(FirebaseImg);
+        SecureImg=(ImageView)findViewById(R.id.secureImgView);
+        Picasso.with(getBaseContext()).load(R.drawable.instamojo_secure_inverted).into(SecureImg);
 
 
         new Handler().postDelayed(new Runnable() {
@@ -158,4 +157,7 @@ public class SplashActivity extends Activity {
         builder.show();
 
     }
+
+
+
 }

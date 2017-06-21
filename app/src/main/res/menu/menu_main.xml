@@ -10,6 +10,8 @@
         android:visible="false" />
     <item android:title="About Us"
         android:id="@+id/action_about_us" />
+    <item android:title="About Mess"
+        android:id="@+id/action_about_mess" />
     <item android:title="Share"
         android:id="@+id/share" />
     <item android:title="Rate Us!"

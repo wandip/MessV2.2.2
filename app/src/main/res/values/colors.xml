@@ -10,20 +10,21 @@
     <color name="colorAccent1">#ffc107</color>
     <color name="BackgroundWhiteColor1">#FFFFFF</color>
 
-    <color name="screen1">#097ed2</color>
-    <color name="screen2">#009688</color>
-    <color name="screen3">#673AB7</color>
-    <color name="screen4">#fe6939</color>
+    <color name="screen1">#fe6939</color>
+    <color name="screen4f">#D6ED28</color>
+    <color name="screen4">#ff693b</color>
+    <color name="screen3">#67DBCF</color>
+    <color name="screen2">#B2F7EF</color>
 
-    <color name="dot_dark_screen1">#1565C0</color>
-    <color name="dot_dark_screen2">#00695C</color>
-    <color name="dot_dark_screen3">#4527A0</color>
-    <color name="dot_dark_screen4">#D84315</color>
+    <color name="dot_dark_screen2">#4FA69D</color>
+    <color name="dot_dark_screen4">#00695C</color>
+    <color name="dot_dark_screen3">#2786a0</color>
+    <color name="dot_dark_screen1">#D84315</color>
 
-    <color name="dot_light_screen1">#a7b9ef</color>
-    <color name="dot_light_screen2">#ade9e1</color>
-    <color name="dot_light_screen3">#ab9ada</color>
-    <color name="dot_light_screen4">#f9bca9</color>
+    <color name="dot_light_screen2">#a7eaef</color>
+    <color name="dot_light_screen4">#ade9e1</color>
+    <color name="dot_light_screen3">#9aa6da</color>
+    <color name="dot_light_screen1">#f9bca9</color>
 
     <array name="dot_active">
         <item>@color/dot_light_screen1</item>

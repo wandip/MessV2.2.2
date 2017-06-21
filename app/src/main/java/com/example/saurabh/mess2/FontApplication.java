@@ -25,7 +25,7 @@ public class FontApplication extends Application{
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Raleway-Regular.ttf")
+                .setDefaultFontPath("fonts/Questrial-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

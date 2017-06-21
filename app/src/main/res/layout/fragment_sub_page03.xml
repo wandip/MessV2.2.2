@@ -24,16 +24,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:textAlignment="viewStart"
+        android:textAlignment="center"
         android:id="@+id/userGroupID"
         android:textSize="15sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
         android:paddingLeft="10dp"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/ralewayReg"
         android:layout_marginBottom="15dp"
-        android:textColor="@color/BackgroundWhiteColor1" />
+        android:textColor="@color/screen4"
+        android:layout_alignStart="@+id/topleftView"
+        android:layout_alignEnd="@+id/rightView" />
 
     <TextView
         android:layout_width="match_parent"
@@ -45,7 +46,7 @@
         android:textStyle="normal|bold"
         android:layout_alignBottom="@+id/ralewayReg"
         android:layout_alignParentStart="true"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/screen4"
         android:layout_marginBottom="10dp" />
 
     <TextView
@@ -58,7 +59,7 @@
         android:textStyle="normal|bold"
         android:layout_above="@+id/scannedlunchTxtView"
         android:layout_alignParentStart="true"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/screen4"
         android:layout_marginBottom="10dp" />
 
     <TextView
@@ -70,7 +71,7 @@
         android:textAlignment="center"
         android:textAllCaps="false"
         android:layout_marginBottom="10dp"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/screen4"
         android:textStyle="normal|bold"
         android:layout_alignStart="@+id/AddGroupBtn"
         android:layout_alignEnd="@+id/AddGroupBtn" />
@@ -85,7 +86,7 @@
         android:textAlignment="center"
         android:layout_alignEnd="@+id/member2TxtView"
         android:textAllCaps="false"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/screen4"
         android:textStyle="normal|bold" />
 
     <TextView
@@ -97,7 +98,7 @@
         android:layout_below="@+id/textView11"
         android:layout_marginTop="12dp"
         android:textAllCaps="false"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/screen4"
         android:textStyle="normal|bold"
         android:layout_marginBottom="10dp"
         android:layout_alignStart="@+id/member2TxtView"
@@ -105,17 +106,16 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#FFFFFF"
+        android:background="@color/screen4"
         android:layout_toStartOf="@+id/textView11"
         android:layout_marginLeft="20dp"
         android:layout_below="@+id/textView11"
         android:layout_marginRight="5dp"
-        android:id="@+id/topleftView" />
+        android:id="@+id/topleftView"
+        android:layout_height="2dp" />
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#FFFFFF"
+        android:background="@color/screen4"
         android:layout_toEndOf="@+id/textView11"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="5dp"
@@ -123,30 +123,29 @@
         android:layout_alignWithParentIfMissing="false"
         android:layout_centerHorizontal="false"
         android:id="@+id/toprightView"
-        android:layout_below="@+id/textView11" />
+        android:layout_below="@+id/textView11"
+        android:layout_height="2dp" />
 
     <View
-        android:background="#FFFFFF"
+        android:background="@color/screen4"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="5dp"
         android:id="@+id/leftView"
         android:layout_height="fill_parent"
         android:visibility="visible"
-        android:layout_width="1dp"
         android:layout_below="@+id/textView11"
         android:layout_alignBottom="@+id/bottomView"
-        android:layout_above="@+id/textView11" />
+        android:layout_width="2dp" />
     <View
-        android:layout_width="1dp"
         android:layout_height="fill_parent"
-        android:background="#FFFFFF"
+        android:background="@color/screen4"
         android:layout_below="@+id/textView11"
         android:layout_marginRight="25dp"
         android:visibility="visible"
         android:layout_alignBottom="@+id/bottomView"
-        android:layout_above="@+id/textView11"
         android:id="@+id/rightView"
-        android:layout_toEndOf="@+id/bottomView" />
+        android:layout_toEndOf="@+id/bottomView"
+        android:layout_width="2dp" />
 
 
     <Button
@@ -163,7 +162,8 @@
         android:layout_centerHorizontal="true"
         android:textSize="18sp"
         android:visibility="invisible"
-        android:clickable="false" />
+        android:clickable="false"
+        android:textColor="@color/screen4" />
 
     <Button
         android:text="MonthlyUpdate"
@@ -174,7 +174,8 @@
         android:layout_below="@+id/member3TxtView"
         android:layout_alignStart="@+id/AddGroupBtn"
         android:layout_marginTop="56dp"
-        android:layout_alignEnd="@+id/AddGroupBtn" />
+        android:layout_alignEnd="@+id/AddGroupBtn"
+        android:textColor="@color/screen4" />
 
     <Button
         android:text="DailyUpdate"
@@ -184,12 +185,12 @@
         android:backgroundTint="@color/zxing_viewfinder_laser"
         android:layout_below="@+id/SuperPowerfulButton2"
         android:layout_alignStart="@+id/SuperPowerfulButton2"
-        android:layout_alignEnd="@+id/SuperPowerfulButton2" />
+        android:layout_alignEnd="@+id/SuperPowerfulButton2"
+        android:textColor="@color/screen4" />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="#FFFFFF"
+        android:background="@color/screen4"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginBottom="10dp"
@@ -198,7 +199,8 @@
         android:layout_marginTop="20dp"
         android:layout_alignEnd="@+id/toprightView"
         android:layout_alignStart="@+id/topleftView"
-        android:id="@+id/bottomView" />
+        android:id="@+id/bottomView"
+        android:layout_height="2dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -220,8 +222,13 @@
         android:textStyle="normal|bold"
         android:layout_marginTop="15dp"
         android:textAllCaps="true"
-        android:textColor="@color/BackgroundWhiteColor1"
+        android:textColor="@color/screen4"
         android:layout_below="@+id/AddGroupBtn"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/signup_button_2"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
 </RelativeLayout>

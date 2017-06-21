@@ -1,5 +1,6 @@
 package com.example.saurabh.mess2;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,13 +20,17 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -59,6 +64,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
+
 import static com.example.saurabh.mess2.MainActivity.BATCH;
 import static com.example.saurabh.mess2.MainActivity.BUFFER;
 import static com.example.saurabh.mess2.MainActivity.CURRENT;
@@ -67,7 +77,9 @@ import static com.example.saurabh.mess2.MainActivity.PAID_TIME;
 import static com.example.saurabh.mess2.MainActivity.PAYEMENT_DONE;
 import static com.example.saurabh.mess2.MainActivity.QRCODE;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
+
 import static com.example.saurabh.mess2.R.id.QRCodeImageView;
+import static com.example.saurabh.mess2.R.id.TodaysMessTxtView;
 import static com.example.saurabh.mess2.R.id.start;
 /*
 import static com.example.saurabh.mess2.UpdateStrings.BUFFER;
@@ -104,6 +116,7 @@ public class SubPage02 extends Fragment  {
     private String qrcode;
     private Button UpcomingMonthBtn;
     public static Map<String,String> timeMap;
+
 
     private boolean connected;
 
@@ -151,12 +164,12 @@ public class SubPage02 extends Fragment  {
     public void passContext(Context context)
     {
         SubPage2Context=context;
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
 
         // Inflate the layout for this fragment
@@ -169,6 +182,8 @@ public class SubPage02 extends Fragment  {
         {
             return rootView2;
         }
+
+
 
         // Monitor launch times and interval from installation
         RateThisApp.onCreate(SubPage2Context);
@@ -226,9 +241,27 @@ public class SubPage02 extends Fragment  {
         Log.v("E_VALUE","PAYEMENT DONE value in oncreate  : "+PAYEMENT_DONE);
 
 
+        /*final TextView TodaysMessTxt=(TextView)rootView2.findViewById(R.id.TodaysMessTxtView);
+
+        TodaysMessTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTutorialHandler.cleanUp();
+                mTutorialHandler.setToolTip(new ToolTip().setTitle("Hey there!").setDescription("Just the middle man").setGravity(Gravity.BOTTOM|Gravity.LEFT)).playOn(image);
+
+            }
+        });
+*/
+
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+               // mTutorialHandler.cleanUp();
+               // mTutorialHandler.setToolTip(new ToolTip().setTitle("Hey...").setDescription("It's time to say goodbye").setGravity(Gravity.TOP|Gravity.RIGHT)).playOn(UpcomingMonthBtn);
+
 
                 DatabaseReference mCurrentUser=FirebaseDatabase.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
                 DatabaseReference  mCheckQRCode=mCurrentUser.child("qrcode");
@@ -280,7 +313,7 @@ public class SubPage02 extends Fragment  {
         UpcomingMonthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+              //  mTutorialHandler.cleanUp();
                 Intent NextMonthIntent=new Intent(SubPage2Context,NextMonthActivity.class);
                // NextMonthIntent.putExtra("UserID", mAuth.getCurrentUser().getUid());
                 //startActivityForResult(PaymentIntent,0);
@@ -290,7 +323,7 @@ public class SubPage02 extends Fragment  {
         });
 
 
-
+       // mTutorialHandler.playOn(TodaysMessTxt);
         return rootView2;
     }
 
@@ -569,7 +602,9 @@ public class SubPage02 extends Fragment  {
 
 
             image.setImageBitmap(bitmap);
-           String imageencodedString= encodeBitmapAndSaveToFirebase(bitmap);
+
+            String imageencodedString= encodeBitmapAndSaveToFirebase(bitmap);
+
             decodeimagefromFirebase64(imageencodedString);
             PAYEMENT_DONE=true;
             QRCODE_GENERATED_FLAG=true;
@@ -603,9 +638,9 @@ public class SubPage02 extends Fragment  {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Log.v("E_VALUE","TASK SUCCESS");
-                mGeneratingQRCode.dismiss();
                 Uri downloadUrl =taskSnapshot.getDownloadUrl();
                 String DOWNLOAD_URL = downloadUrl.getPath();
+                mGeneratingQRCode.dismiss();
 
                 Log.v("E_VALUE","DOWNLOAD URL :"+ DOWNLOAD_URL);
                 mCurrentUser= FirebaseDatabase.getInstance().getReference().child("users").child(UserDataObj.getuid());

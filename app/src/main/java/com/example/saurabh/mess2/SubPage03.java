@@ -19,8 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -269,6 +272,11 @@ public class SubPage03 extends Fragment {
 
 
                         }
+                        else
+                        {
+                            Toast.makeText(SubPage3Context,"WRONG PASSWORD!",Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
                 }) //
@@ -370,6 +378,11 @@ public class SubPage03 extends Fragment {
     public void showAdminPassDialogMethod() {
 
 
+        final String[] curr1 = new String[1];
+        final String[] curr2 = new String[1];
+
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(SubPage3Context);
 
 
@@ -384,11 +397,53 @@ public class SubPage03 extends Fragment {
                         Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(20);
                         String PasswordInput = input.getText().toString();
-                        if(PasswordInput.equals("BulltGyang"))
+                        if(PasswordInput.equals("UpdateBatchOne"))
                         {
+                            FirebaseDatabase.getInstance().getReference().child("batch1").child("current")
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            curr1[0] =dataSnapshot.getValue().toString();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                            Toast.makeText(SubPage3Context,"Logic Run 1! "+curr1[0],Toast.LENGTH_SHORT).show();
+
                             MainActivity MainObj=new MainActivity();
-                            MainObj.initiatelogic();
+                            MainObj.initiatelogic(curr1[0]);
                             dialog.dismiss();
+
+                        }
+                        else if(PasswordInput.equals("UpdateBatchTwo"))
+                        {
+
+                            FirebaseDatabase.getInstance().getReference().child("batch2").child("current")
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            curr2[0] =dataSnapshot.getValue().toString();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                            Toast.makeText(SubPage3Context,"Logic Run 2! "+curr2[0],Toast.LENGTH_SHORT).show();
+
+
+                            MainActivity MainObj=new MainActivity();
+                            MainObj.initiatelogic(curr2[0]);
+                            dialog.dismiss();
+
+                        }
+                        else
+                        {
+                            Toast.makeText(SubPage3Context,"WRONG PASSWORD!",Toast.LENGTH_SHORT).show();
 
                         }
 

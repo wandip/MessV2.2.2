@@ -1,5 +1,6 @@
 package com.example.saurabh.mess2;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +32,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +40,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -67,6 +71,10 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.text.InputType.TYPE_CLASS_PHONE;
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity{
     private static String NameTemp;
     private static boolean DIALOG_MESSAGE_SHOWN;
     private static String DIALOG_MESSAGE;
+
 
 
     String resumeflag;
@@ -124,6 +133,38 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+/*
+
+        checkUpdate();
+
+        DatabaseReference checkResumeFlag2=FirebaseDatabase.getInstance().getReference().child("admin");
+
+        checkResumeFlag2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                resumeflag=dataSnapshot.child("resumeflag").getValue().toString();
+                if(resumeflag.equals("notworking"))
+                {
+                    Intent undercontructIntent=new Intent(MainActivity.this,UnderConstructionActivity.class);
+                    undercontructIntent.putExtra("updatefound",false);
+                    undercontructIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(undercontructIntent);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+*/
+
+
+
         setContentView(R.layout.activity_main);
         this.setFinishOnTouchOutside(true);
         LOGOUT_VAL=0;
@@ -131,9 +172,6 @@ public class MainActivity extends AppCompatActivity{
         final int intValue = mainIntent1.getIntExtra("vf", 0);
         Intent mainIntent2 = getIntent();
         final int intValue2 = mainIntent2.getIntExtra("gf", 0);
-
-
-
 
 
 
@@ -154,7 +192,7 @@ public class MainActivity extends AppCompatActivity{
                 v.vibrate(pattern, -1);
             }
 
-            checkUpdate();
+        checkUpdate();
             checkMessage();
 
 
@@ -629,37 +667,37 @@ public class MainActivity extends AppCompatActivity{
                     Log.v("E_VALUE","QRCODE : "+UserDataObj.getQrcode());
                     setTitle("Hi, "+UserDataObj.getName());
 
-                if(UserDataObj.getContact().equals("nocontact"))
-                {
+                try {
+                    if (UserDataObj.getContact().equals("nocontact")) {
 
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
 
-                    final EditText input = new EditText(getBaseContext());
-                    input.setInputType(TYPE_CLASS_PHONE);
-                    input.setSingleLine();
-                    FrameLayout container = new FrameLayout(getBaseContext());
-                    FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.leftMargin = 50;
-                    params.rightMargin=50;
-                    input.setLayoutParams(params);
-                    container.addView(input);
-                    builder.setView(container);
-                    builder.setTitle("CONTACT DETAILS") //
-                            .setMessage("Enter your Mobile Number") //
-                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                        final EditText input = new EditText(getBaseContext());
+                        input.setInputType(TYPE_CLASS_PHONE);
+                        input.setSingleLine();
+                        FrameLayout container = new FrameLayout(getBaseContext());
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.leftMargin = 50;
+                        params.rightMargin = 50;
+                        input.setLayoutParams(params);
+                        container.addView(input);
+                        builder.setView(container);
+                        builder.setTitle("CONTACT DETAILS") //
+                                .setMessage("Enter your Mobile Number") //
+                                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
 
-                                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                                    v.vibrate(20);
-                                    String ContactNumber=input.getText().toString();
+                                        Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                                        v.vibrate(20);
+                                        String ContactNumber = input.getText().toString();
 
-                                    FirebaseDatabase.getInstance().getReference().child("users")
-                                            .child(mAuth.getCurrentUser().getUid()).child("contact").setValue(ContactNumber);
-                                    dialog.dismiss();
-                                }
-                            }); //
+                                        FirebaseDatabase.getInstance().getReference().child("users")
+                                                .child(mAuth.getCurrentUser().getUid()).child("contact").setValue(ContactNumber);
+                                        dialog.dismiss();
+                                    }
+                                }); //
                     /*.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -668,11 +706,15 @@ public class MainActivity extends AppCompatActivity{
                            // dialog.dismiss();
                         }
                     });*/
-                    builder.show();
+                        builder.show();
 
 
-
+                    }
+                }catch(Exception e)
+                {
+                    Log.v("E_VALUE","Exception caught for contact");
                 }
+
                 setUserDetails2(UserDataObj.getCollege(),UserDataObj.getContact(),
                         UserDataObj.getEmail(),UserDataObj.getEndsub(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode(),UserDataObj.getScanneddinner(),UserDataObj.getScannedlunch());
 
@@ -841,27 +883,28 @@ public class MainActivity extends AppCompatActivity{
 try {
 
     if (groupid.equals("not paid")) {
-        UserGroupIdTxtView = (TextView) findViewById(R.id.userGroupID);
+        UserGroupIdTxtView = (TextView)findViewById(R.id.userGroupID);
         UserGroupIdTxtView.setText("Pay and Add UPTO 4 FRIENDS in your group & enjoy the app Together!");
     } else {
-        UserGroupIdTxtView = (TextView) findViewById(R.id.userGroupID);
+        UserGroupIdTxtView = (TextView)findViewById(R.id.userGroupID);
         UserGroupIdTxtView.setText("Your GROUP CODE : " + groupid/*.substring(0,5)*/);
     }
 
 
     if (!scannedlunch.equals("-1")) {
-        UserScannedLunchTxtView = (TextView) findViewById(R.id.scannedlunchTxtView);
+        UserScannedLunchTxtView = (TextView)findViewById(R.id.scannedlunchTxtView);
         UserScannedLunchTxtView.setText("You had Lunch at :" + scannedlunch);
     }
     if (!scanneddinner.equals("-1")) {
-        UserScannedDinnerTxtView = (TextView) findViewById(R.id.scanneddinnerTxtView);
+        UserScannedDinnerTxtView = (TextView)findViewById(R.id.scanneddinnerTxtView);
         UserScannedDinnerTxtView.setText("You had Dinner at :" + scanneddinner);
     }
 
 }
 catch(Exception e)
 {
-    Toast.makeText(this,"Exception Caught",Toast.LENGTH_LONG).show();
+    e.printStackTrace();
+    Toast.makeText(this,".",Toast.LENGTH_LONG).show();
 }
 
 
@@ -1048,9 +1091,9 @@ catch (Exception e)
      }
 
  */
-    public void initiatelogic() {
+    public void initiatelogic(String groupToChange) {
 
-        DatabaseReference mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");
+        DatabaseReference mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child(groupToChange);
 
         mDatabaseGroups.addValueEventListener(new ValueEventListener() {
             @Override
@@ -1087,7 +1130,7 @@ catch (Exception e)
 
     }
 
-    public void initiatelogic2() {
+    /*public void initiatelogic2() {
 
         DatabaseReference mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");
 
@@ -1124,7 +1167,7 @@ catch (Exception e)
 
 
 
-    }
+    }*/
 
     public void MonthChangeLogic()
     {
@@ -1366,6 +1409,11 @@ catch (Exception e)
                         // Uri.parse("http://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName())));
             }
         }
+        if(id==R.id.action_about_mess)
+        {
+            Intent about_mess_Intent= new Intent(getApplicationContext(),AboutMessActivity.class);
+            startActivity(about_mess_Intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -1454,6 +1502,8 @@ catch (Exception e)
                                                     // IN THIS AREA ( TODO: ADD QR CODE OFFLINE CAPABILITY )
                 //                                                  TODO: ADD PAYEMENT BUTTON IF NOT PAYED
                 //                                                  TODO: OVER DEFAULT QR CODE PLACE BUTTON
+
+
                 SubPage02 subpage02Obj=new SubPage02();
 
                 //TextView textView = (TextView) rootView.findViewById(R.id.section_label);

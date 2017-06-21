@@ -13,7 +13,7 @@
     <application
         android:name=".FontApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/logo_yellow"
+        android:icon="@mipmap/logofinal1"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
@@ -69,9 +69,14 @@
         <activity
             android:name=".UnderConstructionActivity"
             android:theme="@style/NewTheme1" />
-        <activity android:name=".NextMonthActivity"
-            android:theme="@style/Theme.AppCompat" />
-
+        <activity
+            android:name=".NextMonthActivity"
+            android:theme="@style/NewTheme1" />
+        <activity android:name=".ScanActivity" />
+        <activity
+            android:name=".AboutMessActivity"
+            android:theme="@style/NewTheme1" />
+        <activity android:name=".TermsAndConditionsActivity"></activity>
     </application>
 
 </manifest>

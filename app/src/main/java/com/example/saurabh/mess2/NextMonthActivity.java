@@ -3,14 +3,21 @@ package com.example.saurabh.mess2;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.example.saurabh.mess2.MainActivity.BATCH;
@@ -29,6 +40,7 @@ import static com.example.saurabh.mess2.MainActivity.BUFFER_GRPID;
 import static com.example.saurabh.mess2.MainActivity.PAID_NEXT;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
 import static com.example.saurabh.mess2.MainActivity.connected;
+import static com.example.saurabh.mess2.R.color.base_dark;
 
 public class NextMonthActivity extends AppCompatActivity {
 
@@ -36,21 +48,72 @@ public class NextMonthActivity extends AppCompatActivity {
     String BuffGrpId;
     private TextView UserGroupIdTxtView;
     private static TextView memberTxtView[]=new TextView[3];
+    public  TourGuide mTutorialHandler;
+    public TourGuide mTutorialHandler2;
+    public  Activity mActivity;
+    private Intromanager intromanager;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity=this;
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_next_month);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(base_dark));
 
-        setTitle("Upcoming Month Details");
+        }
 
+
+        //setTitle("Upcoming Month Details");
+
+       // setIntro();
+        intromanager=new Intromanager(this);
+
+       // intromanager.setFirst2(true);
+
+        if(intromanager.Check2()) //CHECK IF USER USES APP FOR FIRST TIE OR NOT
+        {
+
+          /* setup enter and exit animation */
+            Animation enterAnimation = new AlphaAnimation(0f, 1f);
+            enterAnimation.setDuration(600);
+            enterAnimation.setFillAfter(true);
+
+            Animation exitAnimation = new AlphaAnimation(1f, 0f);
+            exitAnimation.setDuration(400);
+            exitAnimation.setFillAfter(true);
+
+        /* initialize TourGuide without playOn() */
+            mTutorialHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
+                    .setPointer(new Pointer())
+                    .setToolTip(new ToolTip()
+                            .setTitle("This shows the Next Month Payment Details")
+                            .setDescription("Tap to pay for the coming Month")
+                            .setGravity(Gravity.NO_GRAVITY)
+                    )
+                    .setOverlay(new Overlay()
+                            .setBackgroundColor(Color.parseColor("#4DFFFFFF"))
+                            .disableClick(true)
+                            .setEnterAnimation(enterAnimation)
+                            .setExitAnimation(exitAnimation)
+                    );
+
+        }
 
         mAddGrpBtn=(Button)findViewById(R.id.AddGroupBtn);
 
         memberTxtView[0] = (TextView)findViewById(R.id.member1TxtView);
         memberTxtView[1] = (TextView)findViewById(R.id.member2TxtView);
         memberTxtView[2] = (TextView)findViewById(R.id.member3TxtView);
+        final TextView button3 = (TextView)findViewById(R.id.textView11);
 
 
         FirebaseDatabase.getInstance().getReference().child("users")
@@ -88,47 +151,49 @@ public class NextMonthActivity extends AppCompatActivity {
         PaymentStatusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(PAID_NEXT.equals("not paid"))
-                {
 
-                    Log.v("E_VALUE","PAID_NEXT"+PAID_NEXT);
-                    Intent PaymentIntent2=new Intent(NextMonthActivity.this,PaymentActivity.class);
-                    PaymentIntent2.putExtra("UserID",FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    startActivity(PaymentIntent2);
+                if(intromanager.Check2()) //CHECK IF USER USES APP FOR FIRST TIE OR NOT
+                {
+                    mTutorialHandler.cleanUp();
+                    mTutorialHandler.setToolTip(new ToolTip().setTitle("Add Friends for Next Month").setDescription("Add them every month to keep going!").setGravity(Gravity.BOTTOM)).playOn(mAddGrpBtn);
                 }
-                else if(PAID_NEXT.equals("paid")&&BuffGrpId.equals("not paid"))
-                {
-                    FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            BATCH=dataSnapshot.getValue().toString();
+                else {
+
+
+                    if (PAID_NEXT.equals("not paid")) {
+
+                        Log.v("E_VALUE", "PAID_NEXT" + PAID_NEXT);
+                        Intent PaymentIntent2 = new Intent(NextMonthActivity.this, PaymentActivity.class);
+                        PaymentIntent2.putExtra("UserID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        startActivity(PaymentIntent2);
+                    } else if (PAID_NEXT.equals("paid") && BuffGrpId.equals("not paid")) {
+                        FirebaseDatabase.getInstance().getReference().child("users")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                BATCH = dataSnapshot.getValue().toString();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        if (BATCH.equals("not paid")) {
+                            String from = "NextMonth";
+                            SubPage02 obj = new SubPage02();
+                            obj.setbatch(from);
+                        } else {
+                            String from = "NextMonth";
+                            SubPage02 obj = new SubPage02();
+                            obj.onPayClicked(from);
                         }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                    if(BATCH.equals("not paid"))
-                    {
-                        String from="NextMonth";
-                        SubPage02 obj = new SubPage02();
-                        obj.setbatch(from);
+                        PaymentStatusBtn.setText("Tap to Confirm Payment");
+                    } else {
+                        PaymentStatusBtn.setText("Payment Confirmed!");
                     }
-                    else
-                    {
-                        String from="NextMonth";
-                        SubPage02 obj = new SubPage02();
-                        obj.onPayClicked(from);
-                    }
-                    PaymentStatusBtn.setText("Tap to Confirm Payment");
-                }
-                else
-                {
-                    PaymentStatusBtn.setText("Payment Confirmed!");
                 }
             }
         });
@@ -140,54 +205,134 @@ public class NextMonthActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //  if(isConnected()) {
-
-                final String[] BufferGroupId = new String[1];
-                if(isConnected())
+                if(intromanager.Check2()) //CHECK IF USER USES APP FOR FIRST TIE OR NOT
                 {
-                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    v.vibrate(20);
-                    final AddFriendHandler mAddFriendHandler = new AddFriendHandler(NextMonthActivity.this);
+                    mTutorialHandler.cleanUp();
+                   // intromanager.setFirst2(false);
 
-                    FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("buffgroupid").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            BufferGroupId[0] =dataSnapshot.getValue().toString();
-                            if(!BufferGroupId[0].equals("not paid")&& !PAID_NEXT.equals("not paid"))
-                            {
-
-                                mAddFriendHandler.showDialogMethod();
-                            }
-                            else
-                            {
-                                mAddFriendHandler.showNotPaidDialogue();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-
+                       mTutorialHandler.setToolTip(new ToolTip().setTitle("Your Friends for Next Month will be display here").setDescription("").setGravity(Gravity.NO_GRAVITY)).playOn(button3);
                 }
-                else
-                {
-                    Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    long[] pattern = {0, 75,100,75};
+                else {
 
-                    // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
-                    v.vibrate(pattern, -1);
-                    Toast.makeText(getBaseContext(),"No Internet! Please Check your Connection",Toast.LENGTH_LONG).show();
+                    final String[] BufferGroupId = new String[1];
+                    if (isConnected()) {
+                        Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        final AddFriendHandler mAddFriendHandler = new AddFriendHandler(NextMonthActivity.this);
+
+                        FirebaseDatabase.getInstance().getReference().child("users")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .child("buffgroupid").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                BufferGroupId[0] = dataSnapshot.getValue().toString();
+                                if (!BufferGroupId[0].equals("not paid") && !PAID_NEXT.equals("not paid")) {
+
+                                    
+
+
+                                    mAddFriendHandler.showDialogMethod();
+                                } else {
+                                    mAddFriendHandler.showNotPaidDialogue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    } else {
+                        Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        long[] pattern = {0, 75, 100, 75};
+
+                        // The '-1' here means to vibrate once, as '-1' is out of bounds in the pattern array
+                        v.vibrate(pattern, -1);
+                        Toast.makeText(getBaseContext(), "No Internet! Please Check your Connection", Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
         });
 
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTutorialHandler.cleanUp();
+                intromanager.setFirst2(false);
+            }
+        });
+
+
         initialiseTextViews();
+        if(intromanager.Check2()) //CHECK IF USER USES APP FOR FIRST TIE OR NOT
+        {
+            mTutorialHandler.playOn(PaymentStatusBtn);
+        }
+    }
+
+    private void setIntro() {
+
+        Button button = (Button) findViewById(R.id.PaymentStatusBtn);
+        final Button button2 = (Button)findViewById(R.id.AddGroupBtn);
+        final TextView button3 = (TextView)findViewById(R.id.textView11);
+
+
+         /* setup enter and exit animation */
+        Animation enterAnimation = new AlphaAnimation(0f, 1f);
+        enterAnimation.setDuration(600);
+        enterAnimation.setFillAfter(true);
+
+        Animation exitAnimation = new AlphaAnimation(1f, 0f);
+        exitAnimation.setDuration(600);
+        exitAnimation.setFillAfter(true);
+
+        /* initialize TourGuide without playOn() */
+        mTutorialHandler = TourGuide.init(this).with(TourGuide.Technique.Click)
+                .setPointer(new Pointer())
+                .setToolTip(new ToolTip()
+                        .setTitle("Hey!")
+                        .setDescription("I'm the top fellow")
+                        .setGravity(Gravity.END)
+                )
+                .setOverlay(new Overlay()
+                        .setEnterAnimation(enterAnimation)
+                        .setExitAnimation(exitAnimation)
+                );
+
+        /* setup 1st button, when clicked, cleanUp() and re-run TourGuide on button2 */
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mTutorialHandler.cleanUp();
+                mTutorialHandler.setToolTip(new ToolTip().setTitle("Hey there!").setDescription("Just the middle man").setGravity(Gravity.BOTTOM|Gravity.START)).playOn(button2);
+            }
+        });
+
+        /* setup 2nd button, when clicked, cleanUp() and re-run TourGuide on button3 */
+        button2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mTutorialHandler.cleanUp();
+                mTutorialHandler.setToolTip(new ToolTip().setTitle("Hey...").setDescription("It's time to say goodbye").setGravity(Gravity.TOP| Gravity.END)).playOn(button3);
+            }
+        });
+
+        /* setup 3rd button, when clicked, run cleanUp() */
+        button3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mTutorialHandler.cleanUp();
+            }
+        });
+
+        mTutorialHandler.playOn(button);
+
+
+
 
     }
 

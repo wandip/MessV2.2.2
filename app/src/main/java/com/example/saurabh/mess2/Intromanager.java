@@ -32,5 +32,15 @@ public class Intromanager {
         return pref.getBoolean("check",true);
     }
 
+    public void setFirst2(boolean isFirst)
+    {
+        editor.putBoolean("check2",isFirst);
+        editor.commit();
+    }
+    public boolean Check2()
+    {
+        return pref.getBoolean("check2",true);
+    }
+
 
 }

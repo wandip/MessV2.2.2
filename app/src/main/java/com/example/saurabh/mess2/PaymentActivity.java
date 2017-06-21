@@ -1,23 +1,37 @@
 package com.example.saurabh.mess2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.vision.text.Text;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+import static com.example.saurabh.mess2.MainActivity.BATCH;
+import static com.example.saurabh.mess2.MainActivity.BUFFER;
+import static com.example.saurabh.mess2.MainActivity.BUFFER_GRPID;
+import static com.example.saurabh.mess2.MainActivity.CURRENT;
 import static com.example.saurabh.mess2.MainActivity.UserDataObj;
 
 import com.google.firebase.database.ValueEventListener;
@@ -39,6 +53,7 @@ public class PaymentActivity extends AppCompatActivity {
     private String CashString,onlyLunchGatewayUrl;
     private String onlyDinnerGatewayUrl;
     private DatabaseReference mAdminDatabase,mPaymentLinklim,mPaymentLinkunlim;
+    private TextView termsncond;
 
 
 
@@ -58,7 +73,7 @@ public class PaymentActivity extends AppCompatActivity {
         /*NameTxtView.setText(UserDataObj.getName());
         ContactTxtView.setText(UserDataObj.getContact());
         EmailTxtView.setText(UserDataObj.getEmail());*/
-
+        termsncond=(TextView)findViewById(R.id.termsandconditions);
 
        // PaymentBtn=(Button)findViewById(R.id.paymentBtn);
 
@@ -154,11 +169,22 @@ public class PaymentActivity extends AppCompatActivity {
 
 
 
+
+
+
         final Intent PaymentIntent1 = getIntent();
          UserID = PaymentIntent1.getStringExtra("UserID");
         mCurrentUser= FirebaseDatabase.getInstance().getReference().child("users").child(UserID);
 
 
+        termsncond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+               showTermsandCondDialog();
+
+            }
+        });
 
 
        /* BothBtnLim.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +238,48 @@ public class PaymentActivity extends AppCompatActivity {
 
         });
 
+
+
+
+    }
+
+    private void showTermsandCondDialog() {
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(PaymentActivity.this);
+
+
+        final TextView terms = new TextView(PaymentActivity.this);
+        terms.setText("");
+        terms.setMovementMethod(new ScrollingMovementMethod());
+        FrameLayout container = new FrameLayout(PaymentActivity.this);
+        LayoutInflater inflater = PaymentActivity.this.getLayoutInflater();
+        final View layout= inflater.inflate(R.layout.termstextview, null);
+        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = 50;
+        params.rightMargin=50;
+        layout.setLayoutParams(params);
+        container.addView(terms);
+        builder.setView(layout);
+        builder.setTitle("TERMS AND CONDITIONS") //
+                 //
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+
+                        dialog.dismiss();
+                    }
+                }); //
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Vibrator v = (Vibrator) PaymentActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        // TODO
+                        dialog.dismiss();
+                    }
+                });*/
+        builder.show();
 
 
 

@@ -117,6 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
                     v.vibrate(20);
 
+                    if(emailValid())
                     generateDialogueBoxPassRes();
 
                     //sendPasswordResetMail();
@@ -323,6 +324,21 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+
+    }
+
+    private boolean emailValid() {
+
+        boolean valid=true;
+        String email = emailidedtxt.getText().toString();
+        if (TextUtils.isEmpty(email)) {
+            emailidedtxt.setError("Required.");
+            valid = false;
+        } else {
+            emailidedtxt.setError(null);
+        }
+
+        return valid;
 
     }
 

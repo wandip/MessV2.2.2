@@ -22,16 +22,6 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/instamojo_secure_inverted"
-        android:scaleType="fitCenter"
-        android:id="@+id/imageView12"
-        android:layout_above="@+id/HelptextView"
-        android:layout_marginBottom="15dp"
-        android:layout_below="@+id/BothButtonUnLim" />
-
     <TextView
         android:text="Just One Step away!"
         android:layout_width="wrap_content"
@@ -136,6 +126,30 @@
         android:layout_below="@+id/textView20"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/instamojo_secure_inverted"
+        android:scaleType="fitCenter"
+        android:id="@+id/imageView12"
+        android:layout_above="@+id/HelptextView"
+        android:layout_alignStart="@+id/BothButtonUnLim"
+        android:layout_alignEnd="@+id/BothButtonUnLim" />
+
+    <TextView
+        android:text="@string/termsandconditions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColorLink="@color/screen4"
+        android:layout_below="@+id/BothButtonUnLim"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/termsandconditions"
+        tools:text="@string/termsandconditions"
+        android:textAlignment="center"
+        android:textStyle="normal|bold" />
+
 
 
 </RelativeLayout>
