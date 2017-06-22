@@ -10,7 +10,7 @@
     android:paddingRight="0dp"
     android:paddingTop="0dp"
     android:background="#f9eec6"
-    tools:context="com.example.saurabh.mess2.UnderConstructionActivity">
+    tools:context="com.messedup.saurabh.mess2.UnderConstructionActivity">
 
     <ImageView
         android:layout_width="wrap_content"

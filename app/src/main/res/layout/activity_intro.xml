@@ -4,7 +4,7 @@
     android:id="@+id/activity_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.saurabh.mess2.IntroActivity">
+    tools:context="com.messedup.saurabh.mess2.IntroActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

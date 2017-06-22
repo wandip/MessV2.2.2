@@ -9,7 +9,7 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <com.example.saurabh.mess2.RalewayReg
+    <com.messedup.saurabh.mess2.RalewayReg
         android:layout_width="match_parent"
         android:layout_height="41dp"
         android:textAlignment="center"
@@ -170,7 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/SuperPowerfulButton2"
-        android:backgroundTint="@color/zxing_viewfinder_laser"
+        android:backgroundTint="@color/Red"
         android:layout_below="@+id/member3TxtView"
         android:layout_alignStart="@+id/AddGroupBtn"
         android:layout_marginTop="56dp"
@@ -182,7 +182,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/SuperPowerfulButton"
-        android:backgroundTint="@color/zxing_viewfinder_laser"
+        android:backgroundTint="@color/Red"
         android:layout_below="@+id/SuperPowerfulButton2"
         android:layout_alignStart="@+id/SuperPowerfulButton2"
         android:layout_alignEnd="@+id/SuperPowerfulButton2"

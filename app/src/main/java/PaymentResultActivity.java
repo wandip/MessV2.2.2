@@ -1,5 +1,4 @@
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,13 +21,15 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+/*
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+*/
 
 import java.io.ByteArrayOutputStream;
 
-import static com.example.saurabh.mess2.MainActivity.PAYEMENT_DONE;
-import static com.example.saurabh.mess2.MainActivity.UserDataObj;
-import static com.example.saurabh.mess2.R.id.QRCodeImageView;
+import static com.messedup.saurabh.mess2.MainActivity.PAYEMENT_DONE;
+import static com.messedup.saurabh.mess2.MainActivity.UserDataObj;
+import static com.messedup.saurabh.mess2.R.id.QRCodeImageView;
 
 /**
  * Created by saurabh on 5/5/17.
@@ -56,7 +57,7 @@ public class PaymentResultActivity extends Activity {
 
     }
 
-    private void generateQRCodeMethod() {
+    /*private void generateQRCodeMethod() {
 
 
         Log.v("E_VALUE","In generateqrcodemethod");
@@ -82,7 +83,7 @@ public class PaymentResultActivity extends Activity {
             e.printStackTrace();
         }
 
-    }
+    }*/
     private String encodeBitmapAndSaveToFirebase(Bitmap bitmap) {
 
         StorageReference imageRef= storageRef.child("qrcodes").child(UserDataObj.getuid()+".jpg");

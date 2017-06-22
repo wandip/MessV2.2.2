@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.saurabh.mess2">
+    package="com.messedup.saurabh.mess2">
     //General permissions
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     //required for Juspay to read the OTP from the SMS sent to the device
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
-        android:name=".FontApplication"
+        android:name="com.messedup.saurabh.mess2.FontApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logofinal1"
         android:label="@string/app_name"
@@ -19,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.messedup.saurabh.mess2.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/NewTheme1">
             <intent-filter>
@@ -29,15 +26,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.messedup.saurabh.mess2.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.messedup.saurabh.mess2.LoginActivity"
             android:label=""
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.messedup.saurabh.mess2.SplashActivity"
             android:theme="@style/NewTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,38 +42,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IntroActivity" />
+        <activity android:name="com.messedup.saurabh.mess2.IntroActivity" />
         <activity
-            android:name=".RegisterActivity"
+            android:name="com.messedup.saurabh.mess2.RegisterActivity"
             android:label=""
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".MessSelectionActivity"
+            android:name="com.messedup.saurabh.mess2.MessSelectionActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".GroupFormation.GroupRequestActivity"
+            android:name="com.messedup.saurabh.mess2.GroupFormation.GroupRequestActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".PaymentActivity"
+            android:name="com.messedup.saurabh.mess2.PaymentActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".PaymentTryActivity" />
+        <activity android:name="com.messedup.saurabh.mess2.PaymentTryActivity" />
         <activity
-            android:name=".BrowserActivity"
+            android:name="com.messedup.saurabh.mess2.BrowserActivity"
             android:theme="@style/NewTheme1" />
         <activity
-            android:name=".AboutUsActivity"
+            android:name="com.messedup.saurabh.mess2.AboutUsActivity"
             android:theme="@style/NewTheme1" />
         <activity
-            android:name=".UnderConstructionActivity"
+            android:name="com.messedup.saurabh.mess2.UnderConstructionActivity"
             android:theme="@style/NewTheme1" />
         <activity
-            android:name=".NextMonthActivity"
+            android:name="com.messedup.saurabh.mess2.NextMonthActivity"
             android:theme="@style/NewTheme1" />
-        <activity android:name=".ScanActivity" />
+        <activity android:name="com.messedup.saurabh.mess2.ScanActivity" />
         <activity
-            android:name=".AboutMessActivity"
+            android:name="com.messedup.saurabh.mess2.AboutMessActivity"
             android:theme="@style/NewTheme1" />
-        <activity android:name=".TermsAndConditionsActivity"></activity>
+        <activity android:name="com.messedup.saurabh.mess2.TermsAndConditionsActivity"></activity>
     </application>
 
 </manifest>

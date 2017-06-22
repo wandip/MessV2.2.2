@@ -10,8 +10,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@drawable/blur_background_2"
-    tools:context="com.example.saurabh.mess2.LoginActivity">
+    tools:context="com.messedup.saurabh.mess2.LoginActivity">
 
 
     <ImageView
@@ -62,7 +61,7 @@
                 android:weightSum="1"
                 android:layout_marginBottom="0dp">
 
-                <com.example.saurabh.mess2.RalewaySemiBold
+                <com.messedup.saurabh.mess2.RalewaySemiBold
                     android:text="MESSED UP!"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

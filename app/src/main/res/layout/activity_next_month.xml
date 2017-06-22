@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/next_month"
-    tools:context="com.example.saurabh.mess2.NextMonthActivity">
+    tools:context="com.messedup.saurabh.mess2.NextMonthActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="60dp">
 
-    <com.example.saurabh.mess2.RalewayReg
+    <com.messedup.saurabh.mess2.RalewayReg
         android:layout_width="match_parent"
         android:layout_height="41dp"
         android:textAlignment="center"

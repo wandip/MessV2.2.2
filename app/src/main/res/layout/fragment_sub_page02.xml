@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/optimized_blurbackground2"
         android:visibility="invisible" />
 
-    <com.example.saurabh.mess2.RalewayReg
+    <com.messedup.saurabh.mess2.RalewayReg
         android:text="Today's Mess : ................"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

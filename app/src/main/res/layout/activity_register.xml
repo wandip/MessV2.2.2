@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="com.example.saurabh.mess2.RegisterActivity">
+    tools:context="com.messedup.saurabh.mess2.RegisterActivity">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <com.example.saurabh.mess2.RalewaySemiBold
+                    <com.messedup.saurabh.mess2.RalewaySemiBold
                         android:text="MESSED UP!"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -11,7 +11,7 @@
     android:paddingTop="0dp"
     android:background="#262626"
     android:scaleType="centerCrop"
-    tools:context="com.example.saurabh.mess2.AboutUsActivity">
+    tools:context="com.messedup.saurabh.mess2.AboutUsActivity">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -42,14 +42,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/app_icon_1"
-        android:layout_below="@+id/toolbar2"
-        android:id="@+id/imageView10"
-        android:layout_alignStart="@+id/textView"
-        android:visibility="gone" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -65,12 +57,7 @@
             android:layout_weight="0.33"
             android:id="@+id/ll1">
 
-            <ImageView
-                android:layout_width="121dp"
-                android:layout_height="65dp"
-                app:srcCompat="@drawable/app_icon_1"
-                android:id="@+id/saurabhimg"
-                android:visibility="gone" />
+
 
             <TextView
                 android:text="Saurabh Kshirsagar "
@@ -91,12 +78,6 @@
             android:layout_weight="0.33"
             android:id="@+id/ll2">
 
-            <ImageView
-                android:layout_width="122dp"
-                android:layout_height="65dp"
-                app:srcCompat="@drawable/app_icon_1"
-                android:id="@+id/dipakimg"
-                android:visibility="gone" />
 
             <TextView
                 android:text="Dipak Wani"
@@ -115,12 +96,7 @@
             android:layout_weight="0.33"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="119dp"
-                android:layout_height="72dp"
-                app:srcCompat="@drawable/app_icon_1"
-                android:id="@+id/yashimg"
-                android:visibility="gone" />
+
 
             <TextView
                 android:text="Yash Karwa"
