@@ -169,7 +169,7 @@ public class SubPage02 extends Fragment  {
         RateThisApp.showRateDialogIfNeeded(SubPage2Context);
 
         // Custom condition: 3 days and 10 launches
-        final RateThisApp.Config config = new RateThisApp.Config(3,10);
+        final RateThisApp.Config config = new RateThisApp.Config(7,30);
 
         config.setTitle(R.string.my_own_title);
         config.setMessage(R.string.my_own_message);
@@ -177,7 +177,7 @@ public class SubPage02 extends Fragment  {
         config.setNoButtonText(R.string.my_own_thanks);
         config.setCancelButtonText(R.string.my_own_cancel);
 
-       // config.setUrl("http://www.example.com"); //change if want to override
+        config.setUrl("https://play.google.com/store/apps/details?id=com.messedup.saurabh.mess2"); //change if want to override
 
         RateThisApp.init(config);
 
@@ -623,7 +623,7 @@ public class SubPage02 extends Fragment  {
             bitMatrix = new MultiFormatWriter().encode(
                     Value,
                     BarcodeFormat.DATA_MATRIX.QR_CODE,
-                    270, 270, null
+                    500, 500, null
             );
 
         } catch (IllegalArgumentException Illegalargumentexception) {
@@ -642,7 +642,7 @@ public class SubPage02 extends Fragment  {
             for (int x = 0; x < bitMatrixWidth; x++) {
 
                 pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.Black):getResources().getColor(R.color.BackgroundWhiteColor1);
+                        SubPage2Context.getResources().getColor(R.color.Black):SubPage2Context.getResources().getColor(R.color.BackgroundWhiteColor1);
             }
         }
         Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);

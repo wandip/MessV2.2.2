@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -201,11 +203,26 @@ public class RegisterActivity extends AppCompatActivity {
                         String user_id=mAuth.getCurrentUser().getUid(); //gives current users unique id
 
 
+                        HashMap<String,Object> RegUser=new HashMap<String, Object>();
+                        RegUser.put("name",name);
+                        RegUser.put("qrcode","default");
+                        RegUser.put("email",email);
+                        RegUser.put("contact",contact);
+                        RegUser.put("college",college);
+                        RegUser.put("scannedlunch","-1");
+                        RegUser.put("scanneddinner","-1");
+                        RegUser.put("batch","not paid");
+                        RegUser.put("paidnext","not paid");
+                        RegUser.put("paidtime","not paid");
+                        RegUser.put("buffgroupid","not paid");
+                        RegUser.put("endsub","-56");
+                        RegUser.put("groupid","not paid");
+
                         DatabaseReference current_user_db;
 
                         current_user_db= mDatabase.child(user_id); //goes inside the current user ref
 
-                        current_user_db.child("name").setValue(name);
+                       /* current_user_db.child("name").setValue(name);
                         current_user_db.child("qrcode").setValue("default");
                         current_user_db.child("email").setValue(email);     // UNCCOMENT THIS TO ADD USER TO DATABASE
                         current_user_db.child("contact").setValue(contact);
@@ -218,7 +235,18 @@ public class RegisterActivity extends AppCompatActivity {
                         current_user_db.child("buffgroupid").setValue("not paid");
                         current_user_db.child("endsub").setValue("-56");
                         current_user_db.child("groupid").setValue("not paid");
+*/
 
+                        current_user_db.updateChildren(RegUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                mProgress.dismiss();
+                                SIGN_IN_CHECK++;
+                                sendVerificationEmail();
+
+
+                            }
+                        });
                         Log.v("E_VALUE","babbaba : "+SIGN_IN_CHECK);
 
                         Log.v("E_VALUE","College : "+college);
@@ -228,10 +256,6 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.v("E_VALUE","NAME : "+name);
                         Log.v("E_VALUE","USER ID : "+user_id);
 
-
-                        mProgress.dismiss();
-                        SIGN_IN_CHECK++;
-                        sendVerificationEmail();
 
 
 

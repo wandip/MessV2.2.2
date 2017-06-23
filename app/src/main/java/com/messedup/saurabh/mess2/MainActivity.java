@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity{
             }
 
         checkUpdate();
-            checkMessage();
+        checkmessage2();
 
 
 
@@ -200,7 +200,8 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resumeflag=dataSnapshot.child("resumeflag").getValue().toString();
-                if(resumeflag.equals("notworking"))
+                if(resumeflag.equals("notworking")&&
+                        !FirebaseAuth.getInstance().getCurrentUser().getUid().equals("4ALe90P970eTtifEAEfHlzwe03u1"))
                 {
                     Intent undercontructIntent=new Intent(MainActivity.this,UnderConstructionActivity.class);
                     undercontructIntent.putExtra("updatefound",false);
@@ -257,7 +258,7 @@ public class MainActivity extends AppCompatActivity{
 
 
         mDatabaseUsers=FirebaseDatabase.getInstance().getReference().child("users"); //Database USER Node Ref
-        mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");//Database GROUP Node Ref
+       // mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child("group");//Database GROUP Node Ref
 
         mDatabaseUsers.keepSynced(true);    //Offline Capabilities of Firebase
 
@@ -449,10 +450,11 @@ public class MainActivity extends AppCompatActivity{
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor PreferanceEditor = preferences.edit();*/
 
-        final SharedPreferences preferences = this.getSharedPreferences("com.messedup.saurabh.mess2", Context.MODE_PRIVATE);
-        SharedPreferences.Editor PreferanceEditor = preferences.edit();
 
-        final String MessageKey="com.messedup.saurabh.mess2.message";
+        final SharedPreferences preferences = this.getSharedPreferences("com.example.saurabh.mess2", Context.MODE_PRIVATE);
+       // SharedPreferences.Editor PreferanceEditor = preferences.edit();
+
+        final String MessageKey="com.example.saurabh.mess2.message";
 
 
 
@@ -497,16 +499,70 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    private void showMessageDialog(final String mssg, String mssgtitle)
+    private void checkmessage2()
     {
 
-        final SharedPreferences preferences = this.getSharedPreferences("com.messedup.saurabh.mess2", Context.MODE_PRIVATE);
+
+        Toast.makeText(MainActivity.this,"In checkMessage2",Toast.LENGTH_SHORT).show();
+        SharedPreferences.Editor editor2;
+        final SharedPreferences preferences2 = MainActivity.this.getSharedPreferences("messa", Context.MODE_PRIVATE);
+
+       // editor2=preferences2.edit();
+
+       // String temp=preferences2.getString("mess","nomessage");
+        final String[] msg = new String[1];
+        final String[] msgtitle = new String[1];
+        msgtitle[0]="MESSAGE";
+
+        DatabaseReference mAdminDatabase = FirebaseDatabase.getInstance().getReference().child("adminmessage").child("messagetext");
+        mAdminDatabase.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String name = preferences2.getString("messa","nomessage");
+                msg[0] = dataSnapshot.getValue().toString();
+
+              //  Toast.makeText(MainActivity.this,"In checkMessage2 "+name,Toast.LENGTH_SHORT).show();
+
+                if(!name.equals(msg[0])) {
+
+
+
+                    // msgtitle[0] = dataSnapshot.child("messagetitle").getValue().toString();
+
+                    if (!msg[0].equals(name) && !msg[0].equals("nomessage"))
+                    {
+                       // Toast.makeText(MainActivity.this,"In checkMessage2 ShowMessage "+name,Toast.LENGTH_SHORT).show();
+
+                        showMessageDialog2(msg[0], msgtitle[0]);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void showMessageDialog(final String mssg, String mssgtitle)
+    {
+       // Toast.makeText(MainActivity.this,"In checkMessage2 ShowMessage Function",Toast.LENGTH_SHORT).show();
+
+
+        final SharedPreferences preferences = this.getSharedPreferences("com.example.saurabh.mess2", Context.MODE_PRIVATE);
         final SharedPreferences.Editor PreferanceEditor = preferences.edit();
 
-        final String MessageKey="com.messedup.saurabh.mess2.message";
+        final String MessageKey="com.example.saurabh.mess2.message";
 
         PreferanceEditor.putString(MessageKey, mssg);
         PreferanceEditor.apply();
+
 
 
 
@@ -546,6 +602,59 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private void showMessageDialog2(final String mssg, String mssgtitle)
+    {
+
+        final SharedPreferences.Editor editor2;
+        final SharedPreferences preferences2 = MainActivity.this.getSharedPreferences("messa", Context.MODE_PRIVATE);
+
+        editor2=preferences2.edit();
+
+        //final String MessageKey="com.messedup.saurabh.mess2.message";
+
+        editor2.putString("messa", mssg);
+        editor2.apply();
+        editor2.commit();
+
+
+
+
+        DIALOG_MESSAGE=mssg;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(mssgtitle) //
+                .setMessage(mssg) //
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        editor2.putString("messa", mssg);
+                        editor2.apply();
+                        editor2.commit();
+
+                        dialog.dismiss();
+                        Log.v("E_VALUE", "AFTER CLICKING ........."+String.valueOf(DIALOG_MESSAGE_SHOWN));
+
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        DIALOG_MESSAGE_SHOWN=true;
+                        editor2.putString("messa", mssg);
+                        editor2.apply();
+                        editor2.commit();
+
+                        dialog.dismiss();
+                    }
+                });
+        this.setFinishOnTouchOutside(false);
+        builder.setCancelable(false);
+        builder.show();
+
+
+
+    }
 
 
 
@@ -612,28 +721,38 @@ public class MainActivity extends AppCompatActivity{
     private void getUserdata() {
 
 
+        try {
 
-        final String uid=mAuth.getCurrentUser().getUid();
+            final String uid = mAuth.getCurrentUser().getUid();
 
-        ValueEventListener userDetailsListener;
+            ValueEventListener userDetailsListener;
 
-        mDatabaseUsers.child(uid).addValueEventListener(userDetailsListener=new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                    UserDataObj=dataSnapshot.getValue(Users.class);
-                     UserDataObj.setuid(uid);
-                    Log.v("E_VALUE",UserDataObj.getuid());
+            mDatabaseUsers.child(uid).addValueEventListener(userDetailsListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try{
+                    UserDataObj = dataSnapshot.getValue(Users.class);
+                    UserDataObj.setuid(uid);
+                    Log.v("E_VALUE", UserDataObj.getuid());
+                    }
+                    catch(NullPointerException e)
+                    {
+                        e.printStackTrace();
+
+                        mAuth.signOut();
+                    }
 
 
-                PAID_NEXT=dataSnapshot.child("paidnext").getValue().toString();
-                PAID_TIME=dataSnapshot.child("paidtime").getValue().toString();
-                BUFFER_GRPID=dataSnapshot.child("buffgroupid").getValue().toString();
-                BATCH=dataSnapshot.child("batch").getValue().toString();
+                    try {
+                        PAID_NEXT = dataSnapshot.child("paidnext").getValue().toString();
+                        PAID_TIME = dataSnapshot.child("paidtime").getValue().toString();
+                        BUFFER_GRPID = dataSnapshot.child("buffgroupid").getValue().toString();
+                        BATCH = dataSnapshot.child("batch").getValue().toString();
 
-                    SubPage03 Subpage3obj=new SubPage03();
-                    Subpage3obj.setDetails(UserDataObj.getCollege(),UserDataObj.getContact(),
-                            UserDataObj.getEmail(),UserDataObj.getEndsub(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode(),UserDataObj.getScanneddinner(),UserDataObj.getScannedlunch());
-                NameTemp=UserDataObj.getName();
+                        SubPage03 Subpage3obj = new SubPage03();
+                        Subpage3obj.setDetails(UserDataObj.getCollege(), UserDataObj.getContact(),
+                                UserDataObj.getEmail(), UserDataObj.getEndsub(), UserDataObj.getGroupid(), UserDataObj.getName(), UserDataObj.getQrcode(), UserDataObj.getScanneddinner(), UserDataObj.getScannedlunch());
+                        NameTemp = UserDataObj.getName();
                /* UserNameTxtView=(TextView)findViewById(R.id.userName001);
                 //changeFragmentTextView(NameTemp);
 
@@ -641,48 +760,51 @@ public class MainActivity extends AppCompatActivity{
                 */
 
 
+                        Log.v("E_VALUE", "College : " + UserDataObj.getCollege());
+                        Log.v("E_VALUE", "Contact : " + UserDataObj.getContact());
+                        Log.v("E_VALUE", "Email : " + UserDataObj.getEmail());
+                        Log.v("E_VALUE", "GroupID : " + UserDataObj.getGroupid());
+                        Log.v("E_VALUE", "NAME : " + UserDataObj.getName());
+                        Log.v("E_VALUE", "QRCODE : " + UserDataObj.getQrcode());
+                        setTitle("Hi, " + UserDataObj.getName());
+                    }
+                    catch(NullPointerException e)
+                    {
+                        e.printStackTrace();
+
+                        mAuth.signOut();
+                    }
+                    try {
+                        if (UserDataObj.getContact().equals("nocontact")) {
 
 
-
-                    Log.v("E_VALUE","College : "+UserDataObj.getCollege());
-                    Log.v("E_VALUE","Contact : "+UserDataObj.getContact());
-                    Log.v("E_VALUE","Email : "+UserDataObj.getEmail());
-                    Log.v("E_VALUE","GroupID : "+UserDataObj.getGroupid());
-                    Log.v("E_VALUE","NAME : "+UserDataObj.getName());
-                    Log.v("E_VALUE","QRCODE : "+UserDataObj.getQrcode());
-                    setTitle("Hi, "+UserDataObj.getName());
-
-                try {
-                    if (UserDataObj.getContact().equals("nocontact")) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            final EditText input = new EditText(getBaseContext());
+                            input.setInputType(TYPE_CLASS_PHONE);
+                            input.setSingleLine();
+                            FrameLayout container = new FrameLayout(getBaseContext());
+                            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.leftMargin = 50;
+                            params.rightMargin = 50;
+                            input.setLayoutParams(params);
+                            container.addView(input);
+                            builder.setView(container);
+                            builder.setTitle("CONTACT DETAILS") //
+                                    .setMessage("Enter your Mobile Number") //
+                                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
 
+                                            Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                                            v.vibrate(20);
+                                            String ContactNumber = input.getText().toString();
 
-                        final EditText input = new EditText(getBaseContext());
-                        input.setInputType(TYPE_CLASS_PHONE);
-                        input.setSingleLine();
-                        FrameLayout container = new FrameLayout(getBaseContext());
-                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.leftMargin = 50;
-                        params.rightMargin = 50;
-                        input.setLayoutParams(params);
-                        container.addView(input);
-                        builder.setView(container);
-                        builder.setTitle("CONTACT DETAILS") //
-                                .setMessage("Enter your Mobile Number") //
-                                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-
-                                        Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                                        v.vibrate(20);
-                                        String ContactNumber = input.getText().toString();
-
-                                        FirebaseDatabase.getInstance().getReference().child("users")
-                                                .child(mAuth.getCurrentUser().getUid()).child("contact").setValue(ContactNumber);
-                                        dialog.dismiss();
-                                    }
-                                }); //
+                                            FirebaseDatabase.getInstance().getReference().child("users")
+                                                    .child(mAuth.getCurrentUser().getUid()).child("contact").setValue(ContactNumber);
+                                            dialog.dismiss();
+                                        }
+                                    }); //
                     /*.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -691,40 +813,42 @@ public class MainActivity extends AppCompatActivity{
                            // dialog.dismiss();
                         }
                     });*/
-                        builder.show();
+                            builder.show();
 
 
+                        }
+                    } catch (Exception e) {
+                        Log.v("E_VALUE", "Exception caught for contact");
                     }
-                }catch(Exception e)
-                {
-                    Log.v("E_VALUE","Exception caught for contact");
+
+                    try {
+
+                        setUserDetails2(UserDataObj.getCollege(), UserDataObj.getContact(),
+                                UserDataObj.getEmail(), UserDataObj.getEndsub(), UserDataObj.getGroupid(), UserDataObj.getName(), UserDataObj.getQrcode(), UserDataObj.getScanneddinner(), UserDataObj.getScannedlunch());
+                    }  catch(NullPointerException e)
+                        {
+                            e.printStackTrace();
+
+                            mAuth.signOut();
+                           // finish();
+                        }
+
                 }
 
-                setUserDetails2(UserDataObj.getCollege(),UserDataObj.getContact(),
-                        UserDataObj.getEmail(),UserDataObj.getEndsub(),UserDataObj.getGroupid(),UserDataObj.getName(),UserDataObj.getQrcode(),UserDataObj.getScanneddinner(),UserDataObj.getScannedlunch());
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            //  mDatabaseUsers.child(uid).removeEventListener(userDetailsListener);
 
 
-
-
-
+            if (uid.equals("4ALe90P970eTtifEAEfHlzwe03u1")) //checks if admin
+            {
+                Toast.makeText(MainActivity.this, "Hello, Sir! Welcome to MessedUp! Gyang", Toast.LENGTH_LONG).show();
+                // initiatelogic();
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-      //  mDatabaseUsers.child(uid).removeEventListener(userDetailsListener);
-
-
-
-
-        if(uid.equals("4ALe90P970eTtifEAEfHlzwe03u1")) //checks if admin
-        {
-            Toast.makeText(MainActivity.this,"Hello, Sir! Welcome to MessedUp! Gyang",Toast.LENGTH_LONG).show();
-           // initiatelogic();
-        }
         /*else
         {
             Button mPowerFulButton1=(Button)rootView3.findViewById(R.id.SuperPowerfulButton);
@@ -735,7 +859,13 @@ public class MainActivity extends AppCompatActivity{
         }
 */
 
+        }
+        catch(NullPointerException e)
+        {
+            e.printStackTrace();
 
+            mAuth.signOut();
+        }
 
 
     }
@@ -1078,6 +1208,8 @@ catch (Exception e)
  */
     public void initiatelogic(String groupToChange) {
 
+        Log.v("E_VALUE","#$%^&*  "+groupToChange);
+
         DatabaseReference mDatabaseGroups=FirebaseDatabase.getInstance().getReference().child(groupToChange);
 
         mDatabaseGroups.addValueEventListener(new ValueEventListener() {
@@ -1367,7 +1499,7 @@ catch (Exception e)
                 i.putExtra(Intent.EXTRA_SUBJECT, "Messed Up!");
                 String sAux = "\nHey!\nCheckout and Download Messed Up! on Google Play. Join and enjoy " +
                         "different mess everyday!\n\n";
-                sAux = sAux + "https://www.google.co.in \n\n";
+                sAux = sAux + "https://play.google.com/store/apps/details?id=com.messedup.saurabh.mess2 \n\n";
                 i.putExtra(Intent.EXTRA_TEXT, sAux);
                 startActivity(Intent.createChooser(i, "Share to"));
             } catch(Exception e) {
@@ -1377,7 +1509,7 @@ catch (Exception e)
         if(id==R.id.rateus)
         {
          //   Uri uri = Uri.parse("market://details?id=" + getBaseContext().getPackageName());
-              Uri uri = Uri.parse("http://www.google.co.in");
+              Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.messedup.saurabh.mess2");
 
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
             // To count with Play market backstack, After pressing back button,
@@ -1582,6 +1714,11 @@ catch (Exception e)
         super.onResume();
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     @Override

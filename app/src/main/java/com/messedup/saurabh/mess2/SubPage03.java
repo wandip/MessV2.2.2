@@ -392,7 +392,7 @@ public class SubPage03 extends Fragment {
         builder.setTitle("ENTER CREDENTIALS") //
                 .setMessage("Enter Admin Root Password") //
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(final DialogInterface dialog, int id) {
 
                         Vibrator v = (Vibrator) SubPage3Context.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(20);
@@ -403,7 +403,12 @@ public class SubPage03 extends Fragment {
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Toast.makeText(SubPage3Context,"Logic Run 1! "+curr1[0],Toast.LENGTH_SHORT).show();
+
                                             curr1[0] =dataSnapshot.getValue().toString();
+                                            MainActivity MainObj=new MainActivity();
+                                            MainObj.initiatelogic(curr1[0]);
+                                            dialog.dismiss();
                                         }
 
                                         @Override
@@ -411,11 +416,8 @@ public class SubPage03 extends Fragment {
 
                                         }
                                     });
-                            Toast.makeText(SubPage3Context,"Logic Run 1! "+curr1[0],Toast.LENGTH_SHORT).show();
 
-                            MainActivity MainObj=new MainActivity();
-                            MainObj.initiatelogic(curr1[0]);
-                            dialog.dismiss();
+
 
                         }
                         else if(PasswordInput.equals("UpdateBatchTwo"))
@@ -426,6 +428,12 @@ public class SubPage03 extends Fragment {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             curr2[0] =dataSnapshot.getValue().toString();
+                                            Toast.makeText(SubPage3Context,"Logic Run 2! "+curr2[0],Toast.LENGTH_SHORT).show();
+
+
+                                            MainActivity MainObj=new MainActivity();
+                                            MainObj.initiatelogic(curr2[0]);
+                                            dialog.dismiss();
                                         }
 
                                         @Override
@@ -433,12 +441,7 @@ public class SubPage03 extends Fragment {
 
                                         }
                                     });
-                            Toast.makeText(SubPage3Context,"Logic Run 2! "+curr2[0],Toast.LENGTH_SHORT).show();
 
-
-                            MainActivity MainObj=new MainActivity();
-                            MainObj.initiatelogic(curr2[0]);
-                            dialog.dismiss();
 
                         }
                         else

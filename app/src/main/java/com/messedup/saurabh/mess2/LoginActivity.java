@@ -44,6 +44,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.messedup.saurabh.mess2.RegisterActivity.SIGN_IN_CHECK;
@@ -489,7 +491,7 @@ public class LoginActivity extends AppCompatActivity {
                                     mDatabase=FirebaseDatabase.getInstance().getReference();
                                     DatabaseReference current_user_db= mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()); //goes inside the current user ref
 
-                                    current_user_db.child("name").setValue(account.getDisplayName().trim());
+                                   /* current_user_db.child("name").setValue(account.getDisplayName().trim());
                                     current_user_db.child("qrcode").setValue("default");
                                     current_user_db.child("email").setValue(account.getEmail().trim());     // UNCCOMENT THIS TO ADD USER TO DATABASE
                                     current_user_db.child("contact").setValue("nocontact");
@@ -502,6 +504,24 @@ public class LoginActivity extends AppCompatActivity {
                                     current_user_db.child("buffgroupid").setValue("not paid");
                                     current_user_db.child("endsub").setValue("-56");
                                     current_user_db.child("groupid").setValue("not paid");
+*/
+
+                                    HashMap<String,Object> RegUser=new HashMap<String, Object>();
+                                    RegUser.put("name",account.getDisplayName().trim());
+                                    RegUser.put("qrcode","default");
+                                    RegUser.put("email",account.getEmail().trim());
+                                    RegUser.put("contact","nocontact");
+                                    RegUser.put("college","nocollege");
+                                    RegUser.put("scannedlunch","-1");
+                                    RegUser.put("scanneddinner","-1");
+                                    RegUser.put("batch","not paid");
+                                    RegUser.put("paidnext","not paid");
+                                    RegUser.put("paidtime","not paid");
+                                    RegUser.put("buffgroupid","not paid");
+                                    RegUser.put("endsub","-56");
+                                    RegUser.put("groupid","not paid");
+
+                                    current_user_db.updateChildren(RegUser);
 
 
 
