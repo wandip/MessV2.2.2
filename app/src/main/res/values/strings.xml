@@ -92,29 +92,29 @@
     <string name="my_own_thanks">No, Thanks</string>
     <string name="my_own_cancel">Maybe Later</string>
 
-    <string name="meetingsetup">Call or Drop us a Message anytime to set up meeting time! <br><a href="" target="_top">+917387636474</a></br></string>
+    <string name="meetingsetup">Call us or Drop a Message anytime to set up meeting time! <br><a href="" target="_top">+917387636474</a></br></string>
 
     <string name="unlimitedthalipay">UNLIMITED THALI</string>
     <string name="instamojodetails">PCI-DSS compliant payment environment. 128-bit encryption. RBI regulations compliant.</string>
 
 
     <string name="anandmessdetails">Anand Food Xpress</string>
-    <string name="anandmessdetails2">Anand Food Xpress includes Anand Food Xpress and Parathas Along with Navruchi Veg</string>
+    <string name="anandmessdetails2">Anand Food Xpress includes Anand Food Xpress and Parathas only</string>
     <string name="anandmessdetailsadd">No . 12, Katraj Dairy Road, Katraj, Pune - 411043</string>
     <string name="anandmessdetailsadd2">Landmark: NEAR Bharati Vidyapeeth University</string>
 
 
-    <string name="kwalitymessdetails">Kwality Mess</string>
-    <string name="kwalitymessdetailsadd">No . 12, Katraj Dairy Road, Katraj, Pune - 411043</string>
-    <string name="kwalitymessdetailsadd2">Landmark: NEAR Bharati Vidyapeeth University</string>
+    <string name="kwalitymessdetails">Kwality Mess </string>
+    <string name="kwalitymessdetailsadd">in front of Gurudatta Palace, Katraj, Pune - 411043</string>
+    <string name="kwalitymessdetailsadd2">Landmark: NEAR Shani Mandir</string>
 
     <string name="gujratimessdetails">Gujrati Mess</string>
-    <string name="gujratimessdetailsadd">No . 12, Katraj Dairy Road, Katraj, Pune - 411043</string>
-    <string name="gujratimessdetailsadd2">Landmark: NEAR Bharati Vidyapeeth University</string>
+    <string name="gujratimessdetailsadd">Survey no.34/4, Prasad Bungalow, Katraj, Pune - 411043</string>
+    <string name="gujratimessdetailsadd2">Landmark: NEAR Pune Cambridge School. \nPhone number-83907 55778</string>
 
     <string name="j4umessdetails">Just4U Mess</string>
-    <string name="j4umessdetailsadd">No . 12, Katraj Dairy Road, Katraj, Pune - 411043</string>
-    <string name="j4umessdetailsadd2">Landmark: NEAR Bharati Vidyapeeth University</string>
+    <string name="j4umessdetailsadd">near Bharti Vidyapeeth back gate, Katraj Dairy Road, Katraj, Pune - 411043</string>
+    <string name="j4umessdetailsadd2">Landmark: NEAR Rolls Mania</string>
 
     <string name="termsandconditions">By paying, I Agree to <br><a href="" target="_top">Terms and Conditions</a></br></string>
 

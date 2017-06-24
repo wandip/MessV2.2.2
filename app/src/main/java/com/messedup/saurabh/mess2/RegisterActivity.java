@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         builder.setTitle("CONFIRM!") //
                                 .setMessage("Name : "+name+"\n"+"College : "+college+"\n"+"Contact : "+contact+"\n"+"E-Mail : "+email+"\n"
-                                ) //
+                                        +"\nEMAIL VERIFICATION MAIL WOULD BE SENT TO YOUR EMAIL ID! \nPLEASE CONFIRM!") //
                                 .setPositiveButton("CONFIRM DETAILS", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         startRegister();

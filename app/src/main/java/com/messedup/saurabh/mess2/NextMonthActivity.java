@@ -36,6 +36,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.messedup.saurabh.mess2.MainActivity.BATCH;
 import static com.messedup.saurabh.mess2.MainActivity.BUFFER_GRPID;
 import static com.messedup.saurabh.mess2.MainActivity.PAID_NEXT;
+import static com.messedup.saurabh.mess2.MainActivity.QRCODE;
 import static com.messedup.saurabh.mess2.MainActivity.UserDataObj;
 import static com.messedup.saurabh.mess2.MainActivity.connected;
 import static com.messedup.saurabh.mess2.R.color.base_dark;
@@ -128,7 +129,13 @@ public class NextMonthActivity extends AppCompatActivity {
                 }
                 else if(PAID_NEXT.equals("paid")&&BuffGrpId.equals("not paid"))
                 {
-                    PaymentStatusBtn.setText("Tap to Confirm Payment");
+                    if(!QRCODE.equals("paid"))
+                     PaymentStatusBtn.setText("Tap to Confirm Payment");
+                    else
+                    {
+                        PaymentStatusBtn.setText("Click on the Image on Home Screen to generate your QR CODE");
+
+                    }
                 }
                 else
                 {
@@ -165,30 +172,37 @@ public class NextMonthActivity extends AppCompatActivity {
                         PaymentIntent2.putExtra("UserID", FirebaseAuth.getInstance().getCurrentUser().getUid());
                         startActivity(PaymentIntent2);
                     } else if (PAID_NEXT.equals("paid") && BuffGrpId.equals("not paid")) {
-                        FirebaseDatabase.getInstance().getReference().child("users")
-                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                BATCH = dataSnapshot.getValue().toString();
+                        if(!QRCODE.equals("paid")) {
+
+                            FirebaseDatabase.getInstance().getReference().child("users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    BATCH = dataSnapshot.getValue().toString();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            if (BATCH.equals("not paid")) {
+                                String from = "NextMonth";
+                                SubPage02 obj = new SubPage02();
+                                obj.setbatch(from);
+                            } else {
+                                String from = "NextMonth";
+                                SubPage02 obj = new SubPage02();
+                                obj.onPayClicked(from);
                             }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        if (BATCH.equals("not paid")) {
-                            String from = "NextMonth";
-                            SubPage02 obj = new SubPage02();
-                            obj.setbatch(from);
-                        } else {
-                            String from = "NextMonth";
-                            SubPage02 obj = new SubPage02();
-                            obj.onPayClicked(from);
+                            PaymentStatusBtn.setText("Tap to Confirm Payment");
                         }
-                        PaymentStatusBtn.setText("Tap to Confirm Payment");
+                        else
+                        {
+                            Toast.makeText(NextMonthActivity.this,"Click on the Image on Home Screen to generate your QR CODE",Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         PaymentStatusBtn.setText("Payment Confirmed!");
                     }
@@ -428,7 +442,7 @@ public class NextMonthActivity extends AppCompatActivity {
                             }
                             catch(Exception e)
                             {
-                                Toast.makeText(NextMonthActivity.this,"Exception caught 2",Toast.LENGTH_LONG).show();
+                                //Toast.makeText(NextMonthActivity.this,"Exception caught 2",Toast.LENGTH_LONG).show();
                             }
                         }
 

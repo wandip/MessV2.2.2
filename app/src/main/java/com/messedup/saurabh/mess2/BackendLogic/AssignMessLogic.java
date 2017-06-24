@@ -24,6 +24,7 @@ public class AssignMessLogic extends AppCompatActivity {
     private static ArrayList<MessInfo> m1 = new ArrayList<MessInfo>();
     private static MessInfo tempMess;
     private DatabaseReference mDatabase, mDatabaseInMessRef, mDatabaseMessRef;
+    private String BatchToChange;
 
 
 
@@ -33,6 +34,9 @@ public class AssignMessLogic extends AppCompatActivity {
 
     }
 
+    public AssignMessLogic(String batchToChange) {
+        BatchToChange = batchToChange;
+    }
 
     public void getMessInfo() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -68,16 +72,29 @@ public class AssignMessLogic extends AppCompatActivity {
 
     private void logic4(int date) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabaseMessRef = mDatabase.child("mess");
 
+
+        if(BatchToChange.equals("batch1"))
+            mDatabaseMessRef = mDatabase.child("mess");
+        else if(BatchToChange.equals("batch2"))
+            mDatabaseMessRef = mDatabase.child("mess2");
+
+        DatabaseReference mInMessGroupList;
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
 
         for (int i = 1; i < 5; i++) {
      //       System.out.print("mess for set " + i + " is ");
             messname = ((i + date - 2) % 4);
 //
-           DatabaseReference mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+           mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
 
-            mInMessGroupList.setValue(null);
 
             int j=Group.dip.get(i-1).size()-1;
             while (j>=0) {
@@ -155,26 +172,43 @@ public class AssignMessLogic extends AppCompatActivity {
 
     private void logic5(int date) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabaseMessRef = mDatabase.child("mess");
+
+        if(BatchToChange.equals("batch1"))
+            mDatabaseMessRef = mDatabase.child("mess");
+        else if(BatchToChange.equals("batch2"))
+            mDatabaseMessRef = mDatabase.child("mess2");
+
+        DatabaseReference mInMessGroupList;
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
 
         for (int i = 1; i < 6; i++) {
 
             //System.out.print("mess for set " + i + "is ");
             messname = ((i + date - 2) % 5);
 
-            DatabaseReference mInMessGroupList;
-            if (messname <= 3)
+            if (messname < 3)
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
-            else
+            else if(messname==3)
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+            else
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
 
-            mInMessGroupList.setValue(null);
+
+
+            //mInMessGroupList.setValue(null);
 
             int j=Group.dip.get(i-1).size()-1;
             while (j>=0) {
                 Log.v("E_VALUE","IN LOGIC 5: "+(i-1)+". "+Group.dip.get(i-1).get(j));
-                DatabaseReference mTemp = mInMessGroupList.child((String) Group.dip.get(i - 1).get(j));
-                mTemp.setValue("0");
+               /* DatabaseReference mTemp =*/ mInMessGroupList.child((String) Group.dip.get(i - 1).get(j)).setValue("0");
+
                 j--;
 
             }
@@ -183,13 +217,26 @@ public class AssignMessLogic extends AppCompatActivity {
 
     private void logic6(int date) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabaseMessRef = mDatabase.child("mess");
+
+        if(BatchToChange.equals("batch1"))
+            mDatabaseMessRef = mDatabase.child("mess");
+        else if(BatchToChange.equals("batch2"))
+            mDatabaseMessRef = mDatabase.child("mess2");
+
+        DatabaseReference mInMessGroupList;
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
 
         for (int i = 1; i < 7; i++) {
 
             //System.out.print("mess for set " + i + "is ");/////ABCabD
             messname = ((i + date - 2) % 6);
-            DatabaseReference mInMessGroupList;
 
             if (messname < 3)
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
@@ -198,7 +245,7 @@ public class AssignMessLogic extends AppCompatActivity {
             else
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
 
-            mInMessGroupList.setValue(null);
+            //mInMessGroupList.setValue(null);
 
             int j=Group.dip.get(i-1).size()-1;
             while (j>=0) {
@@ -214,16 +261,30 @@ public class AssignMessLogic extends AppCompatActivity {
 
     private void logic7(int date) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabaseMessRef = mDatabase.child("mess");
+
+        if(BatchToChange.equals("batch1"))
+            mDatabaseMessRef = mDatabase.child("mess");
+        else if(BatchToChange.equals("batch2"))
+            mDatabaseMessRef = mDatabase.child("mess2");
+
+        DatabaseReference mInMessGroupList;
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
 
         for (int i = 1; i < 8; i++) {
 
             //System.out.print("mess for set " + i + "is ");
-            messname = (((i + date - 2) % 7) % 4);
+            messname = (((i + date - 2+((date-1)/7)) % 7) % 4);
 
-            DatabaseReference mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+            mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
 
-            mInMessGroupList.setValue(null);
+            //mInMessGroupList.setValue(null);
 
             int j=Group.dip.get(i-1).size()-1;
             while (j>=0) {
@@ -238,27 +299,55 @@ public class AssignMessLogic extends AppCompatActivity {
 
     private void logic9(int date) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabaseMessRef = mDatabase.child("mess");
+
+        if(BatchToChange.equals("batch1"))
+            mDatabaseMessRef = mDatabase.child("mess");
+        else if(BatchToChange.equals("batch2"))
+            mDatabaseMessRef = mDatabase.child("mess2");
+        DatabaseReference mInMessGroupList;
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+
 
         for (int i = 1; i < 10; i++) {
 
             //System.out.print("mess for set " + i + "is ");
             messname = ((i + date - 2) % 9);
 
-            DatabaseReference mInMessGroupList;
 
-            if (messname <= 3)
-                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
-            else if (messname <= 5)
-                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname-4).mid).child("grouplist");
-            else if (messname==6)
+            if (messname == 0)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+            else if (messname == 1)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+            else if (messname == 2)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+            else if (messname == 3)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+            else if (messname == 4)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+            else if (messname == 5)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+            else if (messname == 6)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+            else if (messname == 7)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+            else //if (messname == 8)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+
+            /*else if (messname==6)
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
             else if (messname==7)
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
             else 
                 mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
-
-            mInMessGroupList.setValue(null);
+*/
+            //mInMessGroupList.setValue(null);
 
             int j=Group.dip.get(i-1).size()-1;
             while (j>=0) {

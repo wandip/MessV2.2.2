@@ -18,6 +18,7 @@
         <activity
             android:name="com.messedup.saurabh.mess2.MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,13 +29,16 @@
         <activity
             android:name="com.messedup.saurabh.mess2.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat" />
         <activity
             android:name="com.messedup.saurabh.mess2.LoginActivity"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="com.messedup.saurabh.mess2.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,32 +50,41 @@
         <activity
             android:name="com.messedup.saurabh.mess2.RegisterActivity"
             android:label=""
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="com.messedup.saurabh.mess2.MessSelectionActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="com.messedup.saurabh.mess2.GroupFormation.GroupRequestActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="com.messedup.saurabh.mess2.PaymentActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name="com.messedup.saurabh.mess2.PaymentTryActivity" />
         <activity
             android:name="com.messedup.saurabh.mess2.BrowserActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1" />
         <activity
             android:name="com.messedup.saurabh.mess2.AboutUsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1" />
         <activity
             android:name="com.messedup.saurabh.mess2.UnderConstructionActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1" />
         <activity
             android:name="com.messedup.saurabh.mess2.NextMonthActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1" />
         <activity android:name="com.messedup.saurabh.mess2.ScanActivity" />
         <activity
             android:name="com.messedup.saurabh.mess2.AboutMessActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NewTheme1" />
         <activity android:name="com.messedup.saurabh.mess2.TermsAndConditionsActivity"></activity>
     </application>

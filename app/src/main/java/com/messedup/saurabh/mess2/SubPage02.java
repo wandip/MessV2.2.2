@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -59,6 +60,7 @@ import static com.messedup.saurabh.mess2.MainActivity.QRCODE;
 import static com.messedup.saurabh.mess2.MainActivity.UserDataObj;
 
 import static com.messedup.saurabh.mess2.R.id.QRCodeImageView;
+import static com.messedup.saurabh.mess2.R.id.dark;
 /*
 import static com.example.saurabh.mess2.UpdateStrings.BUFFER;
 */
@@ -163,6 +165,51 @@ public class SubPage02 extends Fragment  {
 
 
 
+       /* FirebaseDatabase.getInstance().getReference().child("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String Bat=dataSnapshot.getValue().toString();
+                Log.v("E_VALUE","BATCH : "+Bat);
+                if(Bat.equals("not paid"))
+                {
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("dd MM yyyy");
+                  //  Date dateToday=dateFormat.parse()
+                    *//*Calendar c=Calendar.getInstance();
+                    String formatdate=dateFormat.format(c.getTime());*//*
+
+                    String newString=new SimpleDateFormat("dd MM yyyy").format(new Date());
+                    try {
+                        Date cellDate=dateFormat.parse(newString);
+
+                        checkDate2(cellDate);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if(Bat.equals("batch1"))
+                {
+                    setBatch1();
+                    Log.v("E_VALUE"," IN BATCH 1 : "+Bat);
+
+                }
+                else if(Bat.equals("batch2"))
+                {
+                    Log.v("E_VALUE"," IN BATCH 2 : "+Bat);
+
+                    setBatch2();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+*/
+
         // Monitor launch times and interval from installation
         RateThisApp.onCreate(SubPage2Context);
         // If the condition is satisfied, "Rate this app" dialog will be shown
@@ -229,7 +276,11 @@ public class SubPage02 extends Fragment  {
 
             }
         });
+
+
+
 */
+
 
 
         image.setOnClickListener(new View.OnClickListener() {
@@ -248,11 +299,23 @@ public class SubPage02 extends Fragment  {
                 {
                     if(isConnected())
                     {
+                        Toast.makeText(SubPage2Context,"Generating QR CODE Please Wait!",Toast.LENGTH_SHORT).show();
+
                         Vibrator v = (Vibrator) SubPage2Context.getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(20);
 
+                        String from="Main";
+
 
                         setbatch("Main");
+                        if(from.equals("Main")) {
+                            mGeneratingQRCode.setMessage("Generating your QR Code");
+                            mGeneratingQRCode.show();
+                            Log.v("E_VALUE", "In setqrcodeimg");
+
+
+                            generateQRCodeMethod();
+                        }
 
 
                     }
@@ -303,6 +366,60 @@ public class SubPage02 extends Fragment  {
 
        // mTutorialHandler.playOn(TodaysMessTxt);
         return rootView2;
+    }
+
+    private void setBatch1() {
+
+        FirebaseDatabase.getInstance().getReference().child("admin").child("batch1start")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String batchuser = dataSnapshot.getValue().toString();
+                        SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                        try {
+                            Date b1 = myFormat.parse(batchuser);
+
+                            UpcomingMonthBtn.setText("Pay for the month starting from " + b1);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    private void setBatch2() {
+
+        FirebaseDatabase.getInstance().getReference().child("admin").child("batch2start")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String batchuser = dataSnapshot.getValue().toString();
+                        SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                        try {
+                            Date b1 = myFormat.parse(batchuser);
+
+                            UpcomingMonthBtn.setText("Pay for the month starting from " + b1);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
     }
 
     public void setbatch(final String from) {
@@ -474,6 +591,144 @@ public class SubPage02 extends Fragment  {
 
 
     }
+    private void checkDate2(final Date paidDate) {
+
+
+        Log.v("E_VALUE"," IN CheckDate2 1 : ");
+
+        final String[] batch2start = {null};
+        final String[] batch1start = {null};
+
+        FirebaseDatabase.getInstance().getReference().child("admin").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+
+
+                if(s==null)
+                {
+                    batch1start[0] = dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 1 START "+ batch1start[0]);
+
+                }
+                else if(s.equals("batch1start"))
+                {
+                    batch2start[0] =dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 2 START "+ batch2start[0]);
+
+                }
+
+
+                if(batch1start[0]!=null&&batch2start[0]!=(null)) {
+                    updateBatch2(batch1start[0], batch2start[0], paidDate);
+                    batch1start[0]=null;
+                    batch2start[0]=null;
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+
+                if(s==null)
+                {
+                    batch1start[0]= dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 1 START "+batch1start[0]);
+
+
+                }
+                else if(s.equals("batch1start"))
+                {
+                    batch2start[0]=dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 2 START "+batch2start[0]);
+
+                }
+
+
+                if(batch1start[0]!=null&&batch2start[0]!=(null))
+                {
+                    updateBatch2(batch1start[0], batch2start[0], paidDate);
+                    batch1start[0]=null;
+                    batch2start[0]=null;
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void updateBatch2(String batch1start, String batch2start, Date paidDate) {
+
+
+        Log.v("E_VALUE"," IN CheckDate2 1 : ");
+        Log.v("E_VALUE"," IN CheckDate2 batch1start : "+batch1start);
+        Log.v("E_VALUE"," IN CheckDate2 batch2start : "+batch2start);
+
+
+        SimpleDateFormat myFormat=new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            Date b1=myFormat.parse(batch1start);
+            Date b2=myFormat.parse(batch2start);
+
+            long diff1=b1.getTime()-paidDate.getTime();
+            long diff2=b2.getTime()-paidDate.getTime();
+
+
+
+            if(diff1<diff2)
+            {
+                //BATCH="batch1";
+
+
+
+                UpcomingMonthBtn.setText("Pay for the month starting "+b1);
+
+
+                Log.v("E_VALUE","SUB PAGE BATCH"+BATCH);
+
+
+            }
+            else
+            {
+                //BATCH="batch2";
+                UpcomingMonthBtn.setText("Pay for the month starting "+b2);
+
+
+            }
+
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
 
     public void onPayClicked(final String from) {

@@ -115,7 +115,7 @@ public class Group {
     }
 
 
-    public void assignset()
+    public void assignset(String BatchThis)
     {
         initialiseArray();
         int N=getmapsize();
@@ -123,26 +123,26 @@ public class Group {
         dip = new ArrayList<>();
         isDone=false;
         dip.clear();
-        if(isKPartitionPossible(sizearr,N,4))
+        if(isKPartitionPossible(sizearr,N,6))
         {
-            SET_TYPE=4;
+            SET_TYPE=6;
 
         }
         else if(isKPartitionPossible(sizearr,N,7))
         {
             SET_TYPE=7;
         }
-        else if(isKPartitionPossible(sizearr,N,5))
+        else if(isKPartitionPossible(sizearr,N,4))
         {
-            SET_TYPE=5;
+            SET_TYPE=4;
         }
         else if(isKPartitionPossible(sizearr,N,9))
         {
             SET_TYPE=9;
         }
-        else if(isKPartitionPossible(sizearr,N,6))
+        else if(isKPartitionPossible(sizearr,N,5))
         {
-            SET_TYPE=6;
+            SET_TYPE=5;
         }
         else
         {
@@ -161,7 +161,7 @@ public class Group {
         }
         Log.v("E_VALUE","SET COUNT : "+SET_TYPE+"Actual count :"+cnt);
         Log.v("E_VALUE","ARRAYLIST: "+dip);
-        AssignMessLogic assignMessLogic= new AssignMessLogic();
+        AssignMessLogic assignMessLogic= new AssignMessLogic(BatchThis);
         assignMessLogic.getMessInfo();
 
     }

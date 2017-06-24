@@ -145,7 +145,7 @@ public class PaymentActivity extends AppCompatActivity {
 
 
 
-                BothBtnUnLim.setText("Continue to Pay ₹  "+TotalAmtUnLim);
+                BothBtnUnLim.setText("Continue to Pay ₹"+TotalAmtUnLim);
 
 
             }

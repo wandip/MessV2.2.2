@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
+import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -44,6 +48,7 @@ import android.widget.Toast;
 /*
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 */
+import com.google.firebase.database.ChildEventListener;
 import com.messedup.saurabh.mess2.BackendLogic.Group;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity{
 
     private static TextView UserScannedLunchTxtView,UserGroupIdTxtView,UserScannedDinnerTxtView,TodaysMessTxtView;
     private static View rootView3,rootView2;
-    private static ImageView UserQRCodeImgView,BackGroundImg;
+    private static ImageView UserQRCodeImgView,BackGroundImg,UpcomingMonth;
     private static TextView memberTxtView[]=new TextView[3];
 
     /**
@@ -376,6 +381,118 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private void setUpcomingBtn() {
+
+
+        FirebaseDatabase.getInstance().getReference().child("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String Bat=dataSnapshot.getValue().toString();
+                Log.v("E_VALUE","BATCH : "+Bat);
+                if(Bat.equals("not paid"))
+                {
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("dd MM yyyy");
+                    //  Date dateToday=dateFormat.parse()
+                    /*Calendar c=Calendar.getInstance();
+                    String formatdate=dateFormat.format(c.getTime());*/
+
+                    String newString=new SimpleDateFormat("dd MM yyyy").format(new Date());
+                    try {
+                        Date cellDate=dateFormat.parse(newString);
+
+                        checkDate2(cellDate);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if(Bat.equals("batch1"))
+                {
+                    setBatch1();
+                    Log.v("E_VALUE"," IN BATCH 1 : "+Bat);
+
+                }
+                else if(Bat.equals("batch2"))
+                {
+                    Log.v("E_VALUE"," IN BATCH 2 : "+Bat);
+
+                    setBatch2();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }
+
+    private void setBatch1() {
+
+       final Button UpcomingMonthBtn=(Button)rootView2.findViewById(R.id.PayNextBtn);
+
+
+        FirebaseDatabase.getInstance().getReference().child("admin").child("batch1start")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String batchuser = dataSnapshot.getValue().toString();
+                        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yy");
+
+                        try {
+                            Date b1 = myFormat.parse(batchuser);
+
+                            UpcomingMonthBtn.setText("Pay for the month starting from "+b1.getDate()+"/"+(b1.getMonth()+1)+"/"+(b1.getYear()+1900));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+    private void setBatch2() {
+
+        final Button UpcomingMonthBtn=(Button)rootView2.findViewById(R.id.PayNextBtn);
+
+
+        FirebaseDatabase.getInstance().getReference().child("admin").child("batch2start")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String batchuser = dataSnapshot.getValue().toString();
+                        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+
+                        try {
+                            Date b1 = myFormat.parse(batchuser);
+
+                            UpcomingMonthBtn.setText("Pay for the month starting from "+b1.getDate()+"/"+(b1.getMonth()+1)+"/"+(b1.getYear()+1900));
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+
 
     private void checkUpdate() {
 
@@ -437,9 +554,144 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
+    }
+
+    private void checkDate2(final Date paidDate) {
+
+
+        Log.v("E_VALUE"," IN CheckDate2 1 : ");
+
+        final String[] batch2start = {null};
+        final String[] batch1start = {null};
+
+        FirebaseDatabase.getInstance().getReference().child("admin").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
 
+                if(s==null)
+                {
+                    batch1start[0] = dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 1 START "+ batch1start[0]);
+
+                }
+                else if(s.equals("batch1start"))
+                {
+                    batch2start[0] =dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 2 START "+ batch2start[0]);
+
+                }
+
+
+                if(batch1start[0]!=null&&batch2start[0]!=(null)) {
+                    updateBatch2(batch1start[0], batch2start[0], paidDate);
+                    batch1start[0]=null;
+                    batch2start[0]=null;
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+
+                if(s==null)
+                {
+                    batch1start[0]= dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 1 START "+batch1start[0]);
+
+
+                }
+                else if(s.equals("batch1start"))
+                {
+                    batch2start[0]=dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH 2 START "+batch2start[0]);
+
+                }
+
+
+                if(batch1start[0]!=null&&batch2start[0]!=(null))
+                {
+                    updateBatch2(batch1start[0], batch2start[0], paidDate);
+                    batch1start[0]=null;
+                    batch2start[0]=null;
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    private void updateBatch2(String batch1start, String batch2start, Date paidDate) {
+
+        final Button UpcomingMonthBtn=(Button)rootView2.findViewById(R.id.PayNextBtn);
+
+        Log.v("E_VALUE"," IN CheckDate2 1 : ");
+        Log.v("E_VALUE"," IN CheckDate2 batch1start : "+batch1start);
+        Log.v("E_VALUE"," IN CheckDate2 batch2start : "+batch2start);
+
+
+        SimpleDateFormat myFormat=new SimpleDateFormat("dd MM yyyy");
+
+        try {
+            Date b1=myFormat.parse(batch1start);
+            Date b2=myFormat.parse(batch2start);
+
+            long diff1=b1.getTime()-paidDate.getTime();
+            long diff2=b2.getTime()-paidDate.getTime();
+
+
+
+            if(diff1<diff2)
+            {
+                //BATCH="batch1";
+
+                //Calendar c=Calendar.getInstance();
+
+
+                UpcomingMonthBtn.setText("Pay for the month starting from "+b1.getDate()+"/"+(b1.getMonth()+1)+"/"+(b1.getYear()+1900));
+
+
+                Log.v("E_VALUE","SUB PAGE BATCH"+BATCH);
+
+
+            }
+            else
+            {
+                //BATCH="batch2";
+                UpcomingMonthBtn.setText("Pay for the month starting from "+b2.getDate()+"/"+(b2.getMonth()+1)+"/"+(b2.getYear()+1900));
+
+
+            }
+
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -503,7 +755,7 @@ public class MainActivity extends AppCompatActivity{
     {
 
 
-        Toast.makeText(MainActivity.this,"In checkMessage2",Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(MainActivity.this,"In checkMessage2",Toast.LENGTH_SHORT).show();
         SharedPreferences.Editor editor2;
         final SharedPreferences preferences2 = MainActivity.this.getSharedPreferences("messa", Context.MODE_PRIVATE);
 
@@ -733,7 +985,9 @@ public class MainActivity extends AppCompatActivity{
                     try{
                     UserDataObj = dataSnapshot.getValue(Users.class);
                     UserDataObj.setuid(uid);
-                    Log.v("E_VALUE", UserDataObj.getuid());
+                        setUpcomingBtn();
+
+                        Log.v("E_VALUE", UserDataObj.getuid());
                     }
                     catch(NullPointerException e)
                     {
@@ -881,9 +1135,37 @@ public class MainActivity extends AppCompatActivity{
         TodaysMessTxtView=(TextView)findViewById(R.id.TodaysMessTxtView);
 
 
-        setTodaysMessTxtView();
+        FirebaseDatabase.getInstance().getReference().child("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        setMemberTxtView();
+                String TempBatch=dataSnapshot.getValue().toString();
+
+                if(TempBatch.equals("batch1")) {
+
+                    setTodaysMessTxtView("mess");
+                    setMemberTxtView();
+                }
+                else if(TempBatch.equals("batch2")) {
+                    setTodaysMessTxtView("mess2");
+                    setMemberTxtView();
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
        /* DatabaseReference mInCurrentUserGroupsTodaysMess=FirebaseDatabase.getInstance().getReference().child("group").child(groupid).child("todaysmess");
 
@@ -920,6 +1202,7 @@ public class MainActivity extends AppCompatActivity{
                     UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
                     BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
                     UserQRCodeImgView.setImageResource(R.drawable.before_payement_qrcode);
+                    //UpcomingMonth=(Button)rootView2.findViewById(R.id.Upc)
                     //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
                     PAYEMENT_DONE=false;
 
@@ -999,7 +1282,7 @@ try {
 
     if (groupid.equals("not paid")) {
         UserGroupIdTxtView = (TextView)findViewById(R.id.userGroupID);
-        UserGroupIdTxtView.setText("Pay and Add UPTO 4 FRIENDS in your group & enjoy the app Together!");
+        UserGroupIdTxtView.setText("Pay and Add FRIENDS in your group & enjoy the app Together!");
     } else {
         UserGroupIdTxtView = (TextView)findViewById(R.id.userGroupID);
         UserGroupIdTxtView.setText("Your GROUP CODE : " + groupid/*.substring(0,5)*/);
@@ -1019,7 +1302,7 @@ try {
 catch(Exception e)
 {
     e.printStackTrace();
-    Toast.makeText(this,".",Toast.LENGTH_LONG).show();
+   // Toast.makeText(this,".",Toast.LENGTH_LONG).show();
 }
 
 
@@ -1114,7 +1397,7 @@ catch (Exception e)
                             }
                             catch(Exception e)
                             {
-                                Toast.makeText(MainActivity.this,"Exception caught 2",Toast.LENGTH_LONG).show();
+                              //  Toast.makeText(MainActivity.this,"Exception caught 2",Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -1136,13 +1419,13 @@ catch (Exception e)
 
 
 
-    private void setTodaysMessTxtView() {
+    private void setTodaysMessTxtView(String MessToUpdate) {
 
 
 
 
 
-            DatabaseReference mInMess = FirebaseDatabase.getInstance().getReference().child("mess");
+            DatabaseReference mInMess = FirebaseDatabase.getInstance().getReference().child(MessToUpdate);
 
             mInMess.addValueEventListener(new ValueEventListener() {
 
@@ -1206,7 +1489,7 @@ catch (Exception e)
      }
 
  */
-    public void initiatelogic(String groupToChange) {
+    public void initiatelogic(final String groupToChange) {
 
         Log.v("E_VALUE","#$%^&*  "+groupToChange);
 
@@ -1232,7 +1515,11 @@ catch (Exception e)
                 Log.v("E_VALUE","Addition : "+sum);
                 obj=new Group(map);
                 Log.v("E_VALUE","MAP SIZE : "+obj.getmapsize());
-                obj.assignset();
+
+                if(groupToChange.equals("group1")||groupToChange.equals("group2"))
+                    obj.assignset("batch1");
+                else if(groupToChange.equals("group3")||groupToChange.equals("group4"))
+                    obj.assignset("batch2");
 
 
             }
@@ -1521,7 +1808,7 @@ catch (Exception e)
                 startActivity(goToMarket);
             } catch (ActivityNotFoundException e) {
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.google.co.in")));
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.messedup.saurabh.mess2")));
 
                         // Uri.parse("http://play.google.com/store/apps/details?id=" + getBaseContext().getPackageName())));
             }
