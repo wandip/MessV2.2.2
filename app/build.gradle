@@ -7,16 +7,17 @@ android {
         applicationId "com.messedup.saurabh.mess2"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 5
-        versionName "1.0.3"
+        versionCode 6
+        versionName "1.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
 

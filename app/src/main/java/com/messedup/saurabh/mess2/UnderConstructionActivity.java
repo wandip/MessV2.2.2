@@ -48,7 +48,7 @@ public class UnderConstructionActivity extends AppCompatActivity {
 
                         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(20);
-                        Uri uri = Uri.parse("http://www.google.com");
+                        Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=com.messedup.saurabh.mess2");
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
 

@@ -201,7 +201,7 @@
         android:id="@+id/PaymentStatusBtn"
         android:hapticFeedbackEnabled="true"
         android:elevation="19dp"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:visibility="visible"
         android:layout_alignBaseline="@+id/ralewayReg"
         android:layout_alignBottom="@+id/ralewayReg"

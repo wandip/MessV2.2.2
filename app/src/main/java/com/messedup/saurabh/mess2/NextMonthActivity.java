@@ -125,7 +125,7 @@ public class NextMonthActivity extends AppCompatActivity {
 
                 if(PAID_NEXT.equals("not paid"))
                 {
-                    PaymentStatusBtn.setText("Tap to Pay for Next Month");
+                    PaymentStatusBtn.setText("Tap to Pay");
                 }
                 else if(PAID_NEXT.equals("paid")&&BuffGrpId.equals("not paid"))
                 {
