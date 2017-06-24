@@ -133,7 +133,7 @@ public class NextMonthActivity extends AppCompatActivity {
                      PaymentStatusBtn.setText("Tap to Confirm Payment");
                     else
                     {
-                        PaymentStatusBtn.setText("Click on the Image on Home Screen to generate your QR CODE");
+                        PaymentStatusBtn.setText("Tap the Home Screen Image to get your QR CODE");
 
                     }
                 }
