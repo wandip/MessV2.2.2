@@ -383,52 +383,56 @@ public class MainActivity extends AppCompatActivity{
 
     private void setUpcomingBtn() {
 
+//TODO: //CHECK NULLPOINTER EXCEPTION DO TRY CATCH
 
-        FirebaseDatabase.getInstance().getReference().child("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String Bat=dataSnapshot.getValue().toString();
-                Log.v("E_VALUE","BATCH : "+Bat);
-                if(Bat.equals("not paid"))
-                {
-                    SimpleDateFormat dateFormat=new SimpleDateFormat("dd MM yyyy");
-                    //  Date dateToday=dateFormat.parse()
+        try {
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String Bat = dataSnapshot.getValue().toString();
+                    Log.v("E_VALUE", "BATCH : " + Bat);
+                    if (Bat.equals("not paid")) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+                        //  Date dateToday=dateFormat.parse()
                     /*Calendar c=Calendar.getInstance();
                     String formatdate=dateFormat.format(c.getTime());*/
 
-                    String newString=new SimpleDateFormat("dd MM yyyy").format(new Date());
-                    try {
-                        Date cellDate=dateFormat.parse(newString);
+                        String newString = new SimpleDateFormat("dd MM yyyy").format(new Date());
+                        try {
+                            Date cellDate = dateFormat.parse(newString);
 
-                        checkDate2(cellDate);
+                            checkDate2(cellDate);
 
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (Bat.equals("batch1")) {
+                        setBatch1();
+                        Log.v("E_VALUE", " IN BATCH 1 : " + Bat);
+
+                    } else if (Bat.equals("batch2")) {
+                        Log.v("E_VALUE", " IN BATCH 2 : " + Bat);
+
+                        setBatch2();
                     }
                 }
-                else if(Bat.equals("batch1"))
-                {
-                    setBatch1();
-                    Log.v("E_VALUE"," IN BATCH 1 : "+Bat);
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-                else if(Bat.equals("batch2"))
-                {
-                    Log.v("E_VALUE"," IN BATCH 2 : "+Bat);
+            });
 
-                    setBatch2();
-                }
-            }
+        }
+        catch(Exception e)
+        {
+            final Button UpcomingMonthBtn=(Button)rootView2.findViewById(R.id.PayNextBtn);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+            UpcomingMonthBtn.setText("Pay for the next month ");
 
-            }
-        });
-
-
+        }
 
     }
 
@@ -1037,6 +1041,7 @@ public class MainActivity extends AppCompatActivity{
 
                             final EditText input = new EditText(getBaseContext());
                             input.setInputType(TYPE_CLASS_PHONE);
+
                             input.setSingleLine();
                             FrameLayout container = new FrameLayout(getBaseContext());
                             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1134,37 +1139,48 @@ public class MainActivity extends AppCompatActivity{
         UserScannedDinnerTxtView=(TextView)findViewById(R.id.scanneddinnerTxtView);
         TodaysMessTxtView=(TextView)findViewById(R.id.TodaysMessTxtView);
 
+//TODO: //CHECK NULLPOINTER EXCEPTION DO TRY CATCH
+try {
+    FirebaseDatabase.getInstance().getReference().child("users")
+            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+            .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
 
-        FirebaseDatabase.getInstance().getReference().child("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("batch").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            try {
+                String TempBatch = dataSnapshot.getValue().toString();
 
-                String TempBatch=dataSnapshot.getValue().toString();
-
-                if(TempBatch.equals("batch1")) {
+                if (TempBatch.equals("batch1")) {
 
                     setTodaysMessTxtView("mess");
                     setMemberTxtView();
-                }
-                else if(TempBatch.equals("batch2")) {
+                } else if (TempBatch.equals("batch2")) {
                     setTodaysMessTxtView("mess2");
                     setMemberTxtView();
 
                 }
-
-
-
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                mAuth.signOut();
 
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+        }
 
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    });
+}catch (Exception e)
+{
+    e.printStackTrace();
+    mAuth.signOut();
+
+}
 
 
        /* DatabaseReference mInCurrentUserGroupsTodaysMess=FirebaseDatabase.getInstance().getReference().child("group").child(groupid).child("todaysmess");

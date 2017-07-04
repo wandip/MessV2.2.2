@@ -70,6 +70,53 @@ public class AssignMessLogic extends AppCompatActivity {
 
     }
 
+
+    private void logic3(int date) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        if(BatchToChange.equals("batch1"))
+            mDatabaseMessRef = mDatabase.child("mess");
+        else if(BatchToChange.equals("batch2"))
+            mDatabaseMessRef = mDatabase.child("mess2");
+
+        DatabaseReference mInMessGroupList;
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(1).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+        mInMessGroupList= mDatabaseMessRef.child(m1.get(2).mid).child("grouplist");
+        mInMessGroupList.setValue(null);
+
+
+        for (int i = 1; i < 4; i++) {
+
+            //System.out.print("mess for set " + i + "is ");
+            messname = ((i + date - 2) % 5);
+
+            if (messname < 4)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(messname).mid).child("grouplist");
+           /* else if(messname==3)
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(0).mid).child("grouplist");
+            else
+                mInMessGroupList= mDatabaseMessRef.child(m1.get(3).mid).child("grouplist");
+
+*/
+
+            //mInMessGroupList.setValue(null);
+
+            int j=Group.dip.get(i-1).size()-1;
+            while (j>=0) {
+                Log.v("E_VALUE","IN LOGIC 5: "+(i-1)+". "+Group.dip.get(i-1).get(j));
+               /* DatabaseReference mTemp =*/ mInMessGroupList.child((String) Group.dip.get(i - 1).get(j)).setValue("0");
+
+                j--;
+
+            }
+        }
+    }
+
+
+
     private void logic4(int date) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -369,6 +416,10 @@ public class AssignMessLogic extends AppCompatActivity {
         int d = date.getDate();
         sets = MainActivity.obj.cnt;
         switch (sets) {
+
+            case 3:
+                logic3(d);
+                break;
             case 4:
                 logic4(d);
                 break;

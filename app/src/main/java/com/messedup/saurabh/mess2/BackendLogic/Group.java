@@ -123,7 +123,13 @@ public class Group {
         dip = new ArrayList<>();
         isDone=false;
         dip.clear();
-        if(isKPartitionPossible(sizearr,N,6))
+        if(isKPartitionPossible(sizearr,N,3))
+        {
+            SET_TYPE=3;
+
+        }
+
+        else if(isKPartitionPossible(sizearr,N,6))
         {
             SET_TYPE=6;
 

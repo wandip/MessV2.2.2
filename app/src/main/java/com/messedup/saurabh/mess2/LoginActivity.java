@@ -521,29 +521,48 @@ public class LoginActivity extends AppCompatActivity {
                                     RegUser.put("endsub","-56");
                                     RegUser.put("groupid","not paid");
 
-                                    current_user_db.updateChildren(RegUser);
+                                    current_user_db.updateChildren(RegUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Intent GSignIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                            GSignIntent.putExtra("gf", 1);
+                                            GSignIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            startActivity(GSignIntent);
+                                            Toast.makeText(LoginActivity.this, "Google Signed In", Toast.LENGTH_SHORT).show();
+                                            // If sign in fails, display a message to the user. If sign in succeeds
+                                            // the auth state listener will be notified and logic to handle the
+                                            // signed in user can be handled in the listener.
+                                            if (!task.isSuccessful()) {
+                                                Log.w(TAG, "signInWithCredential", task.getException());
+                                                Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }
+                                    });
 
 
 
 
                                 }
+                                else {
 
-                                Intent GSignIntent=new Intent(LoginActivity.this,MainActivity.class);
-                                GSignIntent.putExtra("gf",1);
-                                GSignIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(GSignIntent);
-                                Toast.makeText(LoginActivity.this,"Google Signed In",Toast.LENGTH_SHORT).show();
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    Log.w(TAG, "signInWithCredential", task.getException());
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    Intent GSignIntent = new Intent(LoginActivity.this, MainActivity.class);
+                                    GSignIntent.putExtra("gf", 1);
+                                    GSignIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(GSignIntent);
+                                    Toast.makeText(LoginActivity.this, "Google Signed In", Toast.LENGTH_SHORT).show();
+                                    // If sign in fails, display a message to the user. If sign in succeeds
+                                    // the auth state listener will be notified and logic to handle the
+                                    // signed in user can be handled in the listener.
+                                    if (!task.isSuccessful()) {
+                                        Log.w(TAG, "signInWithCredential", task.getException());
+                                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+
+
                                 }
-
-
-
 
 
                             }
