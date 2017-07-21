@@ -1,5 +1,6 @@
 package com.messedup.saurabh.mess2;
 
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +31,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -184,6 +187,7 @@ public class MainActivity extends AppCompatActivity{
 
         checkUpdate();
         checkmessage2();
+        checkmessage3();
 
 
 
@@ -858,6 +862,165 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private void checkmessage3()
+    {
+
+
+        //  Toast.makeText(MainActivity.this,"In checkMessage2",Toast.LENGTH_SHORT).show();
+        SharedPreferences.Editor editor2;
+        final SharedPreferences preferences2 = MainActivity.this.getSharedPreferences("info", Context.MODE_PRIVATE);
+
+
+                String name = preferences2.getString("info","nomessage");
+
+                if(!name.equals("messageshown")) {
+
+                        showMessageDialog3();
+
+            }
+
+
+
+    }
+
+    private void showMessageDialog3()
+    {
+        // Toast.makeText(MainActivity.this,"In checkMessage2 ShowMessage Function",Toast.LENGTH_SHORT).show();
+
+
+        showTermsandCondDialog3();
+
+        final SharedPreferences preferences = this.getSharedPreferences("info", Context.MODE_PRIVATE);
+        final SharedPreferences.Editor PreferanceEditor = preferences.edit();
+
+        //final String MessageKey="com.example.saurabh.mess2.infomessage";
+
+        PreferanceEditor.putString("info", "messageshown");
+        PreferanceEditor.apply();
+        PreferanceEditor.commit();
+
+
+
+
+
+
+    }
+
+    private void showTermsandCondDialog2() {
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+
+        final TextView terms = new TextView(MainActivity.this);
+        terms.setText("");
+        terms.setMovementMethod(new ScrollingMovementMethod());
+        FrameLayout container = new FrameLayout(MainActivity.this);
+        LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+        final View layout= inflater.inflate(R.layout.intro_info, null);
+        FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.leftMargin = 50;
+        params.rightMargin=50;
+        layout.setLayoutParams(params);
+        container.addView(terms);
+        builder.setView(layout);
+        builder.setTitle("INSTRUCTIONS") //
+                //
+                .setPositiveButton("Got It!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+
+                        dialog.dismiss();
+                    }
+                }); //
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Vibrator v = (Vibrator) PaymentActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(20);
+                        // TODO
+                        dialog.dismiss();
+                    }
+                });*/
+        builder.show();
+
+
+
+    }
+    private void showTermsandCondDialog3() {
+
+
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.custom);
+
+
+        // set the custom dialog components - text, image and button
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.drawable.temp1);
+
+
+
+        final Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialogButton.setText(" Next ");
+                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                image.setImageResource(R.drawable.temp2);
+
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogButton.setText(" Next ");
+                        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                        image.setImageResource(R.drawable.temp3);
+
+                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialogButton.setText(" Next ");
+                                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                                image.setImageResource(R.drawable.temp4);
+
+                                dialogButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialogButton.setText(" GOT IT! ");
+                                        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                                        image.setImageResource(R.drawable.flow_info);
+
+                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+               // dialog.dismiss();
+            }
+        });
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+
+
+    }
+
+
+
+
     private void showMessageDialog2(final String mssg, String mssgtitle)
     {
 
@@ -1203,79 +1366,85 @@ try {
         USERNAME=name;
         DatabaseReference mAdminDatabase=FirebaseDatabase.getInstance().getReference().child("admin").child("daysleft");
 
-        mAdminDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+
+        try{
+            mAdminDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String daysleft=dataSnapshot.getValue().toString();
+                String daysleft = dataSnapshot.getValue().toString();
 
 
                 //Toast.makeText(MainActivity.this,"No. of Days left : "+daysleft,Toast.LENGTH_LONG).show();
-                noofdaysleft=Integer.parseInt(daysleft);
+                noofdaysleft = Integer.parseInt(daysleft);
 
-                if(qrcode.equals("default"))
-                {
 
-                    UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
-                    BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
-                    UserQRCodeImgView.setImageResource(R.drawable.before_payement_qrcode);
-                    //UpcomingMonth=(Button)rootView2.findViewById(R.id.Upc)
-                    //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
-                    PAYEMENT_DONE=false;
+                try {
 
-                    //UserQRCodeImgView.setOnClickListener(new ExternalOnClickListener());
-                }
-                else if(qrcode.equals("paid"))
-                {
-                    if(noofdaysleft>0) {
+                    if (qrcode.equals("default")) {
+
                         UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
-                        UserQRCodeImgView.setImageResource(R.drawable.after_payment_qrcode);
                         BackGroundImg = (ImageView) findViewById(R.id.backgroundImageView);
-                        // BackGroundImg.setImageResource(R.drawable.blur_background_3);
-                        PAYEMENT_DONE = true;
-                    }
-                    else
-                    {
-                        UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
-                        BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
-                        UserQRCodeImgView.setImageResource(R.drawable.after_payment_qrcode);
+                        UserQRCodeImgView.setImageResource(R.drawable.qrcode_new);
+                        //UpcomingMonth=(Button)rootView2.findViewById(R.id.Upc)
                         //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
+                        PAYEMENT_DONE = false;
 
-                        PAYEMENT_DONE=false;
-                    }
-                }
-                else {
+                        //UserQRCodeImgView.setOnClickListener(new ExternalOnClickListener());
+                    } else if (qrcode.equals("paid")) {
+                        if (noofdaysleft > 0) {
+                            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+                            UserQRCodeImgView.setImageResource(R.drawable.after_payment_qrcode);
+                            BackGroundImg = (ImageView) findViewById(R.id.backgroundImageView);
+                            // BackGroundImg.setImageResource(R.drawable.blur_background_3);
+                            PAYEMENT_DONE = true;
+                        } else {
+                            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+                            BackGroundImg = (ImageView) findViewById(R.id.backgroundImageView);
+                            UserQRCodeImgView.setImageResource(R.drawable.after_payment_qrcode);
+                            //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
 
-                    if (noofdaysleft > 0) {
-                        PAYEMENT_DONE = true;
-                        UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
-                        BackGroundImg = (ImageView) findViewById(R.id.backgroundImageView);
-                        // BackGroundImg.setImageResource(R.drawable.optimized_blurbackground2);
-                        try {
-                            Picasso.with(getBaseContext()).load(UserDataObj.getQrcode()).networkPolicy(NetworkPolicy.OFFLINE).into(UserQRCodeImgView, new Callback() {
-                                @Override
-                                public void onSuccess() {
-
-                                }
-
-                                @Override
-                                public void onError() {
-
-                                    Picasso.with(getBaseContext()).load(qrcode).into(UserQRCodeImgView);
-
-                                }
-                            });
-                        } catch (Exception e) {
-                            Log.v("E_VALUE", e.getMessage());
+                            PAYEMENT_DONE = false;
                         }
+                    } else {
+
+                        if (noofdaysleft > 0) {
+                            PAYEMENT_DONE = true;
+                            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+                            BackGroundImg = (ImageView) findViewById(R.id.backgroundImageView);
+                            // BackGroundImg.setImageResource(R.drawable.optimized_blurbackground2);
+                            try {
+                                Picasso.with(getBaseContext()).load(UserDataObj.getQrcode()).networkPolicy(NetworkPolicy.OFFLINE).into(UserQRCodeImgView, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError() {
+
+                                        Picasso.with(getBaseContext()).load(qrcode).into(UserQRCodeImgView);
+
+                                    }
+                                });
+                            } catch (Exception e) {
+                                Log.v("E_VALUE", e.getMessage());
+                            }
+                        } else {
+                            UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
+                            BackGroundImg = (ImageView) findViewById(R.id.backgroundImageView);
+                            UserQRCodeImgView.setImageResource(R.drawable.qrcode);
+                            //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
+                            PAYEMENT_DONE = false;
+                        }
+
+
                     }
-                    else
-                    {
-                        UserQRCodeImgView = (ImageView) findViewById(R.id.QRCodeImageView);
-                        BackGroundImg=(ImageView)findViewById(R.id.backgroundImageView);
-                        UserQRCodeImgView.setImageResource(R.drawable.qrcode);
-                        //  BackGroundImg.setImageResource(R.drawable.blur_background_3);
-                        PAYEMENT_DONE=false;
-                    }
+                }
+                catch(Exception e)
+                {
+                    mAuth.signOut();
                 }
 
 
@@ -1286,6 +1455,13 @@ try {
 
             }
         });
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            mAuth.signOut();
+        }
 
 
    /*     UserNameTxtView.setText(name);
@@ -1298,7 +1474,7 @@ try {
 
     if (groupid.equals("not paid")) {
         UserGroupIdTxtView = (TextView)findViewById(R.id.userGroupID);
-        UserGroupIdTxtView.setText("Pay and Add FRIENDS in your group & enjoy the app Together!");
+        UserGroupIdTxtView.setText("This Page will show your details of the ongoing Month Cycle");
     } else {
         UserGroupIdTxtView = (TextView)findViewById(R.id.userGroupID);
         UserGroupIdTxtView.setText("Your GROUP CODE : " + groupid/*.substring(0,5)*/);
@@ -1308,6 +1484,13 @@ try {
     if (!scannedlunch.equals("-1")) {
         UserScannedLunchTxtView = (TextView)findViewById(R.id.scannedlunchTxtView);
         UserScannedLunchTxtView.setText("You had Lunch at :" + scannedlunch);
+    }
+    else
+    {
+        if(UserDataObj.getGroupid().equals("not paid")) {
+            UserScannedLunchTxtView = (TextView) findViewById(R.id.scannedlunchTxtView);
+            UserScannedLunchTxtView.setText("Swipe Left and tap on the QR CODE to Check your Payment Status");
+        }
     }
     if (!scanneddinner.equals("-1")) {
         UserScannedDinnerTxtView = (TextView)findViewById(R.id.scanneddinnerTxtView);
@@ -1834,6 +2017,13 @@ catch (Exception e)
             Intent about_mess_Intent= new Intent(getApplicationContext(),AboutMessActivity.class);
             startActivity(about_mess_Intent);
         }
+        if(id==R.id.action_info)
+        {
+
+            showTermsandCondDialog3();
+            /*Intent info_Intent= new Intent(getApplicationContext(),ImpInfoActivity.class);
+            startActivity(info_Intent);*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -1991,7 +2181,7 @@ catch (Exception e)
                 case 0:
                     return "TODAY";
                 case 1:
-                    return "PROFILE";
+                    return "CURRENT MONTH";
             }
             return null;
         }
@@ -2018,8 +2208,6 @@ catch (Exception e)
 
 
     }
-
-    @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }

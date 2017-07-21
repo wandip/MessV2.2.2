@@ -76,9 +76,9 @@ public class AddFriendHandler extends AppCompatActivity{
         input.setLayoutParams(params);
         container.addView(input);
         builder.setView(container);
-        builder.setTitle("ADD FRIEND") //
-                .setMessage("Enter Email ID of your Friend") //
-                .setPositiveButton("Add Friend", new DialogInterface.OnClickListener() {
+        builder.setTitle("Enter Email ID of your Friend") //
+                .setMessage("*You can add Friends only before starting of monthly cycle*") //
+                .setPositiveButton("ADD FRIEND", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                             Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
