@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.saurabh.mess2.MessSelectionActivity">
+    tools:context="com.messedup.saurabh.mess2.MessSelectionActivity">
 
 
     <TextView
@@ -42,7 +42,7 @@
     <TextView
         android:text="Not Now. Maybe Later?"
         android:textSize="15dp"
-        android:id="@+id/textView"
+        android:id="@+id/HelptextView"
         android:textColor="@color/BackgroundWhiteColor"
         android:layout_height="wrap_content"
         android:textStyle="normal|bold"

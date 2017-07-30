@@ -1,12 +1,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.saurabh.mess2.MainActivity">
+    tools:context="com.messedup.saurabh.mess2.MainActivity">
+    <item android:title="HOW TO GO ABOUT!"
+        android:id="@+id/action_info"
+        android:visible="true"
+        android:enabled="true"
+        android:checkable="false"
+        android:titleCondensed="Need Help?"
+        android:icon="@drawable/helpfinalfinal"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
+    <item android:title="About Us"
+        android:id="@+id/action_about_us" />
+    <item android:title="About Mess"
+        android:id="@+id/action_about_mess" />
+    <item android:title="Share"
+
+        android:id="@+id/share" />
+    <item android:title="Rate Us!"
+        android:id="@+id/rateus" />
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"

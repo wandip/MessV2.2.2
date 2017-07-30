@@ -1,30 +1,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     tools:context=".SubPage03">
 
     <!-- TODO: Update blank fragment layout -->
 
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:layout_below="@+id/ralewayReg"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/userName001"
-        android:textSize="16sp"
-        android:textAllCaps="true"
-        android:textStyle="normal|bold"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp" />
-
-    <com.example.saurabh.mess2.RalewayReg
+    <com.messedup.saurabh.mess2.RalewayReg
         android:layout_width="match_parent"
         android:layout_height="41dp"
-        android:text="This Page will Show OTHER OPTIONS"
         android:textAlignment="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -33,60 +20,133 @@
         android:textSize="14sp" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:id="@+id/userEmail"
-        android:textSize="16sp"
-        android:textAllCaps="true"
-        android:textStyle="normal|bold"
-        android:layout_below="@+id/userName001"
-        android:layout_alignStart="@+id/userName001"
-        android:paddingLeft="10dp" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:paddingBottom="10dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:id="@+id/userCollege"
-        android:textSize="16sp"
-        android:textAllCaps="true"
-        android:textStyle="normal|bold"
-        android:layout_below="@+id/userEmail"
-        android:layout_alignStart="@+id/userEmail"
-        android:paddingLeft="10dp" />
-
-    <TextView
-        android:text="TextView"
+        android:text="Your Group Code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:textAlignment="viewStart"
+        android:textAlignment="center"
         android:id="@+id/userGroupID"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:textAllCaps="true"
         android:textStyle="normal|bold"
-        android:layout_below="@+id/userCollege"
-        android:layout_alignStart="@+id/userCollege"
-        android:paddingLeft="10dp" />
+        android:paddingLeft="10dp"
+        android:layout_below="@+id/ralewayReg"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/screen4"
+        android:layout_alignStart="@+id/topleftView"
+        android:layout_alignEnd="@+id/rightView" />
 
     <TextView
-        android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:paddingBottom="10dp"
-        android:id="@+id/userContact"
-        android:textSize="16sp"
-        android:textAllCaps="true"
+        android:textAlignment="center"
+        android:id="@+id/scannedlunchTxtView"
+        android:textSize="15sp"
+        android:textAllCaps="false"
         android:textStyle="normal|bold"
-        android:layout_below="@+id/userGroupID"
-        android:layout_alignStart="@+id/userGroupID"
-        android:paddingLeft="10dp" />
+        android:layout_alignBottom="@+id/ralewayReg"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/screen4"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:id="@+id/scanneddinnerTxtView"
+        android:textSize="14sp"
+        android:textAllCaps="false"
+        android:textStyle="normal|bold"
+        android:layout_above="@+id/scannedlunchTxtView"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/screen4"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/member1TxtView"
+        android:id="@+id/member2TxtView"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/screen4"
+        android:textStyle="normal|bold"
+        android:layout_alignStart="@+id/AddGroupBtn"
+        android:layout_alignEnd="@+id/AddGroupBtn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/member2TxtView"
+        android:layout_alignStart="@+id/member2TxtView"
+        android:id="@+id/member3TxtView"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_alignEnd="@+id/member2TxtView"
+        android:textAllCaps="false"
+        android:textColor="@color/screen4"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/member1TxtView"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:layout_below="@+id/textView11"
+        android:layout_marginTop="12dp"
+        android:textAllCaps="false"
+        android:textColor="@color/screen4"
+        android:textStyle="normal|bold"
+        android:layout_marginBottom="10dp"
+        android:layout_alignStart="@+id/member2TxtView"
+        android:layout_alignEnd="@+id/member2TxtView" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/screen4"
+        android:layout_toStartOf="@+id/textView11"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@+id/textView11"
+        android:layout_marginRight="5dp"
+        android:id="@+id/topleftView"
+        android:layout_height="2dp" />
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/screen4"
+        android:layout_toEndOf="@+id/textView11"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/textView11"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_centerHorizontal="false"
+        android:id="@+id/toprightView"
+        android:layout_below="@+id/textView11"
+        android:layout_height="2dp" />
+
+    <View
+        android:background="@color/screen4"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp"
+        android:id="@+id/leftView"
+        android:layout_height="fill_parent"
+        android:visibility="visible"
+        android:layout_below="@+id/textView11"
+        android:layout_alignBottom="@+id/bottomView"
+        android:layout_width="2dp" />
+    <View
+        android:layout_height="fill_parent"
+        android:background="@color/screen4"
+        android:layout_below="@+id/textView11"
+        android:layout_marginRight="25dp"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/bottomView"
+        android:id="@+id/rightView"
+        android:layout_toEndOf="@+id/bottomView"
+        android:layout_width="2dp" />
+
 
     <Button
         android:text="Add Friends"
@@ -96,10 +156,79 @@
         android:id="@+id/AddGroupBtn"
         android:layout_marginLeft="50dp"
         android:hapticFeedbackEnabled="true"
-        android:elevation="10dp"
+        android:elevation="19dp"
         android:layout_marginRight="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/userGroupID"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="96dp" />
+        android:textSize="18sp"
+        android:visibility="invisible"
+        android:clickable="false"
+        android:textColor="@color/screen4" />
+
+    <Button
+        android:text="MonthlyUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SuperPowerfulButton2"
+        android:backgroundTint="@color/Red"
+        android:layout_below="@+id/member3TxtView"
+        android:layout_alignStart="@+id/AddGroupBtn"
+        android:layout_marginTop="56dp"
+        android:layout_alignEnd="@+id/AddGroupBtn"
+        android:textColor="@color/screen4" />
+
+    <Button
+        android:text="DailyUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SuperPowerfulButton"
+        android:backgroundTint="@color/Red"
+        android:layout_below="@+id/SuperPowerfulButton2"
+        android:layout_alignStart="@+id/SuperPowerfulButton2"
+        android:layout_alignEnd="@+id/SuperPowerfulButton2"
+        android:textColor="@color/screen4" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:background="@color/screen4"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="visible"
+        android:layout_below="@+id/member3TxtView"
+        android:layout_marginTop="20dp"
+        android:layout_alignEnd="@+id/toprightView"
+        android:layout_alignStart="@+id/topleftView"
+        android:id="@+id/bottomView"
+        android:layout_height="2dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/optimized_blurbackground2"
+        android:id="@+id/imageView5"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Your Friends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView11"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        android:textStyle="normal|bold"
+        android:layout_marginTop="15dp"
+        android:textAllCaps="true"
+        android:textColor="@color/screen4"
+        android:layout_below="@+id/AddGroupBtn"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/signup_button_2"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
 
 </RelativeLayout>

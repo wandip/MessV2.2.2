@@ -6,7 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.saurabh.mess2.MainActivity">
+    tools:context="com.messedup.saurabh.mess2.MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/kharakharafinal"
+        android:id="@+id/imageView4"
+        android:scaleType="centerCrop" />
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -39,11 +46,49 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_agenda" />
+        app:srcCompat="@android:drawable/ic_menu_agenda"
+        android:visibility="gone" />
+
+    <TextView
+        android:autoLink="email"
+        android:text="@string/helptext"
+        android:textSize="15dp"
+        android:id="@+id/HelptextView"
+        android:textColorLink="@color/screen4"
+        android:textColor="@color/BackgroundWhiteColor"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_gravity="end|bottom"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="10dp" />
+
+    <!--
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_agenda"
+            android:clickable="true"
+            android:layout_gravity="center_vertical|left"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            app:elevation="6dp"
+            app:fabSize="mini"
+            android:autoLink="email"
+            android:text="@string/helptext"
+            app:pressedTranslationZ="12dp"
+            app:borderWidth="0dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_anchor="@+id/container"
+            app:layout_anchorGravity="center_vertical|right"
+            android:backgroundTint="@color/screen4" />-->
 
 </android.support.design.widget.CoordinatorLayout>

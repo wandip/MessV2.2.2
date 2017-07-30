@@ -6,9 +6,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.saurabh.mess2.MainActivity$PlaceholderFragment">
+    tools:context="com.messedup.saurabh.mess2.MainActivity$PlaceholderFragment">
 
-    <com.example.saurabh.mess2.RalewayReg
+    <com.messedup.saurabh.mess2.RalewayReg
         android:id="@+id/section_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

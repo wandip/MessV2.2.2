@@ -6,7 +6,14 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:textColorHint">@color/BackgroundWhiteColor</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@color/BackgroundWhiteColor</item>
         <item name="colorControlActivated">#ffffff</item>
-        <item name="colorControlHighlight">@color/BackgroundWhiteColor</item>    </style>
+        <item name="colorControlHighlight">@color/BackgroundWhiteColor</item>
+
+    </style>
+
+
 </resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="
+        \nMess is assigned to the user, everyday which is open for dinner.
+        \nA unique QR code is generated for the user when the payment gets confirmed.
+
+        \n\n'Groups':
+        \nWhy groups? : As mess is assigned to you everyday, there's a chance that you could receive another mess than the one of your friend's. To enjoy the day with your friend you could add him in your group so that we assign the same mess !
+
+        \n\nChanging of groups between the month isn't allowed.Will be made available in the upcoming updates.
+        \nMaximum members allowed in a group are 3 as of now!
+
+        \n\nYou may subscribe for next month at any time you wish. You can add your friends for the next month once they have confirmed their payment as well. Thus your group can be changed every month.
+        \nYour friends for this month won't be carry forwarded"
+
+                android:scrollbars = "vertical"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="textPrimary">#c79100</color>
+    <color name="textSecondary">#c79100</color>
+    <color name="textColorSecondaryInverse">#fcc107</color>
+</resources>

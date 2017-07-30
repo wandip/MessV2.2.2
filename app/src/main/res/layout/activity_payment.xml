@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_payment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.messedup.saurabh.mess2.PaymentActivity">
+
+    <Button
+        android:text="Continue With Payment"
+        android:textColor="@color/BackgroundWhiteColor"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/paymentBtn"
+        android:background="@drawable/signup_button"
+        android:elevation="0dp"
+        android:padding="15dp"
+        android:visibility="gone"
+        android:textSize="17sp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+    <TextView
+
+        android:textSize="15dp"
+        android:autoLink="email"
+        android:text="@string/helptext"
+        android:id="@+id/HelptextView"
+        android:textColor="@color/BackgroundWhiteColor"
+        android:layout_height="wrap_content"
+        android:textStyle="normal|bold"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="1dp"
+        android:background="@color/BackgroundWhiteColor"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:text="Name:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView13"
+                android:textSize="25sp"
+                android:layout_marginTop="15dp"
+                android:textStyle="normal|bold|italic"
+                android:paddingRight="20dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:text="Saurabh Kshirsagar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/NameTextView"
+                android:textSize="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:text="Email ID:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView14"
+
+                android:layout_marginTop="15dp"
+                android:textSize="25sp"
+                android:textAlignment="viewStart"
+                android:textStyle="normal|bold|italic"
+                android:paddingRight="20dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:text="Email ID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/NameTextView"
+                android:id="@+id/EmailTextView"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp"
+                android:textSize="20dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="Contact:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView15"
+
+                android:textSize="25sp"
+                android:layout_marginTop="15dp"
+                android:textStyle="normal|bold|italic"
+                android:textAlignment="viewStart"
+                android:paddingRight="20dp"
+                android:visibility="gone" />
+
+            <EditText
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:layout_below="@+id/EmailTextView"
+                android:layout_alignParentStart="true"
+                android:id="@+id/ContactEditText"
+                android:textSize="25sp"
+                android:layout_marginTop="15dp"
+                android:hint="8408845374"
+                android:layout_width="match_parent"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="448dp">
+
+
+                <Button
+                    android:textColor="@color/BackgroundWhiteColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/BothButtonLim"
+                    android:background="@drawable/signup_button"
+                    android:elevation="0dp"
+                    android:padding="15dp"
+                    android:visibility="gone"
+                    android:textSize="17sp"
+                    android:layout_below="@+id/linearLayout4"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    tools:text="Limited thali"
+                    android:text="Limited thali"
+                    android:layout_weight="0.94"
+                    android:layout_marginTop="30dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/BackgroundWhiteColor"
+                    android:textStyle="normal|bold|italic"
+                    android:textSize="25dp"
+                    android:layout_alignBottom="@+id/PaymentAmtTxtView"
+                    android:layout_toEndOf="@+id/HelptextView"
+                    android:id="@+id/CostTxtView1"
+                    android:textAlignment="textEnd"
+                    android:visibility="visible"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="15dp"
+                    android:text="Pay with cash  ₹̶3̶0̶7̶5̶  ->  ₹3025" />
+
+                <Button
+                    android:textColor="@color/BackgroundWhiteColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/BothButtonUnLim"
+                    android:background="@drawable/signup_button"
+                    android:elevation="0dp"
+                    android:padding="15dp"
+                    android:visibility="visible"
+                    android:textSize="17sp"
+                    android:layout_below="@+id/linearLayout4"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    tools:text="Unlimited thali"
+                    android:layout_marginTop="30dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

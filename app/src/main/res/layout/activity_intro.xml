@@ -4,7 +4,7 @@
     android:id="@+id/activity_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.saurabh.mess2.IntroActivity">
+    tools:context="com.messedup.saurabh.mess2.IntroActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
@@ -14,10 +14,10 @@
         android:id="@+id/layoutDots"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/btn_next"></LinearLayout>
 
     <View
         android:layout_width="match_parent"
